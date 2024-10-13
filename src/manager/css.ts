@@ -10,12 +10,7 @@ const banner = '/* Custom UI Style Start */'
 const footer = '/* Custom UI Style End */'
 
 function generateBackgroundCSS() {
-  const plt = process?.platform
-
-  const url = (
-    config[`backgroundUrl${captialize(plt)}` as keyof ConfigShorthandMap] || config.backgroundUrl
-  ) as string
-
+  const url = config.backgroundUrl
   if (!url) {
     return ''
   }

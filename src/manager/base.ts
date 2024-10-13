@@ -16,7 +16,7 @@ export abstract class BaseFileManager implements FileManager {
   ) {
     if (!this.hasBakFile) {
       cpSync(this.srcPath, this.bakPath)
-      logger.info('Create', this.bakPath)
+      logger.info(`Create backup file [${this.bakPath}]`)
     }
   }
 
@@ -26,7 +26,7 @@ export abstract class BaseFileManager implements FileManager {
 
   async reload() {
     if (!this.hasBakFile) {
-      logger.warn(`bak file [${this.bakPath}] does not exist, skip reload`)
+      logger.warn(`Backup file [${this.bakPath}] does not exist, skip reload`)
     } else {
       writeFileSync(this.srcPath, await this.patch(readFileSync(this.bakPath, 'utf-8')))
       logger.info(`Config reload [${this.srcPath}]`)
@@ -35,7 +35,7 @@ export abstract class BaseFileManager implements FileManager {
 
   async rollback() {
     if (!this.hasBakFile) {
-      logger.warn(`bak file [${this.bakPath}] does not exist, skip rollback`)
+      logger.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
     } else {
       const originJS = readFileSync(this.bakPath, 'utf-8')
       writeFileSync(this.srcPath, originJS)
