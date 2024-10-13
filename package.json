@@ -1,8 +1,8 @@
 {
-  "publisher": "1667077010@qq.com",
+  "publisher": "subframe7536",
   "name": "custom-ui-style",
   "displayName": "Custom UI Style",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.12.1",
   "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
@@ -135,14 +135,14 @@
     "publish": "vsce publish --no-dependencies",
     "pack": "vsce package --no-dependencies",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && pnpm run publish",
+    "release": "bumpp --all && pnpm run publish",
     "vscode:uninstall": "node ./dist/uninstall.js"
   },
   "devDependencies": {
     "@subframe7536/eslint-config": "^0.9.4",
     "@subframe7536/type-utils": "^0.1.6",
     "@types/node": "^20.16.11",
-    "@types/vscode": "^1.94.0",
+    "@types/vscode": "^1.82.0",
     "@vscode/vsce": "^3.1.1",
     "atomically": "^2.0.3",
     "bumpp": "^9.7.1",
