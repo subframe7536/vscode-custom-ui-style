@@ -135,7 +135,8 @@
     "publish": "vsce publish --no-dependencies",
     "pack": "vsce package --no-dependencies",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && pnpm run publish"
+    "release": "bumpp && pnpm run publish",
+    "vscode:uninstall": "node ./dist/uninstall.js"
   },
   "devDependencies": {
     "@subframe7536/eslint-config": "^0.9.4",

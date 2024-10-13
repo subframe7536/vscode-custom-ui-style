@@ -40,8 +40,7 @@ export abstract class BaseFileManager implements FileManager {
     if (!this.hasBakFile) {
       logger.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
     } else {
-      const originJS = readFileSync(this.bakPath, 'utf-8')
-      writeFileSync(this.srcPath, originJS)
+      writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
       logger.info(`Config rollback [${this.srcPath}]`)
     }
   }
