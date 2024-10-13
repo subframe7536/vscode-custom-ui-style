@@ -7,9 +7,11 @@ VSCode extension that custom ui css style in both editor and webview
 
 > [!warning]
 > This extension works by editting the vscode's css and js files.
+>
 > So, a warning appears while the first time to install or VSCode update. You can click the [never show again] to avoid it.
-> And, you should run `Custom UI Style: reload` when VSCode is updated.
-> [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
+>
+> And, you should run `Custom UI Style: reload` after VSCode is updated.
+> See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
 
 ## Features
 
@@ -47,6 +49,32 @@ VSCode extension that custom ui css style in both editor and webview
 | `custom-ui-style.rollback` | Custom UI Style: Rollback |
 
 <!-- commands -->
+
+## Example
+
+```json
+{
+  "custom-ui-style.stylesheet": {
+    "span:not([class*='dyn-rule'])+span[class*='dyn-rule']": {
+      "border-top-left-radius": "3px",
+      "border-bottom-left-radius": "3px"
+    },
+    "span[class*='dyn-rule']:has(+span:not([class*='dyn-rule']))": {
+      "border-top-right-radius": "3px",
+      "border-bottom-right-radius": "3px"
+    },
+    ".cdr": {
+      "border-radius": "3px"
+    },
+    ".quick-input-widget": {
+      "top": "25vh !important"
+    },
+    ".overlayWidgets .editorPlaceholder": {
+      "line-height": "unset !important"
+    }
+  }
+}
+```
 
 ## Credit
 
