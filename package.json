@@ -27,7 +27,7 @@
     "res/*"
   ],
   "engines": {
-    "vscode": "^1.94.0"
+    "vscode": "^1.82.0"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -52,79 +52,67 @@
       "title": "Custom UI Style",
       "properties": {
         "custom-ui-style.monospace": {
+          "scope": "application",
           "type": "string",
-          "title": "Custom global monospace font family"
+          "description": "Global monospace font family that apply in both editor and webview"
         },
         "custom-ui-style.sansSerif": {
+          "scope": "application",
           "type": "string",
-          "title": "Custom global sans-serif font family"
+          "description": "Global sans-serif font family that apply in both editor and webview"
         },
         "custom-ui-style.backgroundUrl": {
+          "scope": "machine",
           "type": "string",
-          "pattern": "^(https://|file://|data:)",
-          "patternErrorMessage": "Only allow https: file:// data:",
-          "title": "Custom background image url"
-        },
-        "custom-ui-style.backgroundUrlWin32": {
-          "type": "string",
-          "pattern": "^(https://|file://|data:)",
-          "patternErrorMessage": "Only allow https: file:// data:",
-          "title": "Custom background image url (For Windows)"
-        },
-        "custom-ui-style.backgroundUrlDarWin": {
-          "type": "string",
-          "pattern": "^(https://|file://|data:)",
-          "patternErrorMessage": "Only allow https: file:// data:",
-          "title": "Custom background image url (For MacOS)"
-        },
-        "custom-ui-style.backgroundUrlLinux": {
-          "type": "string",
-          "pattern": "^(https://|file://|data:)",
-          "patternErrorMessage": "Only allow https: file:// data:",
-          "title": "Custom background image url (For Linux)"
+          "markdownDescription": "Full-screen background image url, support protocol: `https://`, `file://`, `data:`"
         },
         "custom-ui-style.backgroundOpacity": {
+          "scope": "application",
           "type": "number",
-          "title": "Custom background image opacity",
+          "description": "Background image opacity",
           "default": 0.9
         },
         "custom-ui-style.backgroundSize": {
+          "scope": "application",
           "type": "string",
           "enum": [
             "cover",
             "contain"
           ],
-          "title": "Custom background image size",
+          "description": "Background image size",
           "default": "cover"
         },
         "custom-ui-style.backgroundPosition": {
+          "scope": "application",
           "type": "string",
-          "title": "Custom background image size",
+          "description": "Background image size",
           "default": "center"
         },
         "custom-ui-style.stylesheet": {
+          "scope": "application",
           "type": "object",
-          "title": "Custom css",
-          "description": "support nest selectors"
+          "description": "Custom css for editor, support nest selectors"
         },
         "custom-ui-style.webviewMonospaceSelector": {
+          "scope": "application",
           "type": "array",
           "items": {
             "type": "string"
           },
-          "title": "Custom monospace selector in webview"
+          "description": "Custom monospace selector in webview"
         },
         "custom-ui-style.webviewSansSerifSelector": {
+          "scope": "application",
           "type": "array",
           "items": {
             "type": "string"
           },
-          "title": "Custom sans-serif selector in webview"
+          "description": "Custom sans-serif selector in webview"
         },
         "custom-ui-style.webviewStylesheet": {
+          "scope": "application",
           "type": "object",
-          "title": "Custom css",
-          "description": "support nest selectors"
+          "description": "Custom css for webview, support nest selectors"
         }
       }
     }

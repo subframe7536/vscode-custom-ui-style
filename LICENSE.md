@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022 Anthony Fu <https://github.com/antfu>
+Copyright (c) 2024 subframe7536 <https://github.com/subframe7536>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
