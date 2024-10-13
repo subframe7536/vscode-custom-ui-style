@@ -15,18 +15,19 @@ VSCode extension that custom ui css style in both editor and webview
 
 <!-- configs -->
 
-| Key                                        | Description                                                         | Type     | Default    |
-| ------------------------------------------ | ------------------------------------------------------------------- | -------- | ---------- |
-| `custom-ui-style.monospace`                | Global monospace font family that apply in both editor and webview  | `string` | ``         |
-| `custom-ui-style.sansSerif`                | Global sans-serif font family that apply in both editor and webview | `string` | ``         |
-| `custom-ui-style.backgroundUrl`            |                                                                     | `string` | ``         |
-| `custom-ui-style.backgroundOpacity`        | Background image opacity                                            | `number` | `0.9`      |
-| `custom-ui-style.backgroundSize`           | Background image size                                               | `string` | `"cover"`  |
-| `custom-ui-style.backgroundPosition`       | Background image size                                               | `string` | `"center"` |
-| `custom-ui-style.stylesheet`               | Custom css for editor, support nest selectors                       | `object` | `{}`       |
-| `custom-ui-style.webviewMonospaceSelector` | Custom monospace selector in webview                                | `array`  | ``         |
-| `custom-ui-style.webviewSansSerifSelector` | Custom sans-serif selector in webview                               | `array`  | ``         |
-| `custom-ui-style.webviewStylesheet`        | Custom css for webview, support nest selectors                      | `object` | `{}`       |
+| Key                                           | Description                                                                        | Type      | Default    |
+| --------------------------------------------- | ---------------------------------------------------------------------------------- | --------- | ---------- |
+| `custom-ui-style.monospace`                   | Global monospace font family that apply in both editor and webview                 | `string`  | ``         |
+| `custom-ui-style.sansSerif`                   | Global sans-serif font family that apply in both editor and webview                | `string`  | ``         |
+| `custom-ui-style.backgroundUrl`               | Full-screen background image url, support protocol: 'https://', 'file://', 'data:' | `string`  | ``         |
+| `custom-ui-style.backgroundOpacity`           | Background image opacity                                                           | `number`  | `0.9`      |
+| `custom-ui-style.backgroundSize`              | Background image size                                                              | `string`  | `"cover"`  |
+| `custom-ui-style.backgroundPosition`          | Background image size                                                              | `string`  | `"center"` |
+| `custom-ui-style.stylesheet`                  | Custom css for editor, support nest selectors                                      | `object`  | `{}`       |
+| `custom-ui-style.webviewMonospaceSelector`    | Custom monospace selector in webview                                               | `array`   | ``         |
+| `custom-ui-style.webviewSansSerifSelector`    | Custom sans-serif selector in webview                                              | `array`   | ``         |
+| `custom-ui-style.webviewStylesheet`           | Custom css for webview, support nest selectors                                     | `object`  | `{}`       |
+| `custom-ui-style.applyOnConfigurationChanged` | Whether to apply styles when configuration changed                                 | `boolean` | `false`    |
 
 <!-- configs -->
 
@@ -34,10 +35,10 @@ VSCode extension that custom ui css style in both editor and webview
 
 <!-- commands -->
 
-| Command                    | Title                              |
-| -------------------------- | ---------------------------------- |
-| `custom-ui-style.reload`   | Custom UI Style: Load custom style |
-| `custom-ui-style.rollback` | Custom UI Style: Rollback          |
+| Command                    | Title                     |
+| -------------------------- | ------------------------- |
+| `custom-ui-style.reload`   | Custom UI Style: Reload   |
+| `custom-ui-style.rollback` | Custom UI Style: Rollback |
 
 <!-- commands -->
 

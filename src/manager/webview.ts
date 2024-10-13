@@ -42,9 +42,9 @@ export function fixSha256(html: string) {
 }
 
 export class WebViewFileManager extends BaseFileManager {
-  patch(content: string): Promisable<string> {
+  patch(_fontChanged: boolean, content: () => string): Promisable<string | undefined> {
     return fixSha256(
-      content.replace(
+      content().replace(
         entry,
         `${entry}.replace('</body>', '</body><style>${getCSS()}</style>')`,
       ),

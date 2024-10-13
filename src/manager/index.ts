@@ -12,9 +12,9 @@ export function createFileManagers() {
     new WebViewFileManager(webviewHTMLPath, webviewHTMLBakPath),
   ]
   return {
-    reload: (text: string) => runAndRestart(
+    reload: (text: string, fontChanged = true) => runAndRestart(
       text,
-      () => Promise.all(managers.map(m => m.reload())),
+      () => Promise.all(managers.map(m => m.reload(fontChanged))),
     ),
     rollback: (text: string) => runAndRestart(
       text,

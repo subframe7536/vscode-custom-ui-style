@@ -17,11 +17,15 @@ export const VSC_DFAULT_SANS_FONT = {
 export const VSC_NOTEBOOK_MONO_FONT = `"SF Mono", Monaco, Menlo, Consolas, "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace`
 
 export class JsFileManager extends BaseFileManager {
-  patch(content: string): Promisable<string> {
+  patch(fontChanged: boolean, content: () => string): Promisable<string | undefined> {
+    if (!fontChanged) {
+      return undefined
+    }
+    let _content = content()
     let { monospace, sansSerif } = getFamilies()
     if (monospace) {
       monospace = escapeQuote(monospace)
-      content = content
+      _content = _content
         .replaceAll(VSC_DFAULT_MONO_FONT.win, monospace)
         .replaceAll(VSC_DFAULT_MONO_FONT.mac, monospace)
         .replaceAll(VSC_DFAULT_MONO_FONT.linux, monospace)
@@ -29,11 +33,11 @@ export class JsFileManager extends BaseFileManager {
     }
     if (sansSerif) {
       sansSerif = escapeQuote(sansSerif)
-      content = content
+      _content = _content
         .replaceAll(VSC_DFAULT_SANS_FONT.win, sansSerif)
         .replaceAll(VSC_DFAULT_SANS_FONT.mac, sansSerif)
         .replaceAll(VSC_DFAULT_SANS_FONT.linux, sansSerif)
     }
-    return content
+    return _content
   }
 }

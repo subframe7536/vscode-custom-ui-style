@@ -40,11 +40,13 @@
     "commands": [
       {
         "command": "custom-ui-style.reload",
-        "title": "Custom UI Style: Load custom style"
+        "title": "Reload",
+        "category": "Custom UI Style"
       },
       {
         "command": "custom-ui-style.rollback",
-        "title": "Custom UI Style: Rollback"
+        "title": "Rollback",
+        "category": "Custom UI Style"
       }
     ],
     "configuration": {
@@ -64,7 +66,7 @@
         "custom-ui-style.backgroundUrl": {
           "scope": "machine",
           "type": "string",
-          "markdownDescription": "Full-screen background image url, support protocol: `https://`, `file://`, `data:`"
+          "description": "Full-screen background image url, support protocol: 'https://', 'file://', 'data:'"
         },
         "custom-ui-style.backgroundOpacity": {
           "scope": "application",
@@ -113,6 +115,12 @@
           "scope": "application",
           "type": "object",
           "description": "Custom css for webview, support nest selectors"
+        },
+        "custom-ui-style.applyOnConfigurationChanged": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to apply styles when configuration changed"
         }
       }
     }

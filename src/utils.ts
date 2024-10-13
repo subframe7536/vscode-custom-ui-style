@@ -1,4 +1,4 @@
-import type { Promisable } from '@subframe7536/type-utils'
+import type { AnyFunction, Promisable } from '@subframe7536/type-utils'
 import { existsSync, rmSync } from 'node:fs'
 import { readFileSync, writeFileSync } from 'atomically'
 import { useLogger } from 'reactive-vscode'
@@ -9,7 +9,7 @@ export const logger = useLogger(displayName)
 
 const lockFileName = `__${name}__.lock`
 
-async function runWithLock(fn: () => Promisable<void>) {
+export async function runAndRestart(message: string, action: () => Promise<any>) {
   let count = 5
   const check = () => existsSync(lockFileName)
   while (check() && count--) {
@@ -26,23 +26,21 @@ async function runWithLock(fn: () => Promisable<void>) {
   }
   writeFileSync(lockFileName, String(Date.now()))
   try {
-    await fn()
-  } finally {
-    rmSync(lockFileName)
-  }
-}
-export async function runAndRestart(message: string, action: () => Promise<any>) {
-  await runWithLock(async () => {
     await action()
     const item = await window.showInformationMessage(message, { title: 'Restart vscode' })
     if (item) {
       commands.executeCommand('workbench.action.reloadWindow')
     }
-  })
+  } finally {
+    rmSync(lockFileName)
+  }
 }
 
-export async function showMessage(content: string) {
-  await window.showInformationMessage(content)
+export async function showMessage<T extends string[]>(
+  content: string,
+  ...buttons: T
+): Promise<T[number] | undefined> {
+  return await window.showInformationMessage(content, ...buttons)
 }
 
 export function escapeQuote(str: string) {
@@ -51,8 +49,12 @@ export function escapeQuote(str: string) {
     .replaceAll(`"`, `\\"`)
 }
 
-export function captialize(text: string) {
-  return text[0].toUpperCase() + text.substring(1)
+export function debounce<T extends AnyFunction<void>>(fn: T, delay: number): T {
+  let timer: NodeJS.Timeout
+  return ((...args: any[]) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => fn(...args), delay)
+  }) as T
 }
 
 export function generateStyleFromObject(obj: Record<string, any>) {

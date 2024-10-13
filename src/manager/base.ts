@@ -5,7 +5,7 @@ import { logger } from '../utils'
 
 export interface FileManager {
   hasBakFile: boolean
-  reload: () => Promise<void>
+  reload: (fontChanged: boolean) => Promise<void>
   rollback: () => Promise<void>
 }
 
@@ -24,12 +24,15 @@ export abstract class BaseFileManager implements FileManager {
     return existsSync(this.bakPath)
   }
 
-  async reload() {
+  async reload(fontChanged: boolean) {
     if (!this.hasBakFile) {
       logger.warn(`Backup file [${this.bakPath}] does not exist, skip reload`)
     } else {
-      writeFileSync(this.srcPath, await this.patch(readFileSync(this.bakPath, 'utf-8')))
-      logger.info(`Config reload [${this.srcPath}]`)
+      const newContent = await this.patch(fontChanged, () => readFileSync(this.bakPath, 'utf-8'))
+      if (newContent) {
+        writeFileSync(this.srcPath, newContent)
+        logger.info(`Config reload [${this.srcPath}]`)
+      }
     }
   }
 
@@ -43,5 +46,5 @@ export abstract class BaseFileManager implements FileManager {
     }
   }
 
-  abstract patch(content: string): Promisable<string>
+  abstract patch(fontChanged: boolean, content: () => string): Promisable<string | undefined>
 }
