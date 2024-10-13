@@ -5,6 +5,12 @@
 
 VSCode extension that custom ui css style in both editor and webview
 
+> [!warning]
+> This extension works by editting the vscode's css and js files.
+> So, a warning appears while the first time to install or VSCode update. You can click the [never show again] to avoid it.
+> And, you should run `Custom UI Style: reload` when VSCode is updated.
+> [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
+
 ## Features
 
 - Unified global font family
