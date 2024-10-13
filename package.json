@@ -8,13 +8,13 @@
   "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
   "author": "subframe7536 <1667077010@qq.com>",
   "license": "MIT",
-  "homepage": "https://github.com/subframe7536/custom-ui-style#readme",
+  "homepage": "https://github.com/subframe7536/vscode-custom-ui-style#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antfu/custom-ui-style"
+    "url": "https://github.com/subframe7536/vscode-custom-ui-style"
   },
   "bugs": {
-    "url": "https://github.com/antfu/custom-ui-style/issues"
+    "url": "https://github.com/subframe7536/vscode-custom-ui-style/issues"
   },
   "categories": [
     "Other"
