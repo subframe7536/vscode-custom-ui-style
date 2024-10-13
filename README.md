@@ -42,6 +42,11 @@ VSCode extension that custom ui css style in both editor and webview
 
 <!-- commands -->
 
+## Credit
+
+- [APC](https://github.com/drcika/apc-extension)
+- [Background](https://github.com/shalldie/vscode-background)
+
 ## License
 
 MIT
