@@ -1,11 +1,11 @@
 {
   "publisher": "1667077010@qq.com",
   "name": "custom-ui-style",
-  "displayName": "custom-ui-style",
+  "displayName": "Custom UI Style",
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@9.12.1",
-  "description": "",
+  "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
   "author": "subframe7536 <1667077010@qq.com>",
   "license": "MIT",
   "homepage": "https://github.com/subframe7536/custom-ui-style#readme",
@@ -32,17 +32,106 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
   "contributes": {
-    "commands": [],
+    "commands": [
+      {
+        "command": "custom-ui-style.reload",
+        "title": "Custom UI Style: Load custom style"
+      },
+      {
+        "command": "custom-ui-style.rollback",
+        "title": "Custom UI Style: Rollback"
+      }
+    ],
     "configuration": {
       "type": "object",
-      "title": "custom-ui-style",
-      "properties": {}
+      "title": "Custom UI Style",
+      "properties": {
+        "custom-ui-style.monospace": {
+          "type": "string",
+          "title": "Custom global monospace font family"
+        },
+        "custom-ui-style.sansSerif": {
+          "type": "string",
+          "title": "Custom global sans-serif font family"
+        },
+        "custom-ui-style.backgroundUrl": {
+          "type": "string",
+          "pattern": "^(https://|file://|data:)",
+          "patternErrorMessage": "Only allow https: file:// data:",
+          "title": "Custom background image url"
+        },
+        "custom-ui-style.backgroundUrlWin32": {
+          "type": "string",
+          "pattern": "^(https://|file://|data:)",
+          "patternErrorMessage": "Only allow https: file:// data:",
+          "title": "Custom background image url (For Windows)"
+        },
+        "custom-ui-style.backgroundUrlDarWin": {
+          "type": "string",
+          "pattern": "^(https://|file://|data:)",
+          "patternErrorMessage": "Only allow https: file:// data:",
+          "title": "Custom background image url (For MacOS)"
+        },
+        "custom-ui-style.backgroundUrlLinux": {
+          "type": "string",
+          "pattern": "^(https://|file://|data:)",
+          "patternErrorMessage": "Only allow https: file:// data:",
+          "title": "Custom background image url (For Linux)"
+        },
+        "custom-ui-style.backgroundOpacity": {
+          "type": "number",
+          "title": "Custom background image opacity",
+          "default": 0.9
+        },
+        "custom-ui-style.backgroundSize": {
+          "type": "string",
+          "enum": [
+            "cover",
+            "contain"
+          ],
+          "title": "Custom background image size",
+          "default": "cover"
+        },
+        "custom-ui-style.backgroundPosition": {
+          "type": "string",
+          "title": "Custom background image size",
+          "default": "center"
+        },
+        "custom-ui-style.stylesheet": {
+          "type": "object",
+          "title": "Custom css",
+          "description": "support nest selectors"
+        },
+        "custom-ui-style.webviewMonospaceSelector": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Custom monospace selector in webview"
+        },
+        "custom-ui-style.webviewSansSerifSelector": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Custom sans-serif selector in webview"
+        },
+        "custom-ui-style.webviewStylesheet": {
+          "type": "object",
+          "title": "Custom css",
+          "description": "support nest selectors"
+        }
+      }
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --external vscode",
-    "dev": "pnpm run build --watch",
+    "build": "tsup --treeshake",
+    "dev": "tsup --watch",
     "prepare": "pnpm run update",
     "update": "vscode-ext-gen --output src/generated/meta.ts",
     "format": "eslint . --fix",
@@ -50,13 +139,15 @@
     "publish": "vsce publish --no-dependencies",
     "pack": "vsce package --no-dependencies",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && pnpm publish"
+    "release": "bumpp && pnpm run publish"
   },
   "devDependencies": {
     "@subframe7536/eslint-config": "^0.9.4",
+    "@subframe7536/type-utils": "^0.1.6",
     "@types/node": "^20.16.11",
     "@types/vscode": "^1.94.0",
     "@vscode/vsce": "^3.1.1",
+    "atomically": "^2.0.3",
     "bumpp": "^9.7.1",
     "eslint": "^9.12.0",
     "reactive-vscode": "^0.2.5",

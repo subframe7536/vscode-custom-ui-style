@@ -11,6 +11,9 @@ importers:
       '@subframe7536/eslint-config':
         specifier: ^0.9.4
         version: 0.9.4(@typescript-eslint/utils@8.8.1(eslint@9.12.0(jiti@1.21.6))(typescript@5.6.3))(@vue/compiler-sfc@3.4.27)(eslint@9.12.0(jiti@1.21.6))(local-pkg@0.5.0)(typescript@5.6.3)(vitest@2.0.5(@types/node@20.16.11))
+      '@subframe7536/type-utils':
+        specifier: ^0.1.6
+        version: 0.1.6
       '@types/node':
         specifier: ^20.16.11
         version: 20.16.11
@@ -20,6 +23,9 @@ importers:
       '@vscode/vsce':
         specifier: ^3.1.1
         version: 3.1.1
+      atomically:
+        specifier: ^2.0.3
+        version: 2.0.3
       bumpp:
         specifier: ^9.7.1
         version: 9.7.1
@@ -824,6 +830,9 @@ packages:
     peerDependencies:
       local-pkg: '*'
 
+  '@subframe7536/type-utils@0.1.6':
+    resolution: {integrity: sha512-7tUH6F6q7RluUGNZ3iB2oxnhJAW5w4aCVky6mBTajpuyiBPnO2v2E+lsaNI6oGeUVsGo0rsB1u3akSIQcOKXhA==}
+
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
 
@@ -1098,6 +1107,9 @@ packages:
 
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+
+  atomically@2.0.3:
+    resolution: {integrity: sha512-kU6FmrwZ3Lx7/7y3hPS5QnbJfaohcIul5fGqf7ok+4KklIEk9tJ0C2IQPdacSbVUWv6zVHXEBWoWd6NrVMT7Cw==}
 
   azure-devops-node-api@12.5.0:
     resolution: {integrity: sha512-R5eFskGvOm3U/GzeAuxRkUsAl0hrAwGgWn6zAd2KrZmrEhWZVqLew4OOupbQlXUuojUzpGtq62SmdhJ06N88og==}
@@ -2805,6 +2817,9 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
+  stubborn-fs@1.2.5:
+    resolution: {integrity: sha512-H2N9c26eXjzL/S/K+i/RHHcFanE74dptvvjM8iwzwbVcWY/zjBbgRqF3K0DY4+OD+uTTASTBvDoxPDaPN02D7g==}
+
   sucrase@3.35.0:
     resolution: {integrity: sha512-8EbVDiu9iN/nESwxeSxDKe0dunta1GOlHufmSSXxMD2z2/tMZpDMpvXQGsc+ajGo8y2uYUmixaSRUc/QPoQ0GA==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -3099,6 +3114,9 @@ packages:
 
   whatwg-url@7.1.0:
     resolution: {integrity: sha512-WUu7Rg1DroM7oQvGWfOiAK21n74Gg+T4elXEQYkOhtyLeWiJFoOGLXPKI/9gzIie9CtwVLm8wtw6YJdKyxSjeg==}
+
+  when-exit@2.1.3:
+    resolution: {integrity: sha512-uVieSTccFIr/SFQdFWN/fFaQYmV37OKtuaGphMAzi4DmmUlrvRBJW5WSLkHyjNQY/ePJMz3LoiX9R3yy1Su6Hw==}
 
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
@@ -3774,6 +3792,8 @@ snapshots:
       - typescript
       - vitest
 
+  '@subframe7536/type-utils@0.1.6': {}
+
   '@types/debug@4.1.12':
     dependencies:
       '@types/ms': 0.7.34
@@ -4118,6 +4138,11 @@ snapshots:
     optional: true
 
   asynckit@0.4.0: {}
+
+  atomically@2.0.3:
+    dependencies:
+      stubborn-fs: 1.2.5
+      when-exit: 2.1.3
 
   azure-devops-node-api@12.5.0:
     dependencies:
@@ -4833,7 +4858,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
     optional: true
 
   esutils@2.0.3: {}
@@ -5889,7 +5914,7 @@ snapshots:
   postcss@8.4.41:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.1
+      picocolors: 1.1.0
       source-map-js: 1.2.0
 
   prebuild-install@7.1.1:
@@ -6166,6 +6191,8 @@ snapshots:
     optional: true
 
   strip-json-comments@3.1.1: {}
+
+  stubborn-fs@1.2.5: {}
 
   sucrase@3.35.0:
     dependencies:
@@ -6482,6 +6509,8 @@ snapshots:
       lodash.sortby: 4.7.0
       tr46: 1.0.1
       webidl-conversions: 4.0.2
+
+  when-exit@2.1.3: {}
 
   which@2.0.2:
     dependencies:

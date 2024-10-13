@@ -10,17 +10,35 @@
       "presentation": {
         "reveal": "never"
       },
-      "problemMatcher": [
-        {
-          "base": "$ts-webpack-watch",
-          "background": {
-            "activeOnStart": true,
-            "beginsPattern": "Build start",
-            "endsPattern": "Build success"
-          }
+      "problemMatcher": {
+        "owner": "typescript",
+        "fileLocation": "relative",
+        "pattern": {
+          // TODO: correct "regexp"
+          "regexp": "^([a-zA-Z]\\:/?([\\w\\-]/?)+\\.\\w+):(\\d+):(\\d+): (ERROR|WARNING)\\: (.*)$",
+          "file": 1,
+          "line": 3,
+          "column": 4,
+          "code": 5,
+          "message": 6
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Build start",
+          "endsPattern": "Build success"
         }
-      ],
-      "group": "build"
+      }
+      // "problemMatcher": [
+      //   {
+      //     "owner": "typescript",
+      //     "fileLocation": "relative",
+      //     "background": {
+      //       "activeOnStart": true,
+      //       "beginsPattern": "Build start",
+      //       "endsPattern": "Build success"
+      //     }
+      //   }
+      // ]
     }
   ]
 }
