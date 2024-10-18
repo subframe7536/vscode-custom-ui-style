@@ -53,6 +53,11 @@
       "type": "object",
       "title": "Custom UI Style",
       "properties": {
+        "custom-ui-style.electron": {
+          "scope": "application",
+          "type": "object",
+          "description": "Electron BrowserWindow options"
+        },
         "custom-ui-style.font.monospace": {
           "scope": "application",
           "type": "string",
@@ -126,7 +131,7 @@
     }
   },
   "scripts": {
-    "build": "tsup --treeshake",
+    "build": "pnpm run typecheck && tsup --treeshake",
     "dev": "tsup --watch",
     "prepare": "pnpm run update",
     "update": "vscode-ext-gen --output src/generated/meta.ts",

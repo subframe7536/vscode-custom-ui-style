@@ -29,6 +29,7 @@ VSCode extension that custom ui css style in both editor and webview
 
 | Key                                           | Description                                                                                          | Type      | Default    |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------- | ---------- |
+| `custom-ui-style.electron`                    | Electron BrowserWindow options                                                                       | `object`  | `{}`       |
 | `custom-ui-style.font.monospace`              | Global monospace font family that apply in both editor and webview, fallback to editor's font family | `string`  | ``         |
 | `custom-ui-style.font.sansSerif`              | Global sans-serif font family that apply in both editor and webview                                  | `string`  | ``         |
 | `custom-ui-style.background.url`              | Full-screen background image url, support protocol: 'https://', 'file://', 'data:'                   | `string`  | ``         |

@@ -22,12 +22,12 @@ const { activate, deactivate } = defineExtension(() => {
   const startWatch = () => {
     const cleanup1 = watch(
       () => editorConfig.fontFamily,
-      () => !config.monospace && watchAndReload(true),
+      () => !config['font.monospace'] && watchAndReload(true),
     )
     const cleanup2 = watch(
       config,
       (conf, oldConf) => watchAndReload(
-        conf.monospace !== oldConf.monospace || conf.sansSerif !== oldConf.sansSerif,
+        conf['font.monospace'] !== oldConf['font.monospace'] || conf['font.sansSerif'] !== oldConf['font.sansSerif'],
       ),
     )
     return () => {

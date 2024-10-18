@@ -1,15 +1,26 @@
 import type { FileManager } from './base'
-import { cssBakPath, cssPath, jsBakPath, jsPath, webviewHTMLBakPath, webviewHTMLPath } from '../path'
+import {
+  cssBakPath,
+  cssPath,
+  mainBakPath,
+  mainPath,
+  rendererBakPath,
+  rendererPath,
+  webviewHTMLBakPath,
+  webviewHTMLPath,
+} from '../path'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'
-import { JsFileManager } from './js'
+import { MainFileManager } from './main'
+import { RendererFileManager } from './renderer'
 import { WebViewFileManager } from './webview'
 
 export function createFileManagers() {
   const managers: FileManager[] = [
     new CssFileManager(cssPath, cssBakPath),
-    new JsFileManager(jsPath, jsBakPath),
+    new RendererFileManager(rendererPath, rendererBakPath),
     new WebViewFileManager(webviewHTMLPath, webviewHTMLBakPath),
+    new MainFileManager(mainPath, mainBakPath),
   ]
   return {
     reload: (text: string, fontChanged = true) => runAndRestart(
