@@ -11,7 +11,8 @@ export const editorConfig = defineConfigObject('editor', {
 })
 
 export function getFamilies() {
-  let { monospace, sansSerif } = config
-  monospace ||= editorConfig.fontFamily
-  return { monospace, sansSerif }
+  return {
+    monospace: config['font.monospace'] || editorConfig.fontFamily,
+    sansSerif: config['font.sansSerif'],
+  }
 }

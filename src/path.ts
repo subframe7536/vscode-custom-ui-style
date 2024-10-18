@@ -29,7 +29,7 @@ export const webviewHTMLBakPath = getWebviewHTML(`.${bakExt}.html`)
 /**
  * See https://code.visualstudio.com/api/references/vscode-api#env
  */
-function getMainPath(baseExt: string, backupExt?: string) {
+function getRendererPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   return path.join(
     baseDir,
@@ -42,21 +42,35 @@ function getMainPath(baseExt: string, backupExt?: string) {
   )
 }
 /**
- * css file path
+ * CSS file path
  */
-export const cssPath = getMainPath('css')
+export const cssPath = getRendererPath('css')
 /**
- * css file path
+ * CSS file backup path
  */
-export const cssBakPath = getMainPath('css', bakExt)
+export const cssBakPath = getRendererPath('css', bakExt)
 /**
- * js file path
+ * Main js file path
  */
-export const jsPath = getMainPath('js')
+export const rendererPath = getRendererPath('js')
 /**
- * js file path
+ * Main js file backup path
  */
-export const jsBakPath = getMainPath('js', bakExt)
+export const rendererBakPath = getRendererPath('js', bakExt)
+
+function getMainPath(baseExt: string, backupExt?: string) {
+  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
+  return path.join(
+    baseDir,
+    'vs',
+    'code',
+    'electron-main',
+    `main.${ext}`,
+  )
+}
+
+export const mainPath = getMainPath('js')
+export const mainBakPath = getMainPath('js', bakExt)
 
 export function normalizeUrl(url: string) {
   if (!url.startsWith('file://')) {

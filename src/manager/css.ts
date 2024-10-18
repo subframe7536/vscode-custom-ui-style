@@ -3,23 +3,23 @@ import { config, getFamilies } from '../config'
 import { normalizeUrl } from '../path'
 import { generateStyleFromObject } from '../utils'
 import { BaseFileManager } from './base'
-import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './js'
+import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './renderer'
 
 const banner = '/* Custom UI Style Start */'
 const footer = '/* Custom UI Style End */'
 
 function generateBackgroundCSS() {
-  const url = config.backgroundUrl
+  const url = config['background.url']
   if (!url) {
     return ''
   }
   return `
 body:has([id='workbench.parts.editor']) {
-    background-size: ${config.backgroundSize};
+    background-size: ${config['background.size']};
     background-repeat: no-repeat;
     background-attachment: fixed; // for code-server
-    background-position: ${config.backgroundPosition};
-    opacity: ${config.backgroundOpacity};
+    background-position: ${config['background.position']};
+    opacity: ${config['background.opacity']};
     background-image: url('${normalizeUrl(url)}');
 }`
 }

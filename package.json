@@ -53,28 +53,28 @@
       "type": "object",
       "title": "Custom UI Style",
       "properties": {
-        "custom-ui-style.monospace": {
+        "custom-ui-style.font.monospace": {
           "scope": "application",
           "type": "string",
           "description": "Global monospace font family that apply in both editor and webview, fallback to editor's font family"
         },
-        "custom-ui-style.sansSerif": {
+        "custom-ui-style.font.sansSerif": {
           "scope": "application",
           "type": "string",
           "description": "Global sans-serif font family that apply in both editor and webview"
         },
-        "custom-ui-style.backgroundUrl": {
+        "custom-ui-style.background.url": {
           "scope": "machine",
           "type": "string",
           "description": "Full-screen background image url, support protocol: 'https://', 'file://', 'data:'"
         },
-        "custom-ui-style.backgroundOpacity": {
+        "custom-ui-style.background.opacity": {
           "scope": "application",
           "type": "number",
           "description": "Background image opacity",
           "default": 0.9
         },
-        "custom-ui-style.backgroundSize": {
+        "custom-ui-style.background.size": {
           "scope": "application",
           "type": "string",
           "enum": [
@@ -84,7 +84,7 @@
           "description": "Background image size",
           "default": "cover"
         },
-        "custom-ui-style.backgroundPosition": {
+        "custom-ui-style.background.position": {
           "scope": "application",
           "type": "string",
           "description": "Background image size",
@@ -95,7 +95,7 @@
           "type": "object",
           "description": "Custom css for editor, support nest selectors"
         },
-        "custom-ui-style.webviewMonospaceSelector": {
+        "custom-ui-style.webview.monospaceSelector": {
           "scope": "application",
           "type": "array",
           "items": {
@@ -103,7 +103,7 @@
           },
           "description": "Custom monospace selector in webview"
         },
-        "custom-ui-style.webviewSansSerifSelector": {
+        "custom-ui-style.webview.sansSerifSelector": {
           "scope": "application",
           "type": "array",
           "items": {
@@ -111,7 +111,7 @@
           },
           "description": "Custom sans-serif selector in webview"
         },
-        "custom-ui-style.webviewStylesheet": {
+        "custom-ui-style.webview.stylesheet": {
           "scope": "application",
           "type": "object",
           "description": "Custom css for webview, support nest selectors"
@@ -120,7 +120,7 @@
           "scope": "resource",
           "type": "boolean",
           "default": false,
-          "description": "Whether to apply styles when configuration changed"
+          "description": "Whether to apply styles when configuration changed, 1500ms debounce"
         }
       }
     }

@@ -16,7 +16,7 @@ export const VSC_DFAULT_SANS_FONT = {
 
 export const VSC_NOTEBOOK_MONO_FONT = `"SF Mono", Monaco, Menlo, Consolas, "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace`
 
-export class JsFileManager extends BaseFileManager {
+export class RendererFileManager extends BaseFileManager {
   patch(fontChanged: boolean, content: () => string): Promisable<string | undefined> {
     if (!fontChanged) {
       return undefined

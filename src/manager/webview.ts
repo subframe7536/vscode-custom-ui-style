@@ -11,22 +11,17 @@ const defaultSansSerifSelector: string[] = ['.font-sans', '.github-markdown-body
 
 function getCSS() {
   const { monospace, sansSerif } = getFamilies()
-  const {
-    webviewSansSerifSelector = [],
-    webviewMonospaceSelector = [],
-    webviewStylesheet,
-  } = config
   let result = ''
   if (monospace) {
-    const monoSelectors = [...defaultMonospaceSelector, ...webviewMonospaceSelector]
+    const monoSelectors = [...defaultMonospaceSelector, ...config['webview.monospaceSelector'] || []]
     result += `${monoSelectors}{font-family:${escapeQuote(monospace)}!important}`
   }
   if (sansSerif) {
-    const sansSelectors = [...defaultSansSerifSelector, ...webviewSansSerifSelector]
+    const sansSelectors = [...defaultSansSerifSelector, ...config['webview.sansSerifSelector'] || []]
     result += `${sansSelectors}{font-family:${escapeQuote(sansSerif)}!important}`
   }
-  if (webviewStylesheet) {
-    result += generateStyleFromObject(webviewStylesheet)
+  if (config['webview.stylesheet']) {
+    result += generateStyleFromObject(config['webview.stylesheet'])
   }
   return result
 }
