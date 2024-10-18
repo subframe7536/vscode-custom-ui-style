@@ -1,6 +1,7 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import { createHash } from 'node:crypto'
 import { config, getFamilies } from '../config'
+import { webviewHTMLBakPath, webviewHTMLPath } from '../path'
 import { escapeQuote, generateStyleFromObject, logger } from '../utils'
 import { BaseFileManager } from './base'
 
@@ -37,6 +38,10 @@ export function fixSha256(html: string) {
 }
 
 export class WebViewFileManager extends BaseFileManager {
+  constructor() {
+    super(webviewHTMLPath, webviewHTMLBakPath)
+  }
+
   patch(_fontChanged: boolean, content: () => string): Promisable<string | undefined> {
     return fixSha256(
       content().replace(

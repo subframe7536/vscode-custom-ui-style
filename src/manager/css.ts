@@ -1,6 +1,6 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import { config, getFamilies } from '../config'
-import { normalizeUrl } from '../path'
+import { cssBakPath, cssPath, normalizeUrl } from '../path'
 import { generateStyleFromObject } from '../utils'
 import { BaseFileManager } from './base'
 import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './renderer'
@@ -54,6 +54,10 @@ span.monaco-keybinding-key, .setting-list-row {
 }
 
 export class CssFileManager extends BaseFileManager {
+  constructor() {
+    super(cssPath, cssBakPath)
+  }
+
   patch(_fontChanged: boolean, content: () => string): Promisable<string | undefined> {
     return `${content()}
 ${banner}

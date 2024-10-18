@@ -1,5 +1,6 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import { getFamilies } from '../config'
+import { rendererBakPath, rendererPath } from '../path'
 import { escapeQuote } from '../utils'
 import { BaseFileManager } from './base'
 
@@ -17,6 +18,10 @@ export const VSC_DFAULT_SANS_FONT = {
 export const VSC_NOTEBOOK_MONO_FONT = `"SF Mono", Monaco, Menlo, Consolas, "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace`
 
 export class RendererFileManager extends BaseFileManager {
+  constructor() {
+    super(rendererPath, rendererBakPath)
+  }
+
   patch(fontChanged: boolean, content: () => string): Promisable<string | undefined> {
     if (!fontChanged) {
       return undefined
