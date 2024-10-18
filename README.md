@@ -22,6 +22,7 @@ VSCode extension that custom ui css style in both editor and webview
 - Unified global font family
 - Setup background image
 - Custom nest stylesheet for both editor and webview
+- Custom Electron BrowserWindow options
 
 ## Configurations
 
@@ -59,6 +60,9 @@ VSCode extension that custom ui css style in both editor and webview
 
 ```json
 {
+  "custom-ui-style.font.sansSerif": "Maple UI, -apple-system",
+  "custom-ui-style.background.url": "file:///D:/image/ide-bg.jpg",
+  "custom-ui-style.webview.monospaceSelector": [".codeblock", ".prism [class*='language-']"],
   "custom-ui-style.stylesheet": {
     "span:not([class*='dyn-rule'])+span[class*='dyn-rule']": {
       "border-top-left-radius": "3px",
