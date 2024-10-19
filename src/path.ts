@@ -61,14 +61,13 @@ export const rendererBakPath = getRendererPath('js', bakExt)
 
 function getMainPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
-  const defaultPath = path.join(
+  return path.join(
     baseDir,
     'vs',
     'code',
     'electron-main',
     `main.${ext}`,
   )
-  return fs.existsSync(defaultPath) ? defaultPath : path.join(baseDir, `main.${baseExt}`)
 }
 
 export const mainPath = getMainPath('js')
