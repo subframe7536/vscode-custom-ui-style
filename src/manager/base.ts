@@ -1,7 +1,7 @@
 import type { Promisable } from '@subframe7536/type-utils'
-import { cpSync, existsSync } from 'node:fs'
+import fs from 'node:fs'
 import { readFileSync, writeFileSync } from 'atomically'
-import { logger } from '../utils'
+import { log } from '../utils'
 
 export interface FileManager {
   hasBakFile: boolean
@@ -15,33 +15,37 @@ export abstract class BaseFileManager implements FileManager {
     private bakPath: string,
   ) {
     if (!this.hasBakFile) {
-      cpSync(this.srcPath, this.bakPath)
-      logger.info(`Create backup file [${this.bakPath}]`)
+      if (fs.existsSync(this.srcPath)) {
+        fs.cpSync(this.srcPath, this.bakPath)
+        log.info(`Create backup file [${this.bakPath}]`)
+      } else {
+        log.warn(`Source file ${this.srcPath} does not exists`)
+      }
     }
   }
 
   get hasBakFile() {
-    return existsSync(this.bakPath)
+    return fs.existsSync(this.bakPath)
   }
 
   async reload(fontChanged: boolean) {
     if (!this.hasBakFile) {
-      logger.warn(`Backup file [${this.bakPath}] does not exist, skip reload`)
+      log.warn(`Backup file [${this.bakPath}] does not exist, skip reload`)
     } else {
       const newContent = await this.patch(fontChanged, () => readFileSync(this.bakPath, 'utf-8'))
       if (newContent) {
         writeFileSync(this.srcPath, newContent)
-        logger.info(`Config reload [${this.srcPath}]`)
+        log.info(`Config reload [${this.srcPath}]`)
       }
     }
   }
 
   async rollback() {
     if (!this.hasBakFile) {
-      logger.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
+      log.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
     } else {
       writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
-      logger.info(`Config rollback [${this.srcPath}]`)
+      log.info(`Config rollback [${this.srcPath}]`)
     }
   }
 
