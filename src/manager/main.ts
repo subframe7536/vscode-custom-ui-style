@@ -11,11 +11,12 @@ export class MainFileManager extends BaseFileManager {
   }
 
   patch(_fontChanged: boolean, content: () => string): Promisable<string | undefined> {
-    if (Object.keys(config.electron).length) {
-      return content().replace(
+    const js = content()
+    return Object.keys(config.electron || {}).length
+      ? js.replace(
         new RegExp(entry, 'g'),
         `${JSON.stringify(config.electron).slice(1, -1)},${entry}`,
       )
-    }
+      : js
   }
 }
