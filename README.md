@@ -23,6 +23,7 @@ VSCode extension that custom ui css style in both editor and webview
 - Setup background image
 - Custom nest stylesheet for both editor and webview
 - Custom Electron BrowserWindow options
+  - No effect? See [process](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video (Mac)](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106)
 
 ## Configurations
 
