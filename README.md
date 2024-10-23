@@ -9,6 +9,8 @@
 
 VSCode extension that custom ui css style in both editor and webview
 
+- Works with VSCode 1.94!
+
 > [!warning]
 > This extension works by editting the VSCode's css and js files.
 >
