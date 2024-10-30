@@ -124,14 +124,14 @@
         "custom-ui-style.applyOnConfigurationChanged": {
           "scope": "resource",
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Whether to apply styles when configuration changed, 1500ms debounce"
         }
       }
     }
   },
   "scripts": {
-    "build": "pnpm run typecheck && tsup --treeshake",
+    "build": "pnpm run typecheck && tsup --minify --treeshake",
     "dev": "tsup --watch",
     "prepare": "pnpm run update",
     "update": "vscode-ext-gen --output src/generated/meta.ts",

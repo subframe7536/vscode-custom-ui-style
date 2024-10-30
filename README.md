@@ -41,7 +41,7 @@ VSCode extension that custom ui css style in both editor and webview
 | `custom-ui-style.webview.monospaceSelector`   | Custom monospace selector in webview                                                                 | `array`   | ``         |
 | `custom-ui-style.webview.sansSerifSelector`   | Custom sans-serif selector in webview                                                                | `array`   | ``         |
 | `custom-ui-style.webview.stylesheet`          | Custom css for webview, support nest selectors                                                       | `object`  | `{}`       |
-| `custom-ui-style.applyOnConfigurationChanged` | Whether to apply styles when configuration changed, 1500ms debounce                                  | `boolean` | `false`    |
+| `custom-ui-style.applyOnConfigurationChanged` | Whether to apply styles when configuration changed, 1500ms debounce                                  | `boolean` | `true`     |
 
 <!-- configs -->
 
