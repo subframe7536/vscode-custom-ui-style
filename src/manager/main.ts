@@ -3,7 +3,7 @@ import { config } from '../config'
 import { mainBakPath, mainPath } from '../path'
 import { BaseFileManager } from './base'
 
-const entry = 'backgroundColor:r.getBackgroundColor()'
+const entry = 'experimentalDarkMode:!0'
 
 export class MainFileManager extends BaseFileManager {
   constructor() {
@@ -11,10 +11,9 @@ export class MainFileManager extends BaseFileManager {
   }
 
   patch(content: string): Promisable<string> {
-    config.electron.backgroundColor ??= 'r.getBackgroundColor()'
-    return content.replace(
+    return content.replaceAll(
       entry,
-      JSON.stringify(config.electron).slice(1, -1),
+      `${entry},${JSON.stringify(config.electron).slice(1, -1)}`,
     )
   }
 }

@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 import vscode from 'vscode'
 import { name as bakExt } from './generated/meta'
@@ -60,13 +61,14 @@ export const rendererBakPath = getRendererPath('js', bakExt)
 
 function getMainPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
-  return path.join(
+  const defaultPath = path.join(
     baseDir,
     'vs',
     'code',
     'electron-main',
     `main.${ext}`,
   )
+  return existsSync(defaultPath) ? defaultPath : path.join(baseDir, `main.${ext}`)
 }
 
 export const mainPath = getMainPath('js')
