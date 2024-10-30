@@ -42,9 +42,9 @@ export class WebViewFileManager extends BaseFileManager {
     super(webviewHTMLPath, webviewHTMLBakPath)
   }
 
-  patch(_fontChanged: boolean, content: () => string): Promisable<string | undefined> {
+  patch(content: string): Promisable<string> {
     return fixSha256(
-      content().replace(
+      content.replace(
         entry,
         `${entry}.replace('</body>', '</body><style>${getCSS()}</style>')`,
       ),

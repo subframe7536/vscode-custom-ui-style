@@ -10,11 +10,11 @@ export class MainFileManager extends BaseFileManager {
     super(mainPath, mainBakPath)
   }
 
-  patch(_fontChanged: boolean, content: () => string): Promisable<string | undefined> {
-    const backgroundColor = config.electron.backgroundColor || 'r.getBackgroundColor()'
-    return content().replace(
+  patch(content: string): Promisable<string> {
+    config.electron.backgroundColor ??= 'r.getBackgroundColor()'
+    return content.replace(
       entry,
-      `${JSON.stringify(config.electron).slice(1, -1)},backgroundColor:${backgroundColor}`,
+      JSON.stringify(config.electron).slice(1, -1),
     )
   }
 }

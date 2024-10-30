@@ -5,7 +5,7 @@ import { logger } from '../utils'
 
 export interface FileManager {
   hasBakFile: boolean
-  reload: (fontChanged: boolean) => Promise<void>
+  reload: () => Promise<void>
   rollback: () => Promise<void>
 }
 
@@ -13,26 +13,22 @@ export abstract class BaseFileManager implements FileManager {
   constructor(
     private srcPath: string,
     private bakPath: string,
-  ) {
-    if (!this.hasBakFile) {
-      cpSync(this.srcPath, this.bakPath)
-      logger.info(`Create backup file [${this.bakPath}]`)
-    }
-  }
+  ) { }
 
   get hasBakFile() {
     return existsSync(this.bakPath)
   }
 
-  async reload(fontChanged: boolean) {
+  async reload() {
     if (!this.hasBakFile) {
-      logger.warn(`Backup file [${this.bakPath}] does not exist, skip reload`)
-    } else {
-      const newContent = await this.patch(fontChanged, () => readFileSync(this.bakPath, 'utf-8'))
-      if (newContent) {
-        writeFileSync(this.srcPath, newContent)
-        logger.info(`Config reload [${this.srcPath}]`)
-      }
+      logger.warn(`Backup file [${this.bakPath}] does not exist, backuping...`)
+      cpSync(this.srcPath, this.bakPath)
+      logger.info(`Create backup file [${this.bakPath}]`)
+    }
+    const newContent = await this.patch(readFileSync(this.bakPath, 'utf-8'))
+    if (newContent) {
+      writeFileSync(this.srcPath, newContent)
+      logger.info(`Config reload [${this.srcPath}]`)
     }
   }
 
@@ -45,5 +41,5 @@ export abstract class BaseFileManager implements FileManager {
     }
   }
 
-  abstract patch(fontChanged: boolean, content: () => string): Promisable<string | undefined>
+  abstract patch(content: string): Promisable<string>
 }

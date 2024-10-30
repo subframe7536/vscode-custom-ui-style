@@ -58,8 +58,8 @@ export class CssFileManager extends BaseFileManager {
     super(cssPath, cssBakPath)
   }
 
-  patch(_fontChanged: boolean, content: () => string): Promisable<string | undefined> {
-    return `${content()}
+  patch(content: string): Promisable<string> {
+    return `${content}
 ${banner}
 ${generateBackgroundCSS()}
 ${generateFontCSS()}

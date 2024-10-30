@@ -5,30 +5,33 @@ import { createFileManagers } from './manager'
 import { debounce, showMessage } from './utils'
 
 const { activate, deactivate } = defineExtension(() => {
-  const { reload, rollback } = createFileManagers()
+  const { hasBakFile, reload, rollback } = createFileManagers()
 
-  useCommand(Meta.commands.reload, () => {
-    reload('UI style changed')
-  })
-  useCommand(Meta.commands.rollback, () => {
-    rollback('UI style rollback')
-  })
+  if (!hasBakFile()) {
+    showMessage(
+      'Seems like first time use or new version is installed, reload the configuration now?',
+      'Reload',
+      'Cancel',
+    )
+      .then<any>(item => item === 'Reload' && reload('UI style changed'))
+  }
+
+  useCommand(Meta.commands.reload, () => reload('UI style changed'))
+  useCommand(Meta.commands.rollback, () => rollback('UI style rollback'))
 
   const watchAndReload = debounce(
-    (fontChanged: boolean) => showMessage('Configuration changed, apply?', 'Apply', 'Cancel')
-      .then<any>(item => item === 'Apply' && reload('UI style changed', fontChanged)),
+    () => showMessage('Configuration changed, apply?', 'Apply', 'Cancel')
+      .then<any>(item => item === 'Apply' && reload('UI style changed')),
     1500,
   )
   const startWatch = () => {
     const cleanup1 = watch(
       () => editorConfig.fontFamily,
-      () => !config['font.monospace'] && watchAndReload(true),
+      () => !config['font.monospace'] && watchAndReload(),
     )
     const cleanup2 = watch(
       config,
-      (conf, oldConf) => watchAndReload(
-        conf['font.monospace'] !== oldConf['font.monospace'] || conf['font.sansSerif'] !== oldConf['font.sansSerif'],
-      ),
+      () => watchAndReload(),
     )
     return () => {
       cleanup1()

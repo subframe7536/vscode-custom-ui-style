@@ -22,15 +22,11 @@ export class RendererFileManager extends BaseFileManager {
     super(rendererPath, rendererBakPath)
   }
 
-  patch(fontChanged: boolean, content: () => string): Promisable<string | undefined> {
-    if (!fontChanged) {
-      return undefined
-    }
-    let _content = content()
+  patch(content: string): Promisable<string> {
     let { monospace, sansSerif } = getFamilies()
     if (monospace) {
       monospace = escapeQuote(monospace)
-      _content = _content
+      content = content
         .replaceAll(VSC_DFAULT_MONO_FONT.win, monospace)
         .replaceAll(VSC_DFAULT_MONO_FONT.mac, monospace)
         .replaceAll(VSC_DFAULT_MONO_FONT.linux, monospace)
@@ -38,11 +34,11 @@ export class RendererFileManager extends BaseFileManager {
     }
     if (sansSerif) {
       sansSerif = escapeQuote(sansSerif)
-      _content = _content
+      content = content
         .replaceAll(VSC_DFAULT_SANS_FONT.win, sansSerif)
         .replaceAll(VSC_DFAULT_SANS_FONT.mac, sansSerif)
         .replaceAll(VSC_DFAULT_SANS_FONT.linux, sansSerif)
     }
-    return _content
+    return content
   }
 }
