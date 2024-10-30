@@ -7,7 +7,7 @@ import { commands, window } from 'vscode'
 import { displayName, name } from './generated/meta'
 import { baseDir } from './path'
 
-export const logger = useLogger(displayName)
+export const log = useLogger(displayName)
 
 const lockFile = path.join(baseDir, `__${name}__.lock`)
 
@@ -34,7 +34,7 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
       commands.executeCommand('workbench.action.reloadWindow')
     }
   } catch (e) {
-    logger.error(e)
+    log.error(e)
     showMessage(`Fail to execute action, ${e}`)
   } finally {
     rmSync(lockFile)

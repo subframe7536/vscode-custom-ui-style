@@ -2,7 +2,7 @@ import type { Promisable } from '@subframe7536/type-utils'
 import { createHash } from 'node:crypto'
 import { config, getFamilies } from '../config'
 import { webviewHTMLBakPath, webviewHTMLPath } from '../path'
-import { escapeQuote, generateStyleFromObject, logger } from '../utils'
+import { escapeQuote, generateStyleFromObject, log } from '../utils'
 import { BaseFileManager } from './base'
 
 const entry = `'<!DOCTYPE html>\\n' + newDocument.documentElement.outerHTML`
@@ -33,7 +33,7 @@ export function fixSha256(html: string) {
     return html
   }
   const sha = createHash('sha256').update(scriptString).digest('base64')
-  logger.info('update script sha256', sha)
+  log.info('update script sha256', sha)
   return html.replace(/'sha256-[^']*'/, `'sha256-${sha}'`)
 }
 

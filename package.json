@@ -2,9 +2,9 @@
   "publisher": "subframe7536",
   "name": "custom-ui-style",
   "displayName": "Custom UI Style",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "private": true,
-  "packageManager": "pnpm@9.12.1",
+  "packageManager": "pnpm@9.12.2",
   "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
   "author": "subframe7536 <1667077010@qq.com>",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "res/*"
   ],
   "engines": {
-    "vscode": "^1.82.0"
+    "vscode": "^1.89.0"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -146,15 +146,15 @@
   "devDependencies": {
     "@subframe7536/eslint-config": "^0.9.4",
     "@subframe7536/type-utils": "^0.1.6",
-    "@types/node": "^20.16.11",
-    "@types/vscode": "^1.82.0",
-    "@vscode/vsce": "^3.1.1",
+    "@types/node": "^20.16.12",
+    "@types/vscode": "1.89.0",
+    "@vscode/vsce": "^3.2.0",
     "atomically": "^2.0.3",
     "bumpp": "^9.7.1",
-    "eslint": "^9.12.0",
+    "eslint": "^9.13.0",
     "reactive-vscode": "^0.2.5",
     "tsup": "^8.3.0",
     "typescript": "^5.6.3",
-    "vscode-ext-gen": "^0.4.3"
+    "vscode-ext-gen": "^0.4.4"
   }
 }
