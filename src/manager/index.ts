@@ -1,4 +1,5 @@
 import type { FileManager } from './base'
+import { logWindowOptionsChanged } from '../config'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'
 import { MainFileManager } from './main'
@@ -14,13 +15,19 @@ export function createFileManagers() {
   ]
   return {
     hasBakFile: () => managers.every(m => m.hasBakFile),
-    reload: (text: string) => runAndRestart(
-      text,
-      () => Promise.all(managers.map(m => m.reload())),
-    ),
-    rollback: (text: string) => runAndRestart(
-      text,
-      () => Promise.all(managers.map(m => m.rollback())),
-    ),
+    reload: (text: string) => {
+      logWindowOptionsChanged()
+      runAndRestart(
+        text,
+        () => Promise.all(managers.map(m => m.reload())),
+      )
+    },
+    rollback: (text: string) => {
+      logWindowOptionsChanged()
+      runAndRestart(
+        text,
+        () => Promise.all(managers.map(m => m.rollback())),
+      )
+    },
   }
 }

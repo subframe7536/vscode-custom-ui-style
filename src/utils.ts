@@ -29,8 +29,8 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
   try {
     writeFileSync(lockFile, String(Date.now()))
     await action()
-    const item = await window.showInformationMessage(message, { title: 'Restart vscode' })
-    if (item) {
+    const item = await showMessage(message, 'Reload Window', 'Cancel')
+    if (item === 'Reload Window') {
       commands.executeCommand('workbench.action.reloadWindow')
     }
   } catch (e) {
