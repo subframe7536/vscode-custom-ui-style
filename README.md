@@ -31,20 +31,19 @@ VSCode extension that custom ui css style in both editor and webview
 
 <!-- configs -->
 
-| Key                                           | Description                                                                                          | Type      | Default    |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------- | ---------- |
-| `custom-ui-style.electron`                    | Electron BrowserWindow options                                                                       | `object`  | `{}`       |
-| `custom-ui-style.font.monospace`              | Global monospace font family that apply in both editor and webview, fallback to editor's font family | `string`  | ``         |
-| `custom-ui-style.font.sansSerif`              | Global sans-serif font family that apply in both editor and webview                                  | `string`  | ``         |
-| `custom-ui-style.background.url`              | Full-screen background image url, support protocol: 'https://', 'file://', 'data:'                   | `string`  | ``         |
-| `custom-ui-style.background.opacity`          | Background image opacity                                                                             | `number`  | `0.9`      |
-| `custom-ui-style.background.size`             | Background image size                                                                                | `string`  | `"cover"`  |
-| `custom-ui-style.background.position`         | Background image size                                                                                | `string`  | `"center"` |
-| `custom-ui-style.stylesheet`                  | Custom css for editor, support nest selectors                                                        | `object`  | `{}`       |
-| `custom-ui-style.webview.monospaceSelector`   | Custom monospace selector in webview                                                                 | `array`   | ``         |
-| `custom-ui-style.webview.sansSerifSelector`   | Custom sans-serif selector in webview                                                                | `array`   | ``         |
-| `custom-ui-style.webview.stylesheet`          | Custom css for webview, support nest selectors                                                       | `object`  | `{}`       |
-| `custom-ui-style.applyOnConfigurationChanged` | Whether to apply styles when configuration changed, 1500ms debounce                                  | `boolean` | `true`     |
+| Key                                         | Description                                                                                          | Type     | Default    |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------- | ---------- |
+| `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                       | `object` | `{}`       |
+| `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family | `string` | ``         |
+| `custom-ui-style.font.sansSerif`            | Global sans-serif font family that apply in both editor and webview                                  | `string` | ``         |
+| `custom-ui-style.background.url`            | Full-screen background image url, support protocol: 'https://', 'file://', 'data:'                   | `string` | ``         |
+| `custom-ui-style.background.opacity`        | Background image opacity                                                                             | `number` | `0.9`      |
+| `custom-ui-style.background.size`           | Background image size                                                                                | `string` | `"cover"`  |
+| `custom-ui-style.background.position`       | Background image size                                                                                | `string` | `"center"` |
+| `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                        | `object` | `{}`       |
+| `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                 | `array`  | ``         |
+| `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                | `array`  | ``         |
+| `custom-ui-style.webview.stylesheet`        | Custom css for webview, support nest selectors                                                       | `object` | `{}`       |
 
 <!-- configs -->
 

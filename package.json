@@ -120,12 +120,6 @@
           "scope": "application",
           "type": "object",
           "description": "Custom css for webview, support nest selectors"
-        },
-        "custom-ui-style.applyOnConfigurationChanged": {
-          "scope": "resource",
-          "type": "boolean",
-          "default": true,
-          "description": "Whether to apply styles when configuration changed, 1500ms debounce"
         }
       }
     }
