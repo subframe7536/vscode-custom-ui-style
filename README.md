@@ -15,9 +15,6 @@ VSCode extension that custom ui css style in both editor and webview
 > This extension works by editting the VSCode's css and js files.
 >
 > So, a warning appears while the first time to install or VSCode update. You can click the [never show again] to avoid it.
->
-> And, you should run `Custom UI Style: reload` after VSCode is updated.
-> See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
 
 ## Features
 
@@ -25,7 +22,24 @@ VSCode extension that custom ui css style in both editor and webview
 - Setup background image
 - Custom nest stylesheet for both editor and webview
 - Custom Electron BrowserWindow options
-  - No effect? See [process](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video (Mac)](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106)
+
+### Usage
+
+When first installed or new VSCode version upgraded, the plugin will prompt to dump backup file.
+
+After changing the configuration, please open command panel and run `Custom UI Style: Reload` to apply the configuration.
+
+To rollback or uninstall the plugin, please open command panel and run `Custom UI Style: Rollback` to restore the original VSCode file.
+
+See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
+
+### No Effect?
+
+If you are using Windows or Linux, make sure you have closed all the VSCode windows and then restart.
+
+If you are using MacOS, press <kbd>Command + Q</kbd> first, then restart VSCode.
+
+There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (MacOS) of the process.
 
 ## Configurations
 
