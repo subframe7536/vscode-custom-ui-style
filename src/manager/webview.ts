@@ -7,7 +7,7 @@ import { BaseFileManager } from './base'
 
 const entry = `'<!DOCTYPE html>\\n' + newDocument.documentElement.outerHTML`
 
-const defaultMonospaceSelector: string[] = ['.font-mono', 'code', 'pre', '.mono', '.monospace']
+const defaultMonospaceSelector: string[] = ['.font-mono', 'code', 'pre', '.mono', '.monospace', 'kbd']
 const defaultSansSerifSelector: string[] = ['.font-sans', '.github-markdown-body']
 
 function getCSS() {
