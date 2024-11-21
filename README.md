@@ -33,13 +33,25 @@ To rollback or uninstall the plugin, please open command panel and run `Custom U
 
 See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
 
-### No Effect?
+### FAQ
+
+#### No Effect?
 
 If you are using Windows or Linux, make sure you have closed all the VSCode windows and then restart.
 
 If you are using MacOS, press <kbd>Command + Q</kbd> first, then restart VSCode.
 
 There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (MacOS) of the process.
+
+#### RangeError: Maximum call stack size exceeded
+
+Due to system permission restrictions, you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close (press <kbd>Command + Q</kbd>) VSCode first, then run:
+
+```sh
+sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
+```
+
+See #6
 
 ## Configurations
 

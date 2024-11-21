@@ -1,5 +1,5 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
-import { existsSync, rmSync } from 'node:fs'
+import fs from 'node:fs'
 import path from 'node:path'
 import { readFileSync, writeFileSync } from 'atomically'
 import { useLogger } from 'reactive-vscode'
@@ -13,31 +13,43 @@ const lockFile = path.join(baseDir, `__${name}__.lock`)
 
 export async function runAndRestart(message: string, action: () => Promise<any>) {
   let count = 5
-  const check = () => existsSync(lockFile)
+  const check = () => fs.existsSync(lockFile)
   while (check() && count--) {
+    log.warn('Lock file detected, waiting...')
     await new Promise(resolve => setTimeout(resolve, 1000))
   }
   if (!count) {
     // If exists and expire time exceed 10 minutes, just remove it
     if (check() && Number(readFileSync(lockFile, 'utf-8')) - Date.now() > 6e5) {
-      rmSync(lockFile)
+      log.warn('Lock file timeout, remove and continue')
+      fs.rmSync(lockFile)
     } else {
+      log.error('File locked:', lockFile)
       await showMessage('File locked, cancel operation')
       return
     }
   }
   try {
     writeFileSync(lockFile, String(Date.now()))
-    await action()
-    const item = await showMessage(message, 'Reload Window', 'Cancel')
-    if (item === 'Reload Window') {
-      commands.executeCommand('workbench.action.reloadWindow')
+    let success = true
+    try {
+      await action()
+    } catch (error) {
+      log.error(`Fail to execute action,`, error)
+      showMessage(`Fail to execute action: ${error}`)
+      success = false
+    }
+    if (success) {
+      const item = await showMessage(message, 'Reload Window', 'Cancel')
+      if (item === 'Reload Window') {
+        commands.executeCommand('workbench.action.reloadWindow')
+      }
     }
   } catch (e) {
-    log.error(e)
-    showMessage(`Fail to execute action, ${e}`)
+    log.error(`npm:atomically error,`, e)
+    showMessage(`npm:atomically error: ${e}, maybe you need to enhance VSCode's permissions?`)
   } finally {
-    rmSync(lockFile)
+    fs.rmSync(lockFile)
   }
 }
 
@@ -45,7 +57,11 @@ export async function showMessage<T extends string[]>(
   content: string,
   ...buttons: T
 ): Promise<T[number] | undefined> {
-  return await window.showInformationMessage(content, ...buttons)
+  try {
+    return await window.showInformationMessage(content, ...buttons)
+  } catch (error) {
+    log.error('VSCode error:', error)
+  }
 }
 
 export function escapeQuote(str: string) {

@@ -1,5 +1,5 @@
 import type { Promisable } from '@subframe7536/type-utils'
-import fs, { cpSync } from 'node:fs'
+import fs from 'node:fs'
 import { readFileSync, writeFileSync } from 'atomically'
 import { log } from '../utils'
 
@@ -22,7 +22,7 @@ export abstract class BaseFileManager implements FileManager {
   async reload() {
     if (!this.hasBakFile) {
       log.warn(`Backup file [${this.bakPath}] does not exist, backuping...`)
-      cpSync(this.srcPath, this.bakPath)
+      fs.cpSync(this.srcPath, this.bakPath)
       log.info(`Create backup file [${this.bakPath}]`)
     }
     const newContent = await this.patch(readFileSync(this.bakPath, 'utf-8'))
