@@ -29,25 +29,33 @@ function generateFontCSS() {
   const { monospace, sansSerif } = getFamilies()
   if (monospace) {
     result += `
-span.monaco-keybinding-key, .setting-list-row {
-  font-family: ${monospace}, ${VSC_NOTEBOOK_MONO_FONT} !important;
+body {
+  --cus-monospace-font: ${monospace}, ${VSC_NOTEBOOK_MONO_FONT};
+}
+span.monaco-keybinding-key,
+.setting-list-row,
+kbd {
+  font-family: var(--cus-monospace-font) !important;
 }
 .windows,
 .mac,
 .linux {
-  --monaco-monospace-font: ${monospace}, ${VSC_NOTEBOOK_MONO_FONT} !important;
+  --monaco-monospace-font: var(--cus-monospace-font) !important;
 }`
   }
   if (sansSerif) {
     result += `
+body {
+  --cus-sans-font: ${sansSerif};
+}
 .windows {
-  font-family: ${sansSerif}, ${VSC_DFAULT_SANS_FONT.win} !important;
+  font-family: var(--cus-sans-font), ${VSC_DFAULT_SANS_FONT.win} !important;
 }
 .mac {
-  font-family: ${sansSerif}, ${VSC_DFAULT_SANS_FONT.mac} !important;
+  font-family: var(--cus-sans-font), ${VSC_DFAULT_SANS_FONT.mac} !important;
 }
 .linux {
-  font-family: ${sansSerif}, ${VSC_DFAULT_SANS_FONT.linux} !important;
+  font-family: var(--cus-sans-font), ${VSC_DFAULT_SANS_FONT.linux} !important;
 }`
   }
   return result

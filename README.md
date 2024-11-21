@@ -74,6 +74,11 @@ There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/
 
 ## Example
 
+Avaiable CSS Variables:
+
+- `--cus-monospace-font`: Target monospace font family
+- `--cus-sans-font`: Target sans-serif font family
+
 ```json
 {
   "custom-ui-style.font.sansSerif": "Maple UI, -apple-system",
