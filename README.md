@@ -96,6 +96,28 @@ There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/
     },
     ".overlayWidgets .editorPlaceholder": {
       "line-height": "unset !important"
+    },
+    ".monaco-workbench .activitybar .monaco-action-bar": {
+      "& .action-label": {
+        "font-size": "20px !important",
+        "&::before": {
+          "position": "absolute",
+          "z-index": 2
+        },
+        "&::after": {
+          "content": "''",
+          "width": "75%",
+          "height": "75%",
+          "position": "absolute",
+          "border-radius": "6px"
+        }
+      },
+      "& .action-item:hover .action-label": {
+        "color": "var(--vscode-menu-selectionForeground) !important",
+        "&::after": {
+          "background-color": "var(--vscode-menu-selectionBackground)"
+        }
+      }
     }
   }
 }
