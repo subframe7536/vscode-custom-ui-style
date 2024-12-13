@@ -81,3 +81,7 @@ export function normalizeUrl(url: string) {
   // file:///Users/foo/bar.png => vscode-file://vscode-app/Users/foo/bar.png
   return vscode.Uri.parse(url.replace('file://', 'vscode-file://vscode-app')).toString()
 }
+
+export const productJSONPath = `${baseDir}/product.json`
+
+export const productJSONBakPath = `${baseDir}/product.json.${vscode.version}.${bakExt}`
