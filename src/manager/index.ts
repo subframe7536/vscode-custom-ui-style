@@ -16,21 +16,20 @@ export function createFileManagers() {
   ]
   const productJsonManager = new JsonFileManager()
   return {
-    hasBakFile: () => managers.every(m => m.hasBakFile),
-    reload: (text: string) => {
+    hasBakFile: () => [...managers, productJsonManager].every(m => m.hasBakFile),
+    reload: async (text: string) => {
       logWindowOptionsChanged()
-      runAndRestart(
+      await runAndRestart(
         text,
-        async () => {
-          await Promise.all(managers.map(m => m.reload()))
+        async () => Promise.all(managers.map(m => m.reload()))
           // ensure other files are already modified
-          await productJsonManager.reload()
-        },
+          .then(() => productJsonManager.reload())
+        ,
       )
     },
-    rollback: (text: string) => {
+    rollback: async (text: string) => {
       logWindowOptionsChanged()
-      runAndRestart(
+      await runAndRestart(
         text,
         () => Promise.all([...managers, productJsonManager].map(m => m.rollback())),
       )

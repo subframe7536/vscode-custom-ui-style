@@ -84,6 +84,11 @@ export function normalizeUrl(url: string) {
   return vscode.Uri.parse(url.replace('file://', 'vscode-file://vscode-app')).toString()
 }
 
-export const productJSONPath = `${baseDir}/product.json`
+function getProductJSONPath(baseExt: string, backupExt?: string) {
+  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
+  return path.join(path.basename(baseDir), `product.${ext}`)
+}
 
-export const productJSONBakPath = `${baseDir}/product.json.${vscode.version}.${bakExt}`
+export const productJSONPath = getProductJSONPath('json')
+
+export const productJSONBakPath = getProductJSONPath('json', bakExt)
