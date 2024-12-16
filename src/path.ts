@@ -1,7 +1,9 @@
 import { existsSync } from 'node:fs'
 import path from 'node:path'
 import vscode from 'vscode'
-import { name as bakExt } from './generated/meta'
+import { name } from './generated/meta'
+
+const bakExt = `${vscode.version}.${name}`
 
 /**
  * Base dir
