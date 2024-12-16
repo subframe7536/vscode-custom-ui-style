@@ -23,8 +23,7 @@ export function createFileManagers() {
         text,
         () => Promise.all(managers.map(m => m.reload()))
           // ensure other files are already modified
-          .then(() => productJsonManager.reload())
-        ,
+          .then(() => productJsonManager.reload()),
       )
     },
     rollback: async (text: string) => {

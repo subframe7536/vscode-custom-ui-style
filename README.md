@@ -14,7 +14,8 @@ VSCode extension that custom ui css style in both editor and webview
 > [!warning]
 > This extension works by editting the VSCode's css and js files.
 >
-> So, a warning appears while the first time to install or VSCode update. You can click the [never show again] to avoid it.
+> ~~So, a warning appears while the first time to install or VSCode update. You can click the [never show again] to avoid it.~~
+> From V0.4.0, the warning will no longer prompt. #11
 
 ## Features
 
@@ -43,6 +44,8 @@ If you are using MacOS, press <kbd>Command + Q</kbd> first, then restart VSCode.
 
 There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (MacOS) of the process.
 
+From V0.4.0, the extension will spawn a new process to totally reload the VSCode.
+
 #### RangeError: Maximum call stack size exceeded
 
 Due to system permission restrictions, you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close (press <kbd>Command + Q</kbd>) VSCode first, then run:
@@ -52,6 +55,10 @@ sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
 ```
 
 See #6
+
+### Notice
+
+Please make sure the VSCode is totally replaced while upgrading.
 
 ## Configurations
 

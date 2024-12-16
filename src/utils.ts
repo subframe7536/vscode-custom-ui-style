@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { readFileSync, writeFileSync } from 'atomically'
 import { useLogger } from 'reactive-vscode'
-import { commands, window } from 'vscode'
+import { commands, version, window } from 'vscode'
 import { displayName, name } from './generated/meta'
 import { baseDir } from './path'
 import { restartApp } from './restart'
@@ -43,8 +43,11 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
     if (success) {
       const item = await showMessage(message, 'Reload Window', 'Cancel')
       if (item === 'Reload Window') {
-        // commands.executeCommand('workbench.action.reloadWindow')
-        await restartApp()
+        if (checkIsVSCodeUsingESM()) {
+          await restartApp()
+        } else {
+          commands.executeCommand('workbench.action.reloadWindow')
+        }
       }
     }
   } catch (e) {
@@ -53,6 +56,14 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
   } finally {
     fs.rmSync(lockFile)
   }
+}
+
+/**
+ * Version >= 1.95
+ */
+function checkIsVSCodeUsingESM() {
+  const versionArray = version.split('.').map(Number)
+  return versionArray[0] === 1 && versionArray[1] >= 95
 }
 
 export async function showMessage<T extends string[]>(

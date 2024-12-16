@@ -16,9 +16,7 @@ export abstract class BaseFileManager implements FileManager {
   ) { }
 
   get hasBakFile() {
-    const exists = fs.existsSync(this.bakPath)
-    log.info(`Backup file [${this.bakPath}] exist:`, exists)
-    return exists
+    return fs.existsSync(this.bakPath)
   }
 
   async reload() {
