@@ -4,7 +4,7 @@
   "displayName": "Custom UI Style",
   "version": "0.3.3",
   "private": true,
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@9.15.0",
   "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
   "author": "subframe7536 <1667077010@qq.com>",
   "license": "MIT",
@@ -138,17 +138,17 @@
     "vscode:uninstall": "node ./dist/uninstall.js"
   },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^0.9.6",
+    "@subframe7536/eslint-config": "^1.0.0",
     "@subframe7536/type-utils": "^0.1.6",
-    "@types/node": "^20.17.5",
+    "@types/node": "^20.17.10",
     "@types/vscode": "1.89.0",
     "@vscode/vsce": "^3.2.1",
     "atomically": "^2.0.3",
-    "bumpp": "^9.8.0",
-    "eslint": "^9.13.0",
-    "reactive-vscode": "^0.2.6",
+    "bumpp": "^9.9.1",
+    "eslint": "^9.17.0",
+    "reactive-vscode": "^0.2.9",
     "tsup": "^8.3.5",
-    "typescript": "^5.6.3",
-    "vscode-ext-gen": "^0.5.0"
+    "typescript": "^5.7.2",
+    "vscode-ext-gen": "^0.5.2"
   }
 }
