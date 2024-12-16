@@ -1,7 +1,9 @@
 import { existsSync } from 'node:fs'
 import path from 'node:path'
 import vscode from 'vscode'
-import { name as bakExt } from './generated/meta'
+import { name } from './generated/meta'
+
+const bakExt = `${vscode.version}.${name}`
 
 /**
  * Base dir
@@ -81,3 +83,12 @@ export function normalizeUrl(url: string) {
   // file:///Users/foo/bar.png => vscode-file://vscode-app/Users/foo/bar.png
   return vscode.Uri.parse(url.replace('file://', 'vscode-file://vscode-app')).toString()
 }
+
+function getProductJSONPath(baseExt: string, backupExt?: string) {
+  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
+  return path.join(path.dirname(baseDir), `product.${ext}`)
+}
+
+export const productJSONPath = getProductJSONPath('json')
+
+export const productJSONBakPath = getProductJSONPath('json', bakExt)
