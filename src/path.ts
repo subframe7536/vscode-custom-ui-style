@@ -1,9 +1,7 @@
 import { existsSync } from 'node:fs'
 import path from 'node:path'
 import vscode from 'vscode'
-import { name } from './generated/meta'
-
-const bakExt = `${vscode.version}.${name}`
+import { name as bakExt } from './generated/meta'
 
 /**
  * Base dir
@@ -91,4 +89,4 @@ function getProductJSONPath(baseExt: string, backupExt?: string) {
 
 export const productJSONPath = getProductJSONPath('json')
 
-export const productJSONBakPath = getProductJSONPath('json', bakExt)
+export const productJSONBakPath = getProductJSONPath('json', `${vscode.version}.${bakExt}`)
