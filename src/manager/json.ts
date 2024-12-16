@@ -5,6 +5,7 @@ import { readFileSync } from 'atomically'
 import { baseDir, productJSONBakPath, productJSONPath } from '../path'
 import { BaseFileManager } from './base'
 
+// https://github.com/RimuruChan/vscode-fix-checksums/blob/master/src/extension.js#L75-L81
 function computeChecksum(file: string) {
   return createHash('sha256')
     .update(readFileSync(file))
@@ -18,6 +19,7 @@ export class JsonFileManager extends BaseFileManager {
   }
 
   patch(content: string): Promisable<string> {
+    // https://github.com/RimuruChan/vscode-fix-checksums/blob/master/src/extension.js#L30-L58
     const product: { checksums: Record<string, string> } = JSON.parse(content)
     for (const [filePath, curChecksum] of Object.entries(product.checksums)) {
       const checksum = computeChecksum(path.join(baseDir, filePath))
@@ -25,6 +27,6 @@ export class JsonFileManager extends BaseFileManager {
         product.checksums[filePath] = checksum
       }
     }
-    return JSON.stringify(product, null, 2)
+    return JSON.stringify(product, null, '\t')
   }
 }
