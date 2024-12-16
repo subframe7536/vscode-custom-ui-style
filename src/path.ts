@@ -86,7 +86,7 @@ export function normalizeUrl(url: string) {
 
 function getProductJSONPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
-  return path.join(path.basename(baseDir), `product.${ext}`)
+  return path.join(path.dirname(baseDir), `product.${ext}`)
 }
 
 export const productJSONPath = getProductJSONPath('json')
