@@ -36,8 +36,7 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
     try {
       await action()
     } catch (error) {
-      log.error(`Fail to execute action,`, error)
-      showMessage(`Fail to execute action: ${error}`)
+      logError('Fail to execute action', error)
       success = false
     }
     if (success) {
@@ -47,8 +46,7 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
           try {
             await restartApp()
           } catch (error) {
-            log.error('Fail to restart VSCode', (error as Error).message, (error as Error).stack)
-            showMessage(`Fail to restart VSCode, ${error}`)
+            logError('Fail to restart VSCode', error)
           }
         } else {
           commands.executeCommand('workbench.action.reloadWindow')
@@ -56,8 +54,7 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
       }
     }
   } catch (e) {
-    log.error(`npm:atomically error,`, e)
-    showMessage(`npm:atomically error: ${e}, maybe you need to enhance VSCode's permissions?`)
+    logError(`npm:atomically error, maybe you need to enhance VSCode's permissions?`, e)
   } finally {
     fs.rmSync(lockFile)
   }
@@ -71,6 +68,11 @@ function checkIsVSCodeUsingESM() {
   return versionArray[0] === 1 && versionArray[1] >= 95
 }
 
+function logError(message: string, error: unknown) {
+  log.error(message, ...error instanceof Error ? [error.message, error.stack] : [error])
+  showMessage(`${message}, ${error}`)
+}
+
 export async function showMessage<T extends string[]>(
   content: string,
   ...buttons: T
@@ -78,7 +80,7 @@ export async function showMessage<T extends string[]>(
   try {
     return await window.showInformationMessage(content, ...buttons)
   } catch (error) {
-    log.error('VSCode error:', error)
+    logError('VSCode error', error)
   }
 }
 
