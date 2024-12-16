@@ -146,7 +146,7 @@
     "atomically": "^2.0.3",
     "bumpp": "^9.9.1",
     "eslint": "^9.17.0",
-    "reactive-vscode": "^0.2.9",
+    "reactive-vscode": "0.2.6",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
     "vscode-ext-gen": "^0.5.2"
