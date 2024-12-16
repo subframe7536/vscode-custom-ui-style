@@ -1,7 +1,8 @@
 // Reference from https://github.com/zokugun/vscode-sync-settings/blob/master/src/utils/restart-app.ts
 import { spawn } from 'node:child_process'
-import { readdirSync } from 'node:fs'
+import fs from 'node:fs'
 import path from 'node:path'
+import { readFileSync } from 'atomically'
 import { productJSONPath } from './path'
 
 export async function restartApp(): Promise<void> {
@@ -21,7 +22,7 @@ export async function restartApp(): Promise<void> {
 
 function getAppBinary(appHomeDir: string): string {
   // remove tunnel
-  let files = readdirSync(appHomeDir).filter(file => !file.includes('-tunnel'))
+  let files = fs.readdirSync(appHomeDir).filter(file => !file.includes('-tunnel'))
 
   if (files.length === 1) {
     return path.join(appHomeDir, files[0])
@@ -40,7 +41,7 @@ function getAppBinary(appHomeDir: string): string {
 }
 
 async function restartMacOS() {
-  const { nameLong } = JSON.parse(productJSONPath) as { nameLong: string }
+  const { nameLong } = JSON.parse(readFileSync(productJSONPath, 'utf-8')) as { nameLong: string }
 
   const match = /(.*\.app)\/Contents\/Frameworks\//.exec(process.execPath)
   const appPath = match ? match[1] : `/Applications/${nameLong}.app`

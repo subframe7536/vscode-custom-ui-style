@@ -44,7 +44,12 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
       const item = await showMessage(message, 'Reload Window', 'Cancel')
       if (item === 'Reload Window') {
         if (checkIsVSCodeUsingESM()) {
-          await restartApp()
+          try {
+            await restartApp()
+          } catch (error) {
+            log.error('Fail to restart VSCode', (error as Error).message, (error as Error).stack)
+            showMessage(`Fail to restart VSCode, ${error}`)
+          }
         } else {
           commands.executeCommand('workbench.action.reloadWindow')
         }
