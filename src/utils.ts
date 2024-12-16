@@ -6,6 +6,7 @@ import { useLogger } from 'reactive-vscode'
 import { commands, window } from 'vscode'
 import { displayName, name } from './generated/meta'
 import { baseDir } from './path'
+import { restartApp } from './restart'
 
 export const log = useLogger(displayName)
 
@@ -42,7 +43,8 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
     if (success) {
       const item = await showMessage(message, 'Reload Window', 'Cancel')
       if (item === 'Reload Window') {
-        commands.executeCommand('workbench.action.reloadWindow')
+        // commands.executeCommand('workbench.action.reloadWindow')
+        await restartApp()
       }
     }
   } catch (e) {

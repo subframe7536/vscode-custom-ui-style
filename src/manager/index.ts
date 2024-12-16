@@ -21,7 +21,7 @@ export function createFileManagers() {
       logWindowOptionsChanged()
       await runAndRestart(
         text,
-        async () => Promise.all(managers.map(m => m.reload()))
+        () => Promise.all(managers.map(m => m.reload()))
           // ensure other files are already modified
           .then(() => productJsonManager.reload())
         ,
