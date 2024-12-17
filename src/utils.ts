@@ -59,8 +59,14 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
       success = false
     }
     if (success) {
-      const item = await showMessage(message, 'Reload Window', 'Cancel')
-      if (item === 'Reload Window') {
+      let shouldProceed = false
+      if (config.reloadWithoutPrompting) {
+        shouldProceed = true
+      } else {
+        const item = await showMessage(message, 'Reload Window', 'Cancel')
+        shouldProceed = item === 'Reload Window'
+      }
+      if (shouldProceed) {
         if (fullRestart) {
           try {
             await restartApp()
