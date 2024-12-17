@@ -67,6 +67,7 @@ Please make sure the VSCode is totally replaced while upgrading.
 | Key                                         | Description                                                                                                     | Type      | Default    |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
 | `custom-ui-style.preferRestart`             | Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version >= 1.95.0) | `boolean` | `false`    |
+| `custom-ui-style.reloadWithoutPrompting`    | Reload/restart immediately, instead of having to click 'Reload Window' in the notification                      | `boolean` | `false`    |
 | `custom-ui-style.watch`                     | Watch configuration changes and reload window automatically                                                     | `boolean` | `true`     |
 | `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                                  | `object`  | `{}`       |
 | `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family            | `string`  | ``         |
