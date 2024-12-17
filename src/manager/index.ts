@@ -1,6 +1,6 @@
 import type { FileManager } from './base'
 import { version } from 'vscode'
-import { config, logWindowOptionsChanged } from '../config'
+import { config } from '../config'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'
 import { JsonFileManager } from './json'
@@ -27,7 +27,6 @@ export function createFileManagers() {
   return {
     hasBakFile: () => [...managers, productJsonManager].every(m => m.hasBakFile),
     reload: async (text: string) => {
-      logWindowOptionsChanged()
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
@@ -37,7 +36,6 @@ export function createFileManagers() {
       )
     },
     rollback: async (text: string) => {
-      logWindowOptionsChanged()
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,

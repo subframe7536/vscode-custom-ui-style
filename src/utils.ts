@@ -4,6 +4,7 @@ import path from 'node:path'
 import { readFileSync, writeFileSync } from 'atomically'
 import { useLogger } from 'reactive-vscode'
 import { commands, window } from 'vscode'
+import { config } from './config'
 import * as Meta from './generated/meta'
 import { baseDir } from './path'
 import { restartApp } from './restart'
@@ -11,6 +12,23 @@ import { restartApp } from './restart'
 export const log = useLogger(Meta.displayName)
 
 const lockFile = path.join(baseDir, `__${Meta.name}__.lock`)
+
+let last = hasElectronWindowOptions()
+function hasElectronWindowOptions(): string {
+  return JSON.stringify(config.electron)
+}
+
+function logWindowOptionsChanged(useFullRestart: boolean) {
+  const current = hasElectronWindowOptions()
+  if (last !== current) {
+    if (useFullRestart) {
+      return
+    }
+    const method = process.platform === 'darwin' ? 'Press "Command + Q"' : 'Close all windows'
+    showMessage(`Note: Please TOTALLY restart VSCode (${method}) to take effect, "custom-ui-style.electron" is changed`)
+  }
+  last = current
+}
 
 export async function runAndRestart(message: string, fullRestart: boolean, action: () => Promise<any>) {
   let count = 5
@@ -34,6 +52,7 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
     writeFileSync(lockFile, String(Date.now()))
     let success = true
     try {
+      logWindowOptionsChanged(fullRestart)
       await action()
     } catch (error) {
       logError('Fail to execute action', error)
