@@ -53,6 +53,12 @@
       "type": "object",
       "title": "Custom UI Style",
       "properties": {
+        "custom-ui-style.preferRestart": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version >= 1.95.0)",
+          "default": false
+        },
         "custom-ui-style.electron": {
           "scope": "application",
           "type": "object",

@@ -23,6 +23,8 @@ VSCode extension that custom ui css style in both editor and webview
 - Setup background image
 - Custom nest stylesheet for both editor and webview
 - Custom Electron BrowserWindow options
+- [From V0.4.0] support total restart
+- [From V0.4.0] suppress corrupt message
 
 ### Usage
 
@@ -44,8 +46,6 @@ If you are using MacOS, press <kbd>Command + Q</kbd> first, then restart VSCode.
 
 There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (MacOS) of the process.
 
-From V0.4.0, the extension will spawn a new process to totally reload the VSCode.
-
 #### RangeError: Maximum call stack size exceeded
 
 Due to system permission restrictions, you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close (press <kbd>Command + Q</kbd>) VSCode first, then run:
@@ -64,19 +64,20 @@ Please make sure the VSCode is totally replaced while upgrading.
 
 <!-- configs -->
 
-| Key                                         | Description                                                                                          | Type     | Default    |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------- | ---------- |
-| `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                       | `object` | `{}`       |
-| `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family | `string` | ``         |
-| `custom-ui-style.font.sansSerif`            | Global sans-serif font family that apply in both editor and webview                                  | `string` | ``         |
-| `custom-ui-style.background.url`            | Full-screen background image url, support protocol: 'https://', 'file://', 'data:'                   | `string` | ``         |
-| `custom-ui-style.background.opacity`        | Background image opacity                                                                             | `number` | `0.9`      |
-| `custom-ui-style.background.size`           | Background image size                                                                                | `string` | `"cover"`  |
-| `custom-ui-style.background.position`       | Background image position                                                                            | `string` | `"center"` |
-| `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                        | `object` | `{}`       |
-| `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                 | `array`  | ``         |
-| `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                | `array`  | ``         |
-| `custom-ui-style.webview.stylesheet`        | Custom css for webview, support nest selectors                                                       | `object` | `{}`       |
+| Key                                         | Description                                                                                                     | Type      | Default    |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
+| `custom-ui-style.preferRestart`             | Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version >= 1.95.0) | `boolean` | `false`    |
+| `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                                  | `object`  | `{}`       |
+| `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family            | `string`  | ``         |
+| `custom-ui-style.font.sansSerif`            | Global sans-serif font family that apply in both editor and webview                                             | `string`  | ``         |
+| `custom-ui-style.background.url`            | Full-screen background image url, support protocol: 'https://', 'file://', 'data:'                              | `string`  | ``         |
+| `custom-ui-style.background.opacity`        | Background image opacity                                                                                        | `number`  | `0.9`      |
+| `custom-ui-style.background.size`           | Background image size                                                                                           | `string`  | `"cover"`  |
+| `custom-ui-style.background.position`       | Background image position                                                                                       | `string`  | `"center"` |
+| `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                   | `object`  | `{}`       |
+| `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                            | `array`   | ``         |
+| `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                           | `array`   | ``         |
+| `custom-ui-style.webview.stylesheet`        | Custom css for webview, support nest selectors                                                                  | `object`  | `{}`       |
 
 <!-- configs -->
 

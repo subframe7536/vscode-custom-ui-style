@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { readFileSync, writeFileSync } from 'atomically'
 import { useLogger } from 'reactive-vscode'
-import { commands, version, window } from 'vscode'
+import { commands, window } from 'vscode'
 import * as Meta from './generated/meta'
 import { baseDir } from './path'
 import { restartApp } from './restart'
@@ -12,7 +12,7 @@ export const log = useLogger(Meta.displayName)
 
 const lockFile = path.join(baseDir, `__${Meta.name}__.lock`)
 
-export async function runAndRestart(message: string, action: () => Promise<any>) {
+export async function runAndRestart(message: string, fullRestart: boolean, action: () => Promise<any>) {
   let count = 5
   const check = () => fs.existsSync(lockFile)
   while (check() && count--) {
@@ -42,7 +42,7 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
     if (success) {
       const item = await showMessage(message, 'Reload Window', 'Cancel')
       if (item === 'Reload Window') {
-        if (checkIsVSCodeUsingESM()) {
+        if (fullRestart) {
           try {
             await restartApp()
           } catch (error) {
@@ -58,14 +58,6 @@ export async function runAndRestart(message: string, action: () => Promise<any>)
   } finally {
     fs.rmSync(lockFile)
   }
-}
-
-/**
- * Version >= 1.95
- */
-function checkIsVSCodeUsingESM() {
-  const versionArray = version.split('.').map(Number)
-  return versionArray[0] === 1 && versionArray[1] >= 95
 }
 
 function logError(message: string, error: unknown) {
