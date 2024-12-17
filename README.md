@@ -72,7 +72,7 @@ Please make sure the VSCode is totally replaced while upgrading.
 | `custom-ui-style.background.url`            | Full-screen background image url, support protocol: 'https://', 'file://', 'data:'                   | `string` | ``         |
 | `custom-ui-style.background.opacity`        | Background image opacity                                                                             | `number` | `0.9`      |
 | `custom-ui-style.background.size`           | Background image size                                                                                | `string` | `"cover"`  |
-| `custom-ui-style.background.position`       | Background image size                                                                                | `string` | `"center"` |
+| `custom-ui-style.background.position`       | Background image position                                                                            | `string` | `"center"` |
 | `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                        | `object` | `{}`       |
 | `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                 | `array`  | ``         |
 | `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                | `array`  | ``         |

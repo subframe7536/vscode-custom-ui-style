@@ -92,7 +92,7 @@
         "custom-ui-style.background.position": {
           "scope": "application",
           "type": "string",
-          "description": "Background image size",
+          "description": "Background image position",
           "default": "center"
         },
         "custom-ui-style.stylesheet": {

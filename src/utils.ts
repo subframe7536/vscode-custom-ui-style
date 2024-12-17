@@ -4,13 +4,13 @@ import path from 'node:path'
 import { readFileSync, writeFileSync } from 'atomically'
 import { useLogger } from 'reactive-vscode'
 import { commands, version, window } from 'vscode'
-import { displayName, name } from './generated/meta'
+import * as Meta from './generated/meta'
 import { baseDir } from './path'
 import { restartApp } from './restart'
 
-export const log = useLogger(displayName)
+export const log = useLogger(Meta.displayName)
 
-const lockFile = path.join(baseDir, `__${name}__.lock`)
+const lockFile = path.join(baseDir, `__${Meta.name}__.lock`)
 
 export async function runAndRestart(message: string, action: () => Promise<any>) {
   let count = 5
