@@ -59,6 +59,12 @@
           "description": "Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version >= 1.95.0)",
           "default": false
         },
+        "custom-ui-style.watch": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Watch configuration changes and reload window automatically",
+          "default": true
+        },
         "custom-ui-style.electron": {
           "scope": "application",
           "type": "object",
