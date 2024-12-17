@@ -151,6 +151,8 @@ Avaiable CSS Variables:
 
 - [APC](https://github.com/drcika/apc-extension)
 - [Background](https://github.com/shalldie/vscode-background)
+- [vscode-sync-settings](https://github.com/zokugun/vscode-sync-settings)
+- [vscode-fix-checksums](https://github.com/RimuruChan/vscode-fix-checksums)
 
 ## License
 

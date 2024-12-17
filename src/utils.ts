@@ -70,7 +70,7 @@ function checkIsVSCodeUsingESM() {
 
 function logError(message: string, error: unknown) {
   log.error(message, ...error instanceof Error ? [error.message, error.stack] : [error])
-  showMessage(`${message}, ${error}`)
+  showMessage(`${message}, Error: ${error}`)
 }
 
 export async function showMessage<T extends string[]>(
