@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { readFileSync } from 'atomically'
-import { productJSONPath } from './path'
+import { baseDir, productJSONPath } from './path'
 
 export async function restartApp(): Promise<void> {
   let sp
@@ -71,12 +71,23 @@ async function restartMacOS() {
 
 async function restartWindows() {
   const appHomeDir = path.dirname(process.execPath)
-  const exeName = path.basename(process.execPath)
-  const binary = getAppBinary(`${appHomeDir}\\bin\\`)
+  const exeName = path.basename(process.execPath, '.exe')
+  const binary = getAppBinary(`${appHomeDir}/bin/`, `${path.dirname(baseDir)}/bin/`)
+
+  const checkScript = [
+    'for ($i = 0; $i -lt 100; $i++) {',
+    `    $vscodeProcess = Get-Process '${exeName}' -ErrorAction SilentlyContinue;`,
+    '    if ($vscodeProcess -eq $null) {',
+    '        exit',
+    '    }',
+    '    Start-Sleep -Milliseconds 100',
+    '}',
+  ].join('')
+  const batchScript = `taskkill /F /IM ${exeName}.exe >nul && powershell -Command "${checkScript}" && "${binary}"`
 
   return spawn(
     process.env.comspec ?? 'cmd',
-    [`/C taskkill /F /IM ${exeName} >nul && timeout /T 1 && "${binary}"`],
+    [`/C ${batchScript}`],
     {
       detached: true,
       stdio: 'ignore',
