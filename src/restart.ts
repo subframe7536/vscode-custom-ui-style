@@ -20,20 +20,25 @@ export async function restartApp(): Promise<void> {
   sp.unref()
 }
 
-function getAppBinary(appHomeDir: string): string {
-  // remove tunnel
-  let files = fs.readdirSync(appHomeDir).filter(file => !file.includes('-tunnel'))
-
-  if (files.length === 1) {
-    return path.join(appHomeDir, files[0])
-  }
-
-  if (process.platform === 'win32') {
-    // select *.cmd
-    files = files.filter(file => file.endsWith('.cmd'))
+function getAppBinary(...binDirectories: string[]): string {
+  for (const dir of binDirectories) {
+    if (!fs.existsSync(dir)) {
+      continue
+    }
+    // remove tunnel
+    let files = fs.readdirSync(dir).filter(file => !file.includes('-tunnel'))
 
     if (files.length === 1) {
-      return path.join(appHomeDir, files[0])
+      return path.join(dir, files[0])
+    }
+
+    if (process.platform === 'win32') {
+      // select *.cmd
+      files = files.filter(file => file.endsWith('.cmd'))
+
+      if (files.length === 1) {
+        return path.join(dir, files[0])
+      }
     }
   }
 
