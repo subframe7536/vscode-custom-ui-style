@@ -105,12 +105,21 @@ async function restartWindows() {
 async function restartLinux() {
   const appHomeDir = path.dirname(process.execPath)
   const binary = getAppBinary(`${appHomeDir}/bin/`)
+  const processName = path.basename(process.execPath)
 
   return spawn(
     '/bin/sh',
     [
       '-c',
-      `killall "${process.execPath}" && sleep 1 && killall -9 "${process.execPath}" && sleep 1 && "${binary}"`,
+      `
+      pkill -f "${processName}"
+      counter=0
+      while pgrep -f "${processName}" > /dev/null && [ $counter -lt 100 ]; do
+        sleep 0.1
+        counter=$((counter + 1))
+      done
+      "${binary}"
+      `,
     ],
     {
       detached: true,
