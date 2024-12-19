@@ -28,21 +28,19 @@ function getAppBinary(...binDirectories: string[]): string {
     // remove tunnel
     let files = fs.readdirSync(dir).filter(file => !file.includes('-tunnel'))
 
-    if (files.length === 1) {
-      return path.join(dir, files[0])
-    }
-
     if (process.platform === 'win32') {
       // select *.cmd
       files = files.filter(file => file.endsWith('.cmd'))
 
-      if (files.length === 1) {
+      if (files.length > 0) {
         return path.join(dir, files[0])
       }
+    } else if (files.length > 0) {
+      return path.join(dir, files[0])
     }
   }
 
-  throw new Error('Can determine binary path')
+  throw new Error(`Cannot find binary path in [${binDirectories}]`)
 }
 
 async function restartMacOS() {
@@ -78,7 +76,7 @@ async function restartMacOS() {
 async function restartWindows() {
   const appHomeDir = path.dirname(process.execPath)
   const exeName = path.basename(process.execPath, '.exe')
-  const binary = getAppBinary(`${appHomeDir}/bin/`, `${path.dirname(baseDir)}/bin/`)
+  const binary = getAppBinary(`${appHomeDir}\\bin\\`, `${path.dirname(baseDir)}\\bin\\`)
 
   const checkScript = [
     'for ($i = 0; $i -lt 100; $i++) {',
