@@ -86,8 +86,13 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
 }
 
 function logError(message: string, error: unknown) {
-  log.error(message, ...error instanceof Error ? [error.message, error.stack] : [error])
-  showMessage(`${message}, Error: ${error}`)
+  if (error instanceof Error) {
+    log.error(message, error instanceof Error ? `${error.message},` : error)
+    showMessage(`${message}, ${error}`)
+  } else {
+    log.error(message, error)
+    showMessage(`${message}, Error: ${error}`)
+  }
 }
 
 export async function showMessage<T extends string[]>(
