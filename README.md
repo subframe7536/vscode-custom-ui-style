@@ -101,8 +101,24 @@ Avaiable CSS Variables:
 - `--cus-monospace-font`: Target monospace font family
 - `--cus-sans-font`: Target sans-serif font family
 
-```json
+```jsonc
 {
+  // Electron BrowserWindow options
+  //  - https://www.electronjs.org/docs/latest/api/base-window
+  //  - https://www.electronjs.org/docs/latest/api/browser-window
+  "custom-ui-style.electron": {
+    // Frameless window (no title bar, no macos traffic light buttons)
+    //  - "A frameless window removes all chrome applied by the OS, including window controls"
+    //  - https://www.electronjs.org/docs/latest/api/base-window#new-basewindowoptions
+    //  - https://www.electronjs.org/docs/latest/tutorial/custom-window-styles#frameless-windows
+    //  - https://www.electronjs.org/docs/latest/tutorial/custom-title-bar
+    "frame": false,
+    // Disable rounded corners (macos)
+    //  - https://www.electronjs.org/docs/latest/api/base-window#new-basewindowoptions
+    //  - "Whether frameless window should have rounded corners on macOS"
+    //  - "Setting this property to false will prevent the window from being fullscreenable"
+    "roundedCorners": false,
+  },
   "custom-ui-style.font.sansSerif": "Maple UI, -apple-system",
   "custom-ui-style.background.url": "file:///D:/image/ide-bg.jpg",
   "custom-ui-style.webview.monospaceSelector": [".codeblock", ".prism [class*='language-']"],
