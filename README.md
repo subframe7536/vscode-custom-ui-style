@@ -101,7 +101,7 @@ Avaiable CSS Variables:
 - `--cus-monospace-font`: Target monospace font family
 - `--cus-sans-font`: Target sans-serif font family
 
-```json
+```jsonc
 {
   // Electron BrowserWindow options
   //  - https://www.electronjs.org/docs/latest/api/base-window
