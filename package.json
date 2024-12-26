@@ -156,7 +156,7 @@
     "vscode:uninstall": "node ./dist/uninstall.js"
   },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^1.0.0",
+    "@subframe7536/eslint-config": "^1.1.3",
     "@subframe7536/type-utils": "^0.1.6",
     "@types/node": "^20.17.10",
     "@types/vscode": "1.89.0",
