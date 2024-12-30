@@ -9,7 +9,7 @@ const banner = '/* Custom UI Style Start */'
 const footer = '/* Custom UI Style End */'
 
 function generateBackgroundCSS() {
-  const url = config['background.url']
+  const url = config['background.url'] || config['background.remoteURL']
   if (!url) {
     return ''
   }
