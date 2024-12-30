@@ -14,7 +14,7 @@ function generateBackgroundCSS() {
     return ''
   }
   return `
-body:has([id='workbench.parts.editor']) {
+body {
     background-size: ${config['background.size']};
     background-repeat: no-repeat;
     background-attachment: fixed; // for code-server
