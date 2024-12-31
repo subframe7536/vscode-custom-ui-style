@@ -75,6 +75,7 @@ export const mainPath = getMainPath('js')
 export const mainBakPath = getMainPath('js', bakExt)
 
 export function normalizeUrl(url: string) {
+  url = url.replace(/\\/g, '/')
   if (!url.startsWith('file://')) {
     return url
   }

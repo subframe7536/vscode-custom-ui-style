@@ -1,12 +1,9 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { config, getFamilies } from '../config'
+import { getCssImports } from '../imports'
 import { cssBakPath, cssPath, normalizeUrl } from '../path'
 import { generateStyleFromObject } from '../utils'
 import { BaseFileManager } from './base'
 import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './renderer'
-
-const banner = '/* Custom UI Style Start */'
-const footer = '/* Custom UI Style End */'
 
 function generateBackgroundCSS() {
   const url = config['background.url'] || config['background.remoteURL']
@@ -66,13 +63,13 @@ export class CssFileManager extends BaseFileManager {
     super(cssPath, cssBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  async patch(content: string): Promise<string> {
     return `${content}
-${banner}
+/* Custom UI Style Start */${await getCssImports()}
 ${generateBackgroundCSS()}
 ${generateFontCSS()}
 ${generateStyleFromObject(config.stylesheet)}
-${footer}
+/* Custom UI Style End */
 `
   }
 }

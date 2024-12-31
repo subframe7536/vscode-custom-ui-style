@@ -68,7 +68,7 @@
         "custom-ui-style.watch": {
           "scope": "resource",
           "type": "boolean",
-          "description": "Watch configuration changes and reload window automatically",
+          "description": "Watch configuration changes and reload window automatically (ignore imports)",
           "default": true
         },
         "custom-ui-style.electron": {
@@ -117,6 +117,20 @@
           "type": "string",
           "description": "Background image position",
           "default": "center"
+        },
+        "custom-ui-style.external.enable": {
+          "scope": "application",
+          "type": "boolean",
+          "description": "Enable external CSS or JS resources",
+          "default": true
+        },
+        "custom-ui-style.external.imports": {
+          "scope": "application",
+          "type": "array",
+          "description": "External CSS or JS resources, use `${userHome}` to get user home directory, support protocol: 'https://', 'file://'",
+          "items": {
+            "type": "string"
+          }
         },
         "custom-ui-style.stylesheet": {
           "scope": "application",

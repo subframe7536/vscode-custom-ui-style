@@ -56,6 +56,22 @@ sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
 
 See #6
 
+#### Fail to restart VSCode after adding remote JS file
+
+The remote script is garbled or have syntax error, you may need to manually rollback the source file:
+
+Copy
+
+```
+{VSCodeAppRoot}/resources/app/out/vs/workbench/workbench.desktop.main.custom-ui-style.js
+```
+
+To
+
+```
+{VSCodeAppRoot}/resources/app/out/vs/workbench/workbench.desktop.main.js
+```
+
 ### Notice
 
 Please make sure the VSCode is totally replaced while upgrading.
@@ -68,7 +84,7 @@ Please make sure the VSCode is totally replaced while upgrading.
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---------- |
 | `custom-ui-style.preferRestart`             | Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version &gt;= 1.95.0)                   | `boolean` | `false`    |
 | `custom-ui-style.reloadWithoutPrompting`    | Reload/restart immediately, instead of having to click 'Reload Window' in the notification                                           | `boolean` | `false`    |
-| `custom-ui-style.watch`                     | Watch configuration changes and reload window automatically                                                                          | `boolean` | `true`     |
+| `custom-ui-style.watch`                     | Watch configuration changes and reload window automatically (ignore imports)                                                         | `boolean` | `true`     |
 | `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                                                       | `object`  | `{}`       |
 | `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family                                 | `string`  | ``         |
 | `custom-ui-style.font.sansSerif`            | Global sans-serif font family that apply in both editor and webview                                                                  | `string`  | ``         |
@@ -77,6 +93,8 @@ Please make sure the VSCode is totally replaced while upgrading.
 | `custom-ui-style.background.opacity`        | Background image opacity                                                                                                             | `number`  | `0.9`      |
 | `custom-ui-style.background.size`           | Background image size                                                                                                                | `string`  | `"cover"`  |
 | `custom-ui-style.background.position`       | Background image position                                                                                                            | `string`  | `"center"` |
+| `custom-ui-style.external.enable`           | Enable external CSS or JS resources                                                                                                  | `boolean` | `true`     |
+| `custom-ui-style.external.imports`          | External CSS or JS resources, use `${userHome}` to get user home directory, support protocol: 'https://', 'file://'                  | `array`   | ``         |
 | `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                                        | `object`  | `{}`       |
 | `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                                                 | `array`   | ``         |
 | `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                                                | `array`   | ``         |

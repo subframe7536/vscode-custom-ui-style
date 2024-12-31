@@ -1,5 +1,5 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { getFamilies } from '../config'
+import { getJsImports } from '../imports'
 import { rendererBakPath, rendererPath } from '../path'
 import { escapeQuote } from '../utils'
 import { BaseFileManager } from './base'
@@ -22,7 +22,7 @@ export class RendererFileManager extends BaseFileManager {
     super(rendererPath, rendererBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  async patch(content: string): Promise<string> {
     let { monospace, sansSerif } = getFamilies()
     if (monospace) {
       monospace = escapeQuote(monospace)
@@ -39,6 +39,6 @@ export class RendererFileManager extends BaseFileManager {
         .replaceAll(VSC_DFAULT_SANS_FONT.mac, sansSerif)
         .replaceAll(VSC_DFAULT_SANS_FONT.linux, sansSerif)
     }
-    return content
+    return content + await getJsImports()
   }
 }
