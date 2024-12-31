@@ -8,8 +8,9 @@ import { log, logError, showMessage } from './utils'
 
 let css: string | undefined
 let js: string | undefined
+let jsModule: string | undefined
 
-export async function getCssImports(): Promise<string> {
+export function getCssImports(): string {
   if (!config['external.enable']) {
     return ''
   }
@@ -19,7 +20,7 @@ export async function getCssImports(): Promise<string> {
   return css || ''
 }
 
-export async function getJsImports(): Promise<string> {
+export function getJsImports(): string {
   if (!config['external.enable']) {
     return ''
   }
@@ -29,10 +30,20 @@ export async function getJsImports(): Promise<string> {
   return js || ''
 }
 
-export function resetCachedImports() {
-  css = js = undefined
+export function getJsModuleImports(): string {
+  if (!config['external.enable']) {
+    return ''
+  }
+  if (typeof jsModule === 'undefined') {
+    log.warn('No import parsed, ignore')
+  }
+  return jsModule || ''
 }
-type ResourceType = 'css' | 'js'
+
+export function resetCachedImports() {
+  css = js = jsModule = undefined
+}
+type ResourceType = 'css' | 'js' | 'js-module'
 type ImportConfig = string | { type: ResourceType, url: string }
 
 let hasPrompted = false
@@ -55,6 +66,9 @@ export async function parseImports(): Promise<void> {
         css += `\n/* >> ${parsedURL} */${content}\n`
         break
       case 'js':
+        js += `\n// >> ${parsedURL}\n${content}\n`
+        break
+      case 'js-module':
         js += `\n// >> ${parsedURL}\n${content}\n`
         break
     }

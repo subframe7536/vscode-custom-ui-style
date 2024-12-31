@@ -141,7 +141,8 @@
                     "type": "string",
                     "enum": [
                       "css",
-                      "js"
+                      "js",
+                      "js-module"
                     ]
                   },
                   "url": {

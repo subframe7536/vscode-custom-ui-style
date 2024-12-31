@@ -1,10 +1,10 @@
 import fs from 'node:fs'
-import path from 'node:path'
+import path from 'node:path/posix'
 import vscode from 'vscode'
 import { name as bakExt } from './generated/meta'
 
 /**
- * Base dir
+ * Base dir: {VSCodeExecPath}/out
  */
 export const baseDir = (() => {
   const mainFilename = require.main?.filename
@@ -30,7 +30,7 @@ export const webviewHTMLBakPath = getWebviewHTML(`.${bakExt}.html`)
 /**
  * See https://code.visualstudio.com/api/references/vscode-api#env
  */
-function getRendererPath(baseExt: string, backupExt?: string) {
+function getWorkbenchPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   return path.join(
     baseDir,
@@ -45,19 +45,19 @@ function getRendererPath(baseExt: string, backupExt?: string) {
 /**
  * CSS file path
  */
-export const cssPath = getRendererPath('css')
+export const cssPath = getWorkbenchPath('css')
 /**
  * CSS file backup path
  */
-export const cssBakPath = getRendererPath('css', bakExt)
+export const cssBakPath = getWorkbenchPath('css', bakExt)
 /**
  * Main js file path
  */
-export const rendererPath = getRendererPath('js')
+export const rendererPath = getWorkbenchPath('js')
 /**
  * Main js file backup path
  */
-export const rendererBakPath = getRendererPath('js', bakExt)
+export const rendererBakPath = getWorkbenchPath('js', bakExt)
 
 function getMainPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
@@ -91,3 +91,24 @@ function getProductJSONPath(baseExt: string, backupExt?: string) {
 export const productJSONPath = getProductJSONPath('json')
 
 export const productJSONBakPath = getProductJSONPath('json', `${vscode.version}.${bakExt}`)
+
+function getSandboxPath(name: string, backupExt?: string) {
+  return path.join(
+    path.dirname(baseDir),
+    'vs',
+    'code',
+    'electron-sandbox',
+    'workbench',
+    `${backupExt ? `${name}.${backupExt}` : name}`,
+  )
+}
+
+export const htmlPath = getSandboxPath('workbench.html')
+
+export const htmlBakPath = getSandboxPath('workbench.html', bakExt)
+
+export const externalJsName = 'external.js'
+export const externalJsModuleName = 'external.module.js'
+
+export const externalJsPath = getSandboxPath(externalJsName)
+export const externalJsModulePath = getSandboxPath(externalJsModuleName)

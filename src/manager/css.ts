@@ -63,9 +63,9 @@ export class CssFileManager extends BaseFileManager {
     super(cssPath, cssBakPath)
   }
 
-  async patch(content: string): Promise<string> {
+  patch(content: string): string {
     return `${content}
-/* Custom UI Style Start */${await getCssImports()}
+/* Custom UI Style Start */${getCssImports()}
 ${generateBackgroundCSS()}
 ${generateFontCSS()}
 ${generateStyleFromObject(config.stylesheet)}

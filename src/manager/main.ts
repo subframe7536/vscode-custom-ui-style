@@ -10,7 +10,7 @@ export class MainFileManager extends BaseFileManager {
     super(mainPath, mainBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  patch(content: string): string {
     return content.replaceAll(
       entry,
       `${entry},${JSON.stringify(config.electron).slice(1, -1)}`,

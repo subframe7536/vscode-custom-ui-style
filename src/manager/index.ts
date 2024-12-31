@@ -4,6 +4,7 @@ import { config } from '../config'
 import { parseImports, resetCachedImports } from '../imports'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'
+import { HTMLFileManager } from './html'
 import { JsonFileManager } from './json'
 import { MainFileManager } from './main'
 import { RendererFileManager } from './renderer'
@@ -22,6 +23,7 @@ export function createFileManagers() {
     new CssFileManager(),
     new MainFileManager(),
     new RendererFileManager(),
+    new HTMLFileManager(),
     new WebViewFileManager(),
     new JsonFileManager(), // MUST be the end of managers
   ]

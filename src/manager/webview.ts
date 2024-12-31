@@ -42,7 +42,7 @@ export class WebViewFileManager extends BaseFileManager {
     super(webviewHTMLPath, webviewHTMLBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  patch(content: string): string {
     return fixSha256(
       content.replace(
         entry,
