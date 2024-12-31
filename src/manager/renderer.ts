@@ -1,6 +1,4 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { getFamilies } from '../config'
-import { getJsImports } from '../imports'
 import { rendererBakPath, rendererPath } from '../path'
 import { escapeQuote } from '../utils'
 import { BaseFileManager } from './base'

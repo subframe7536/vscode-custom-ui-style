@@ -54,7 +54,7 @@ All resources will be fetched, merged and persist during reload, so there is no 
     // load from user home dir
     "file://${userHome}/test.css",
     // load according to environment variable (with optional fallback value)
-    "file://${env:your_env_name:optional_fallback_value}/other.js",
+    "file://${env:YOUR_ENV_NAME:optional_fallback_value}/other.js",
 
     // Remote resources will be downloaded
     {

@@ -1,4 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { createHash } from 'node:crypto'
 import { config, getFamilies } from '../config'
 import { webviewHTMLBakPath, webviewHTMLPath } from '../path'

@@ -1,4 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { writeFileSync } from 'atomically'
 import { getJsImports, getJsModuleImports } from '../imports'
 import { externalJsModuleName, externalJsModulePath, externalJsName, externalJsPath, htmlBakPath, htmlPath } from '../path'

@@ -1,4 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { config } from '../config'
 import { mainBakPath, mainPath } from '../path'
 import { BaseFileManager } from './base'

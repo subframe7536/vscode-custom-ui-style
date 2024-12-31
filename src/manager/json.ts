@@ -1,4 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
 import { readFileSync } from 'atomically'
