@@ -14,13 +14,13 @@ function generateBackgroundCSS() {
     return ''
   }
   return `
-body {
-    background-size: ${config['background.size']};
-    background-repeat: no-repeat;
-    background-attachment: fixed; // for code-server
-    background-position: ${config['background.position']};
-    opacity: ${config['background.opacity']};
-    background-image: url('${normalizeUrl(url)}');
+body:has(div[role=application]) {
+  background-size: ${config['background.size']};
+  background-repeat: no-repeat;
+  background-attachment: fixed; // for code-server
+  background-position: ${config['background.position']};
+  opacity: ${config['background.opacity']};
+  background-image: url('${normalizeUrl(url)}');
 }`
 }
 
