@@ -92,23 +92,24 @@ export const productJSONPath = getProductJSONPath('json')
 
 export const productJSONBakPath = getProductJSONPath('json', `${vscode.version}.${bakExt}`)
 
-function getSandboxPath(name: string, backupExt?: string) {
-  return path.join(
-    path.dirname(baseDir),
-    'vs',
-    'code',
-    'electron-sandbox',
-    'workbench',
-    `${backupExt ? `${name}.${backupExt}` : name}`,
-  )
+const sandboxPath = path.join(
+  baseDir,
+  'vs',
+  'code',
+  'electron-sandbox',
+  'workbench',
+)
+function getSandboxPath(baseExt: string, backupExt?: string) {
+  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
+  return path.join(sandboxPath, `workbench.${ext}`)
 }
 
-export const htmlPath = getSandboxPath('workbench.html')
+export const htmlPath = getSandboxPath('html')
 
-export const htmlBakPath = getSandboxPath('workbench.html', bakExt)
+export const htmlBakPath = getSandboxPath('html', bakExt)
 
 export const externalJsName = 'external.js'
 export const externalJsModuleName = 'external.module.js'
 
-export const externalJsPath = getSandboxPath(externalJsName)
-export const externalJsModulePath = getSandboxPath(externalJsModuleName)
+export const externalJsPath = path.join(sandboxPath, externalJsName)
+export const externalJsModulePath = path.join(sandboxPath, externalJsModuleName)
