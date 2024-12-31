@@ -36,6 +36,36 @@ To rollback or uninstall the plugin, please open command panel and run `Custom U
 
 See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
 
+#### External Resources
+
+From v0.4.2, the extension supports to load external CSS or JS file, from local file or remote. This operation may introduce security issue or runtime crash, use it with caution!
+
+```jsonc
+{
+  "custom-ui-style.external.enable": true,
+  "custom-ui-style.external.imports": [
+    "file://D:/data/test.js",
+    "file:///Users/yourname/test.js",
+
+    // Variable supports:
+    // load from user home dir
+    "file://${userHome}/test.css",
+    // load according to environment variable (with optional fallback value)
+    "file://${env:your_env_name:optional_fallback_value}/other.js",
+
+    // Remote resources will be downloaded
+    {
+      "type": "css",
+      "url": "https://fonts.googleapis.com/css?family=Sofia",
+    },
+    {
+      "type": "js",
+      "url": "https://example.com/test.js",
+    }
+  ]
+}
+```
+
 ### FAQ
 
 #### No Effect?
@@ -54,22 +84,22 @@ Due to system permission restrictions, you will receive `RangeError: Maximum cal
 sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
 ```
 
-See #6
+See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
 
 #### Fail to restart VSCode after adding remote JS file
 
-The remote script is garbled or have syntax error, you may need to manually rollback the source file:
+The remote JS script is garbled or have syntax error, you may need to manually rollback the source file:
 
 Copy
 
 ```
-{VSCodeAppRoot}/resources/app/out/vs/workbench/workbench.desktop.main.custom-ui-style.js
+{VSCodeAppExecPath}/resources/app/out/vs/workbench/workbench.desktop.main.custom-ui-style.js
 ```
 
 To
 
 ```
-{VSCodeAppRoot}/resources/app/out/vs/workbench/workbench.desktop.main.js
+{VSCodeAppExecPath}/resources/app/out/vs/workbench/workbench.desktop.main.js
 ```
 
 ### Notice
@@ -94,7 +124,7 @@ Please make sure the VSCode is totally replaced while upgrading.
 | `custom-ui-style.background.size`           | Background image size                                                                                                                | `string`  | `"cover"`  |
 | `custom-ui-style.background.position`       | Background image position                                                                                                            | `string`  | `"center"` |
 | `custom-ui-style.external.enable`           | Enable external CSS or JS resources                                                                                                  | `boolean` | `true`     |
-| `custom-ui-style.external.imports`          | External CSS or JS resources, use `${userHome}` to get user home directory, support protocol: 'https://', 'file://'                  | `array`   | ``         |
+| `custom-ui-style.external.imports`          | External CSS or JS resources, support protocol: 'https://', 'file://'                                                                | `array`   | ``         |
 | `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                                        | `object`  | `{}`       |
 | `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                                                 | `array`   | ``         |
 | `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                                                | `array`   | ``         |
@@ -189,6 +219,7 @@ Avaiable CSS Variables:
 
 - [APC](https://github.com/drcika/apc-extension)
 - [Background](https://github.com/shalldie/vscode-background)
+- [Custom CSS and JS Loader](https://github.com/be5invis/vscode-custom-css)
 - [vscode-sync-settings](https://github.com/zokugun/vscode-sync-settings)
 - [vscode-fix-checksums](https://github.com/RimuruChan/vscode-fix-checksums)
 
