@@ -4,7 +4,7 @@ import os from 'node:os'
 import Url from 'node:url'
 import { readFileSync } from 'atomically'
 import { config } from './config'
-import { log, logError, showMessage } from './utils'
+import { log, logError, promptWarn, showMessage } from './utils'
 
 let css: string | undefined
 let js: string | undefined
@@ -15,7 +15,7 @@ export function getCssImports(): string {
     return ''
   }
   if (typeof css === 'undefined') {
-    log.warn('No import parsed, ignore')
+    promptWarn('Fail to initialize CSS')
   }
   return css || ''
 }
@@ -25,7 +25,7 @@ export function getJsImports(): string {
     return ''
   }
   if (typeof js === 'undefined') {
-    log.warn('No import parsed, ignore')
+    promptWarn('Fail to initialize JS')
   }
   return js || ''
 }
@@ -35,7 +35,7 @@ export function getJsModuleImports(): string {
     return ''
   }
   if (typeof jsModule === 'undefined') {
-    log.warn('No import parsed, ignore')
+    promptWarn('Fail to initialize JS Module')
   }
   return jsModule || ''
 }
@@ -49,7 +49,7 @@ type ImportConfig = string | { type: ResourceType, url: string }
 let hasPrompted = false
 export async function parseImports(): Promise<void> {
   const urls = (config['external.imports'] || []) as ImportConfig[]
-  css = js = ''
+  css = js = jsModule = ''
   if (!hasPrompted && urls.some(u => typeof u === 'object' && u.type === 'js')) {
     await showMessage('Loading external JS script, be care of its source code!')
     hasPrompted = true
@@ -82,6 +82,8 @@ function isGarbled(text: string): boolean {
 }
 
 const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+const fileProtocol = 'file://'
+const httpsProtocol = 'https://'
 async function getImportsContent(
   config: ImportConfig,
 ): Promise<[type: ResourceType, url: string, content: string] | undefined> {
@@ -93,12 +95,14 @@ async function getImportsContent(
     } else if (config.endsWith('.js')) {
       type = 'js-module'
     } else {
-      log.warn(`Unsupported extension: ${config}. Must be '.css' or '.js'`)
+      promptWarn(`Unsupported extension: [${config}]. Must be '.css' or '.js'`)
       return undefined
     }
-    const protocol = 'file://'
-    if (!config.startsWith(protocol)) {
-      log.warn(`${config} must startsWith '${protocol}'`)
+    if (config.startsWith(httpsProtocol)) {
+      return await getImportsContent({ type, url: config })
+    }
+    if (!config.startsWith(fileProtocol)) {
+      promptWarn(`[${config}] must startsWith '${fileProtocol}'`)
       return undefined
     }
     return await getContent(
@@ -107,9 +111,8 @@ async function getImportsContent(
       path => readFileSync(path, 'utf-8'),
     )
   } else {
-    const protocol = 'https://'
-    if (!config.url.startsWith(protocol)) {
-      log.warn(`${config.url} must startsWith '${protocol}'`)
+    if (!config.url.startsWith(httpsProtocol)) {
+      promptWarn(`[${config.url}] must startsWith '${httpsProtocol}'`)
       return undefined
     }
     return await getContent(
@@ -127,7 +130,7 @@ async function readURLContent(url: string, type: string): Promise<string> {
     return txt
   }
   const base = `The content of ${url} may be garbled and crash your VSCode`
-  log.warn(base, '\n', txt)
+  log.warn(`${base}\n${txt}`)
   const result = await showMessage(`${base}: ${txt.substring(0, 100)}`, 'Skip And Show Details', 'Apply at my own risk')
   if (result === 'Apply at my own risk') {
     log.warn(`Apply ${url}`)

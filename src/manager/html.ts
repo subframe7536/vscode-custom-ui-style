@@ -17,10 +17,10 @@ export class HTMLFileManager extends BaseFileManager {
     return content.replace(
       entry,
       `${entry}
-  <!-- External Script Start -->
-  <script src="./${externalJsName}"></script>
-  <script src="./${externalJsModuleName}" type="module"></script>
-  <!-- External Script End -->
+    <!-- External Script Start -->
+    <script src="./${externalJsName}"></script>
+    <script src="./${externalJsModuleName}" type="module"></script>
+    <!-- External Script End -->
 `,
     )
   }
