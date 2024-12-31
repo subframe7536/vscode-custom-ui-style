@@ -1,3 +1,4 @@
+// Reference from https://github.com/be5invis/vscode-custom-css/blob/master/src/extension.js
 import type { Promisable } from '@subframe7536/type-utils'
 import os from 'node:os'
 import Url from 'node:url'
@@ -31,12 +32,14 @@ export async function getJsImports(): Promise<string> {
 export function resetCachedImports() {
   css = js = undefined
 }
+type ResourceType = 'css' | 'js'
+type ImportConfig = string | { type: ResourceType, url: string }
 
 let hasPrompted = false
 export async function parseImports(): Promise<void> {
-  const urls = config['external.imports'] || []
+  const urls = (config['external.imports'] || []) as ImportConfig[]
   css = js = ''
-  if (!hasPrompted && urls.some(u => u.startsWith('http') && u.endsWith('.js'))) {
+  if (!hasPrompted && urls.some(u => typeof u === 'object' && u.type === 'js')) {
     await showMessage('Loading external JS script, be care of its source code!')
     hasPrompted = true
   }
@@ -66,59 +69,68 @@ function isGarbled(text: string): boolean {
 
 const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
 async function getImportsContent(
-  url: string,
-): Promise<[type: 'css' | 'js', url: string, content: string] | undefined> {
-  let type: 'css' | 'js'
-  if (url.endsWith('.css')) {
-    type = 'css'
-  } else if (url.endsWith('.js')) {
-    type = 'js'
-  } else {
-    log.warn(`Unsupported extension: ${url}. Must be '.css' or '.js`)
-    return undefined
-  }
+  config: ImportConfig,
+): Promise<[type: ResourceType, url: string, content: string] | undefined> {
+  let type: ResourceType
 
-  if (url.startsWith('file://')) {
+  if (typeof config === 'string') {
+    if (config.endsWith('.css')) {
+      type = 'css'
+    } else if (config.endsWith('.js')) {
+      type = 'js'
+    } else {
+      log.warn(`Unsupported extension: ${config}. Must be '.css' or '.js'`)
+      return undefined
+    }
+    const protocol = 'file://'
+    if (!config.startsWith(protocol)) {
+      log.warn(`${config} must startsWith '${protocol}'`)
+      return undefined
+    }
     return await getContent(
       type,
-      parseFilePath(url),
+      parseFilePath(config),
       path => readFileSync(path, 'utf-8'),
     )
-  } else if (url.startsWith('https://')) {
-    return await getContent(
-      type,
-      new URL(url).toString(),
-      async url => await fetch(url, { headers: { 'User-Agent': ua } })
-        .then(resp => resp.text())
-        .then(async (txt) => {
-          if (!isGarbled(txt)) {
-            return txt
-          }
-          const base = `The content of ${url} may be garbled and crash your VSCode`
-          log.warn(base, '\n', txt)
-          const result = await showMessage(`${base}: ${txt.substring(0, 100)}`, 'Skip And Show Details', 'Apply at my own risk')
-          if (result === 'Apply at my own risk') {
-            log.warn(`Apply ${url}`)
-            return txt
-          } else {
-            log.show()
-            return type === 'css' ? `/* ${base}, skip */` : `// ${base}, skip`
-          }
-        }),
-    )
   } else {
-    log.warn(`Unsupported protocol: ${url}. Must be 'file://' or 'https://'`)
-    return undefined
+    const protocol = 'https://'
+    if (!config.url.startsWith(protocol)) {
+      log.warn(`${config.url} must startsWith '${protocol}'`)
+      return undefined
+    }
+    return await getContent(
+      config.type,
+      new URL(config.url).toString(),
+      readURLContent,
+    )
+  }
+}
+
+async function readURLContent(url: string, type: string): Promise<string> {
+  const resp = await fetch(url, { headers: { 'User-Agent': ua } })
+  const txt = await resp.text()
+  if (!isGarbled(txt)) {
+    return txt
+  }
+  const base = `The content of ${url} may be garbled and crash your VSCode`
+  log.warn(base, '\n', txt)
+  const result = await showMessage(`${base}: ${txt.substring(0, 100)}`, 'Skip And Show Details', 'Apply at my own risk')
+  if (result === 'Apply at my own risk') {
+    log.warn(`Apply ${url}`)
+    return txt
+  } else {
+    log.show()
+    return type === 'css' ? `/* ${base}, skip */` : `// ${base}, skip`
   }
 }
 
 async function getContent<T>(
   type: T,
   url: string,
-  fn: (url: string) => Promisable<string>,
+  fn: (url: string, type: T) => Promisable<string>,
 ): Promise<[type: T, url: string, content: string] | undefined> {
   try {
-    return [type, url, await fn(url)]
+    return [type, url, await fn(url, type)]
   } catch (error) {
     logError(`Fail to get content of [${url}]`, error)
     return undefined

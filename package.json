@@ -127,9 +127,30 @@
         "custom-ui-style.external.imports": {
           "scope": "application",
           "type": "array",
-          "description": "External CSS or JS resources, use `${userHome}` to get user home directory, support protocol: 'https://', 'file://'",
+          "description": "External CSS or JS resources, support protocol: 'https://', 'file://'",
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Path to local CSS or JS file, only support 'file://' protocol, support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}]"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "css",
+                      "js"
+                    ]
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "URL to CSS or JS script, only support 'https://' protocol"
+                  }
+                }
+              }
+            ]
           }
         },
         "custom-ui-style.stylesheet": {
