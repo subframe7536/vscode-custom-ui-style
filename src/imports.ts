@@ -91,7 +91,7 @@ async function getImportsContent(
     if (config.endsWith('.css')) {
       type = 'css'
     } else if (config.endsWith('.js')) {
-      type = 'js'
+      type = 'js-module'
     } else {
       log.warn(`Unsupported extension: ${config}. Must be '.css' or '.js'`)
       return undefined
