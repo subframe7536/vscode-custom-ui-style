@@ -32,9 +32,14 @@ export function resetCachedImports() {
   css = js = undefined
 }
 
+let hasPrompted = false
 export async function parseImports(): Promise<void> {
   const urls = config['external.imports'] || []
   css = js = ''
+  if (!hasPrompted && urls.some(u => u.startsWith('http') && u.endsWith('.js'))) {
+    await showMessage('Loading external JS script, be care of its source code!')
+    hasPrompted = true
+  }
 
   for (const url of urls) {
     const data = await getImportsContent(url)
@@ -115,7 +120,7 @@ async function getContent<T>(
   try {
     return [type, url, await fn(url)]
   } catch (error) {
-    logError(`Fail to get content of [${url}],`, error)
+    logError(`Fail to get content of [${url}]`, error)
     return undefined
   }
 }
