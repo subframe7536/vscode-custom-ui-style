@@ -127,11 +127,14 @@ async function parseResourceMeta<T extends ResourceType>(
   return [
     type,
     url,
-    () => Promise.resolve(fn(url, type))
-      .catch((error) => {
+    async () => {
+      try {
+        return await fn(url, type)
+      } catch (error) {
         logError(`Fail to get content of [${url}]`, error)
         return undefined
-      }),
+      }
+    },
   ]
 }
 
