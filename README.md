@@ -40,7 +40,7 @@ See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#w
 
 From v0.4.2, the extension supports to load external CSS or JS file, from local file or remote URL. This operation may introduce security issue or runtime crash, use it with caution!
 
-All resources will be fetched, merged and persist during reload, so there is no watcher support
+All resources will be fetched, merged and persist according to resource type during reload, so there is no watcher support
 
 ```jsonc
 {
@@ -53,22 +53,22 @@ All resources will be fetched, merged and persist during reload, so there is no 
     "file:///Users/yourname/test.js",
 
     // Variable supports:
-    // load from user home dir
+    // Load from user home dir
     "file://${userHome}/test.css",
-    // load according to environment variable (with optional fallback value)
+    // Load from environment variable (with optional fallback value)
     "file://${env:YOUR_ENV_NAME:optional_fallback_value}/other.js",
 
     // Remote resources will be downloaded
     {
-      "type": "css",
+      "type": "css", // <link rel="stylesheet" href="./external.css"></link>
       "url": "https://fonts.googleapis.com/css?family=Sofia",
     },
     {
-      "type": "js",
+      "type": "js", // <script src="./external.js"></script>
       "url": "https://example.com/test.js",
     },
     {
-      "type": "js-module",
+      "type": "js-module", // <script src="./external.module.js" type="module"></script>
       "url": "https://example.com/test.module.js",
     }
   ]
