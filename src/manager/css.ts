@@ -1,8 +1,18 @@
+import { Uri } from 'vscode'
 import { config, getFamilies } from '../config'
-import { cssBakPath, cssPath, normalizeUrl } from '../path'
-import { generateStyleFromObject } from '../utils'
+import { cssBakPath, cssPath } from '../path'
+import { fileProtocol, generateStyleFromObject } from '../utils'
 import { BaseFileManager } from './base'
 import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './renderer'
+
+function normalizeUrl(url: string) {
+  url = url.replace(/\\/g, '/')
+  if (!url.startsWith(fileProtocol)) {
+    return url
+  }
+  // file:///Users/foo/bar.png => vscode-file://vscode-app/Users/foo/bar.png
+  return Uri.parse(url.replace(fileProtocol, 'vscode-file://vscode-app')).toString()
+}
 
 function generateBackgroundCSS() {
   const url = config['background.url'] || config['background.remoteURL']
@@ -13,7 +23,7 @@ function generateBackgroundCSS() {
 body:has(div[role=application]) {
   background-size: ${config['background.size']};
   background-repeat: no-repeat;
-  background-attachment: fixed; // for code-server
+  background-attachment: fixed; /* for code-server */
   background-position: ${config['background.position']};
   opacity: ${config['background.opacity']};
   background-image: url('${normalizeUrl(url)}');

@@ -6,6 +6,7 @@ import Url from 'node:url'
 import { readFileSync, writeFileSync } from 'atomically'
 import { config } from '../config'
 import {
+  externalCacheInfoPath,
   externalCssName,
   externalCssPath,
   externalJsModuleName,
@@ -15,42 +16,38 @@ import {
   htmlBakPath,
   htmlPath,
 } from '../path'
-import { log, logError, promptWarn, showMessage } from '../utils'
+import { fileProtocol, httpsProtocol, log, logError, promptWarn, showMessage } from '../utils'
 import { BaseFileManager } from './base'
 
-type ResourceType = 'css' | 'js' | 'jsModule'
-type ImportConfig = string | { type: ResourceType, url: string }
+type ResourceType = 'css' | 'js' | 'js-module'
+type ResourceMeta = [type: ResourceType, url: string, content: () => Promisable<string | undefined>]
+type ResourceConfig = string | { type: ResourceType, url: string }
+
+const EMPTY_CSS = '/* EMPTY EXTERNAL CSS */'
+const EMPTY_JS = '// EMPTY EXTERNAL JS'
+const EMPTY_JS_MODULE = '// EMPTY EXTERNAL JS MODULE'
 
 let hasPrompted = false
-async function parseImports(): Promise<Record<ResourceType, string>> {
-  const urls = (config['external.imports'] || []) as ImportConfig[]
-  let css = ''
-  let js = ''
-  let jsModule = ''
-  if (!hasPrompted && urls.some(u => typeof u === 'object' && u.type === 'js')) {
-    showMessage('Loading external JS script, be care of its source code!')
+async function parseImports(urls: ResourceConfig[]): Promise<ResourceMeta[]> {
+  if (
+    !hasPrompted
+    && urls.some(u =>
+      (typeof u === 'object' && u.type.startsWith('.js'))
+      || (typeof u === 'string' && u.startsWith('http') && u.endsWith('.js')),
+    )
+  ) {
+    showMessage('Loading remote JS script, be care of its source code!')
     hasPrompted = true
   }
 
+  const result: ResourceMeta[] = []
   for (const url of urls) {
-    const data = await getImportsContent(url)
-    if (data === undefined) {
-      continue
-    }
-    const [type, parsedURL, content] = data
-    switch (type) {
-      case 'css':
-        css += `\n/* >> ${parsedURL} */${content}\n`
-        break
-      case 'js':
-        js += `\n// >> ${parsedURL}\n${content}\n`
-        break
-      case 'jsModule':
-        jsModule += `\n// >> ${parsedURL}\n${content}\n`
-        break
+    const data = await getResourceMeta(url)
+    if (data) {
+      result.push(data)
     }
   }
-  return { css, js, jsModule }
+  return result
 }
 
 // check encoding error
@@ -60,30 +57,27 @@ function isGarbled(text: string): boolean {
 }
 
 const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-const fileProtocol = 'file://'
-const httpsProtocol = 'https://'
-async function getImportsContent(
-  config: ImportConfig,
-): Promise<[type: ResourceType, url: string, content: string] | undefined> {
+
+async function getResourceMeta(config: ResourceConfig): Promise<ResourceMeta | undefined> {
   let type: ResourceType
 
   if (typeof config === 'string') {
     if (config.endsWith('.css')) {
       type = 'css'
     } else if (config.endsWith('.js')) {
-      type = 'jsModule'
+      type = 'js-module'
     } else {
       promptWarn(`Unsupported extension: [${config}]. Must be '.css' or '.js'`)
       return undefined
     }
     if (config.startsWith(httpsProtocol)) {
-      return await getImportsContent({ type, url: config })
+      return await getResourceMeta({ type, url: config })
     }
     if (!config.startsWith(fileProtocol)) {
       promptWarn(`[${config}] must startsWith '${fileProtocol}'`)
       return undefined
     }
-    return await getContent(
+    return await parseResourceMeta(
       type,
       parseFilePath(config),
       path => readFileSync(path, 'utf-8'),
@@ -93,8 +87,8 @@ async function getImportsContent(
       promptWarn(`[${config.url}] must startsWith '${httpsProtocol}'`)
       return undefined
     }
-    return await getContent(
-      config.type.replace('-m', 'M') as ResourceType,
+    return await parseResourceMeta(
+      config.type,
       new URL(config.url).toString(),
       fetchURLContent,
     )
@@ -109,7 +103,13 @@ async function fetchURLContent(url: string, type: string): Promise<string> {
   }
   const base = `The content of ${url} may be garbled and crash your VSCode`
   log.warn(`${base}\n${txt}`)
-  const result = await showMessage(`${base}: ${txt.substring(0, 100)}`, 'Skip And Show Details', 'Apply at my own risk')
+
+  const result = await showMessage(
+    `${base}: ${txt.substring(0, 100)}`,
+    'Skip And Show Details',
+    'Apply at my own risk',
+  )
+
   if (result === 'Apply at my own risk') {
     log.warn(`Apply ${url}`)
     return txt
@@ -119,17 +119,20 @@ async function fetchURLContent(url: string, type: string): Promise<string> {
   }
 }
 
-async function getContent<T>(
+async function parseResourceMeta<T extends ResourceType>(
   type: T,
   url: string,
   fn: (url: string, type: T) => Promisable<string>,
-): Promise<[type: T, url: string, content: string] | undefined> {
-  try {
-    return [type, url, await fn(url, type)]
-  } catch (error) {
-    logError(`Fail to get content of [${url}]`, error)
-    return undefined
-  }
+): Promise<ResourceMeta | undefined> {
+  return [
+    type,
+    url,
+    () => Promise.resolve(fn(url, type))
+      .catch((error) => {
+        logError(`Fail to get content of [${url}]`, error)
+        return undefined
+      }),
+  ]
 }
 
 const envRegex = /\$\{([^{}]+)\}/g
@@ -150,14 +153,108 @@ function resolveVariable(key: string): string | undefined {
     return process.env[envKey] ?? optionalDefault ?? ''
   }
 }
+type CacheInfo = {
+  hasFailed: boolean
+  urls: string[]
+}
 
-function hasCache() {
-  for (const p of [externalCssPath, externalJsPath, externalJsModulePath]) {
-    if (!fs.existsSync(p) || !fs.readFileSync(p, 'utf-8')) {
-      return false
+async function mergeAndWriteContent(
+  resources: ResourceMeta[],
+  useCached: boolean,
+): Promise<void> {
+  // Check if resources changed compared to cache
+  if (useCached) {
+    let cachedInfo: CacheInfo = {
+      hasFailed: true,
+      urls: [],
+    }
+
+    try {
+      if (useCached && fs.existsSync(externalCacheInfoPath)) {
+        cachedInfo = JSON.parse(readFileSync(externalCacheInfoPath, 'utf-8'))
+      }
+    } catch (error) {
+      logError('Failed to read cache file', error)
+    }
+
+    const resourceUrls = new Set(resources.map(([type, url]) => `${type}:${url}`))
+    if (
+      !cachedInfo.hasFailed
+      && resourceUrls.size === cachedInfo.urls.length
+      && [...resourceUrls].every(url => cachedInfo.urls.includes(url))
+    ) {
+      log.info('No changes detected and no failed fetches, using cached content')
+      return
     }
   }
-  return true
+
+  const resourcesByType: Record<
+    ResourceType,
+    { url: string, content: string }[]
+  > = {
+    'css': [],
+    'js': [],
+    'js-module': [],
+  }
+
+  // Track new fetch status
+  let newCacheInfo: CacheInfo
+  if (useCached) {
+    newCacheInfo = {
+      hasFailed: false,
+      urls: [],
+    }
+  }
+
+  for (const [type, url, contentFn] of resources) {
+    const content = await contentFn()
+    if (useCached) {
+      newCacheInfo!.urls.push(`${type}:${url}`)
+      if (!newCacheInfo!.hasFailed && !content) {
+        newCacheInfo!.hasFailed = true
+      }
+    }
+    if (content) {
+      resourcesByType[type].push({ url, content })
+    }
+  }
+
+  if (useCached) {
+    try {
+      writeFileSync(externalCacheInfoPath, JSON.stringify(newCacheInfo!, null, 2), 'utf-8')
+    } catch (error) {
+      logError('Failed to write cache file', error)
+    }
+  }
+
+  try {
+    const sep = '\n\n'
+    writeFileSync(
+      externalCssPath,
+      resourcesByType.css.length > 0
+        ? resourcesByType.css.map(r => `/* ${r.url} */\n${r.content}`).join(sep)
+        : EMPTY_CSS,
+      'utf-8',
+    )
+
+    writeFileSync(
+      externalJsPath,
+      resourcesByType.js.length > 0
+        ? resourcesByType.js.map(r => `// ${r.url}\n${r.content}`).join(sep)
+        : EMPTY_JS,
+      'utf-8',
+    )
+
+    writeFileSync(
+      externalJsModulePath,
+      resourcesByType['js-module'].length > 0
+        ? resourcesByType['js-module'].map(r => `// ${r.url}\n${r.content}`).join(sep)
+        : EMPTY_JS_MODULE,
+      'utf-8',
+    )
+  } catch (error) {
+    logError('Failed to write external files', error)
+  }
 }
 
 const entryJS = '<script src="./workbench.js" type="module"></script>'
@@ -169,40 +266,36 @@ export class ExternalFileManager extends BaseFileManager {
   }
 
   async patch(content: string): Promise<string> {
-    switch (config['external.loadStrategy']) {
-      case 'disable':
-        writeFileSync(externalCssPath, '')
-        writeFileSync(externalJsPath, '')
-        writeFileSync(externalJsModulePath, '')
-        return content
-      case 'cache':
-        if (hasCache()) {
-          return content
-        }
-        break
-      case 'fetch':
-        break
+    const strategy = config['external.loadStrategy']
+    if (strategy === 'disable') {
+      writeFileSync(externalCssPath, undefined)
+      writeFileSync(externalJsPath, undefined)
+      writeFileSync(externalJsModulePath, undefined)
+      return content
     }
-    const { css, js, jsModule } = await parseImports()
-    writeFileSync(externalCssPath, css, 'utf-8')
-    writeFileSync(externalJsPath, js, 'utf-8')
-    writeFileSync(externalJsModulePath, jsModule, 'utf-8')
+
+    await mergeAndWriteContent(
+      await parseImports(
+        (config['external.imports'] || []) as ResourceConfig[],
+      ),
+      strategy === 'cache',
+    )
     return content
       .replace(
         entryJS,
         `${entryJS}
-        <!-- External Script Start -->
-        <script src="./${externalJsName}"></script>
-        <script src="./${externalJsModuleName}" type="module"></script>
-        <!-- External Script End -->
+  <!-- External Script Start -->
+  <script src="./${externalJsName}"></script>
+  <script src="./${externalJsModuleName}" type="module"></script>
+  <!-- External Script End -->
 `,
       )
       .replace(
         entryCSS,
         `${entryCSS}
-                <!-- External Style Start -->
-                <link rel="stylesheet" href="./${externalCssName}"></link>
-                <!-- External Style End -->
+    <!-- External Style Start -->
+    <link rel="stylesheet" href="./${externalCssName}"></link>
+    <!-- External Style End -->
 `,
       )
   }

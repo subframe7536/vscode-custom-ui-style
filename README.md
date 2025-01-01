@@ -38,13 +38,15 @@ See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#w
 
 #### External Resources
 
-From v0.4.2, the extension supports to load external CSS or JS file, from local file or remote. This operation may introduce security issue or runtime crash, use it with caution!
+From v0.4.2, the extension supports to load external CSS or JS file, from local file or remote URL. This operation may introduce security issue or runtime crash, use it with caution!
 
 All resources will be fetched, merged and persist during reload, so there is no watcher support
 
 ```jsonc
 {
-  "custom-ui-style.external.enable": true,
+  // skip refetch resources if there is nothing changed
+  // and all resources are successfully fetched
+  "custom-ui-style.external.loadStrategy": "cache",
   "custom-ui-style.external.imports": [
     // assume the script is ESM format
     "file://D:/data/test.js",
@@ -95,16 +97,11 @@ See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
 
 #### Fail to restart VSCode after adding remote JS file
 
-The remote JS script is garbled or have syntax error, you may need to manually **truncate** the external file:
+Maybe the remote JS script is garbled or have syntax error, you need to manually **truncate** the external file:
 
 ```
 {VSCodeAppExecPath}/Resources/app/out/vs/electron-sandbox/workbench/external.js
 {VSCodeAppExecPath}/Resources/app/out/vs/electron-sandbox/workbench/external.module.js
-```
-
-or just remove extra script import in
-```
-{VSCodeAppExecPath}/Resources/app/out/vs/electron-sandbox/workbench/workbench.html
 ```
 
 ### Notice

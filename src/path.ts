@@ -74,15 +74,6 @@ function getMainPath(baseExt: string, backupExt?: string) {
 export const mainPath = getMainPath('js')
 export const mainBakPath = getMainPath('js', bakExt)
 
-export function normalizeUrl(url: string) {
-  url = url.replace(/\\/g, '/')
-  if (!url.startsWith('file://')) {
-    return url
-  }
-  // file:///Users/foo/bar.png => vscode-file://vscode-app/Users/foo/bar.png
-  return vscode.Uri.parse(url.replace('file://', 'vscode-file://vscode-app')).toString()
-}
-
 function getProductJSONPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   return path.join(path.dirname(baseDir), `product.${ext}`)
@@ -115,3 +106,4 @@ export const externalJsModuleName = 'external.module.js'
 export const externalCssPath = path.join(sandboxPath, externalCssName)
 export const externalJsPath = path.join(sandboxPath, externalJsName)
 export const externalJsModulePath = path.join(sandboxPath, externalJsModuleName)
+export const externalCacheInfoPath = path.join(sandboxPath, 'external.cache.json')

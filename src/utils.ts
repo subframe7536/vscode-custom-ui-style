@@ -10,6 +10,8 @@ import { baseDir } from './path'
 import { restartApp } from './restart'
 
 export const log = useLogger(Meta.displayName)
+export const fileProtocol = 'file://'
+export const httpsProtocol = 'https://'
 
 const lockFile = path.join(baseDir, `__${Meta.name}__.lock`)
 
