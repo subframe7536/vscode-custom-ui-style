@@ -1,10 +1,9 @@
 import type { FileManager } from './base'
 import { version } from 'vscode'
 import { config } from '../config'
-import { parseImports, resetCachedImports } from '../imports'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'
-import { HTMLFileManager } from './html'
+import { ExternalFileManager } from './external'
 import { JsonFileManager } from './json'
 import { MainFileManager } from './main'
 import { RendererFileManager } from './renderer'
@@ -23,14 +22,13 @@ export function createFileManagers() {
     new CssFileManager(),
     new MainFileManager(),
     new RendererFileManager(),
-    new HTMLFileManager(),
+    new ExternalFileManager(),
     new WebViewFileManager(),
     new JsonFileManager(), // MUST be the end of managers
   ]
   return {
     hasBakFile: () => managers.every(m => m.hasBakFile),
     reload: async (text: string) => {
-      await parseImports()
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
@@ -38,7 +36,6 @@ export function createFileManagers() {
           for (const manager of managers) {
             await manager.reload()
           }
-          resetCachedImports()
         },
       )
     },

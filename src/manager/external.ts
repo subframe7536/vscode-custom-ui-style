@@ -2,54 +2,30 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import os from 'node:os'
 import Url from 'node:url'
-import { readFileSync } from 'atomically'
-import { config } from './config'
-import { log, logError, promptWarn, showMessage } from './utils'
+import { readFileSync, writeFileSync } from 'atomically'
+import { config } from '../config'
+import {
+  externalCssName,
+  externalCssPath,
+  externalJsModuleName,
+  externalJsModulePath,
+  externalJsName,
+  externalJsPath,
+  htmlBakPath,
+  htmlPath,
+} from '../path'
+import { log, logError, promptWarn, showMessage } from '../utils'
+import { BaseFileManager } from './base'
 
-let css: string | undefined
-let js: string | undefined
-let jsModule: string | undefined
-
-export function getCssImports(): string {
-  if (!config['external.enable']) {
-    return ''
-  }
-  if (typeof css === 'undefined') {
-    promptWarn('Fail to initialize CSS')
-  }
-  return css || ''
-}
-
-export function getJsImports(): string {
-  if (!config['external.enable']) {
-    return ''
-  }
-  if (typeof js === 'undefined') {
-    promptWarn('Fail to initialize JS')
-  }
-  return js || ''
-}
-
-export function getJsModuleImports(): string {
-  if (!config['external.enable']) {
-    return ''
-  }
-  if (typeof jsModule === 'undefined') {
-    promptWarn('Fail to initialize JS Module')
-  }
-  return jsModule || ''
-}
-
-export function resetCachedImports() {
-  css = js = jsModule = undefined
-}
-type ResourceType = 'css' | 'js' | 'js-module'
+type ResourceType = 'css' | 'js' | 'jsModule'
 type ImportConfig = string | { type: ResourceType, url: string }
 
 let hasPrompted = false
-export async function parseImports(): Promise<void> {
+async function parseImports(): Promise<Record<ResourceType, string>> {
   const urls = (config['external.imports'] || []) as ImportConfig[]
-  css = js = jsModule = ''
+  let css = ''
+  let js = ''
+  let jsModule = ''
   if (!hasPrompted && urls.some(u => typeof u === 'object' && u.type === 'js')) {
     await showMessage('Loading external JS script, be care of its source code!')
     hasPrompted = true
@@ -57,7 +33,7 @@ export async function parseImports(): Promise<void> {
 
   for (const url of urls) {
     const data = await getImportsContent(url)
-    if (!data) {
+    if (data === undefined) {
       continue
     }
     const [type, parsedURL, content] = data
@@ -68,11 +44,12 @@ export async function parseImports(): Promise<void> {
       case 'js':
         js += `\n// >> ${parsedURL}\n${content}\n`
         break
-      case 'js-module':
-        js += `\n// >> ${parsedURL}\n${content}\n`
+      case 'jsModule':
+        jsModule += `\n// >> ${parsedURL}\n${content}\n`
         break
     }
   }
+  return { css, js, jsModule }
 }
 
 // check encoding error
@@ -93,7 +70,7 @@ async function getImportsContent(
     if (config.endsWith('.css')) {
       type = 'css'
     } else if (config.endsWith('.js')) {
-      type = 'js-module'
+      type = 'jsModule'
     } else {
       promptWarn(`Unsupported extension: [${config}]. Must be '.css' or '.js'`)
       return undefined
@@ -116,14 +93,14 @@ async function getImportsContent(
       return undefined
     }
     return await getContent(
-      config.type,
+      config.type.replace('-m', 'M') as ResourceType,
       new URL(config.url).toString(),
-      readURLContent,
+      fetchURLContent,
     )
   }
 }
 
-async function readURLContent(url: string, type: string): Promise<string> {
+async function fetchURLContent(url: string, type: string): Promise<string> {
   const resp = await fetch(url, { headers: { 'User-Agent': ua } })
   const txt = await resp.text()
   if (!isGarbled(txt)) {
@@ -170,5 +147,50 @@ function resolveVariable(key: string): string | undefined {
   } else if (key.startsWith('env:')) {
     const [_, envKey, optionalDefault] = key.split(':')
     return process.env[envKey] ?? optionalDefault ?? ''
+  }
+}
+
+const entryJS = '<script src="./workbench.js" type="module"></script>'
+const entryCSS = '<link rel="stylesheet" href="../../../workbench/workbench.desktop.main.css">'
+
+export class ExternalFileManager extends BaseFileManager {
+  constructor() {
+    super(htmlPath, htmlBakPath)
+  }
+
+  async patch(content: string): Promise<string> {
+    switch (config['external.loadStrategy']) {
+      case 'disable':
+        writeFileSync(externalCssPath, '')
+        writeFileSync(externalJsPath, '')
+        writeFileSync(externalJsModulePath, '')
+        return content
+      case 'keep':
+        return content
+      case 'enable':
+        break
+    }
+    const { css, js, jsModule } = await parseImports()
+    writeFileSync(externalCssPath, css, 'utf-8')
+    writeFileSync(externalJsPath, js, 'utf-8')
+    writeFileSync(externalJsModulePath, jsModule, 'utf-8')
+    return content
+      .replace(
+        entryJS,
+        `${entryJS}
+        <!-- External Script Start -->
+        <script src="./${externalJsName}"></script>
+        <script src="./${externalJsModuleName}" type="module"></script>
+        <!-- External Script End -->
+`,
+      )
+      .replace(
+        entryCSS,
+        `${entryCSS}
+                <!-- External Style Start -->
+                <script src="./${externalCssName}"></script>
+                <!-- External Style End -->
+`,
+      )
   }
 }

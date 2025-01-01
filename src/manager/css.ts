@@ -1,5 +1,4 @@
 import { config, getFamilies } from '../config'
-import { getCssImports } from '../imports'
 import { cssBakPath, cssPath, normalizeUrl } from '../path'
 import { generateStyleFromObject } from '../utils'
 import { BaseFileManager } from './base'
@@ -65,7 +64,7 @@ export class CssFileManager extends BaseFileManager {
 
   patch(content: string): string {
     return `${content}
-/* Custom UI Style Start */${getCssImports()}
+/* Custom UI Style Start */
 ${generateBackgroundCSS()}
 ${generateFontCSS()}
 ${generateStyleFromObject(config.stylesheet)}

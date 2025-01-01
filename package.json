@@ -118,11 +118,17 @@
           "description": "Background image position",
           "default": "center"
         },
-        "custom-ui-style.external.enable": {
+        "custom-ui-style.external.loadStrategy": {
           "scope": "application",
-          "type": "boolean",
-          "description": "Enable external CSS or JS resources",
-          "default": true
+          "type": "string",
+          "enum": ["enable", "disable", "keep"],
+          "enumDescriptions": [
+            "Persist and load resources",
+            "Remove cached resources",
+            "Keep existing cached resource, don't refetch"
+          ],
+          "description": "Load strategy for external CSS or JS resources",
+          "default": "enable"
         },
         "custom-ui-style.external.imports": {
           "scope": "application",

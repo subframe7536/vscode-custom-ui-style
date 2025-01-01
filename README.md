@@ -128,7 +128,7 @@ Please make sure the VSCode is totally replaced while upgrading.
 | `custom-ui-style.background.opacity`        | Background image opacity                                                                                                             | `number`  | `0.9`      |
 | `custom-ui-style.background.size`           | Background image size                                                                                                                | `string`  | `"cover"`  |
 | `custom-ui-style.background.position`       | Background image position                                                                                                            | `string`  | `"center"` |
-| `custom-ui-style.external.enable`           | Enable external CSS or JS resources                                                                                                  | `boolean` | `true`     |
+| `custom-ui-style.external.loadStrategy`     | Load strategy for external CSS or JS resources                                                                                       | `string`  | `"enable"` |
 | `custom-ui-style.external.imports`          | External CSS or JS resources, support protocol: 'https://', 'file://'                                                                | `array`   | ``         |
 | `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                                        | `object`  | `{}`       |
 | `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                                                 | `array`   | ``         |

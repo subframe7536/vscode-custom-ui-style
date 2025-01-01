@@ -108,8 +108,10 @@ export const htmlPath = getSandboxPath('html')
 
 export const htmlBakPath = getSandboxPath('html', bakExt)
 
+export const externalCssName = 'external.css'
 export const externalJsName = 'external.js'
 export const externalJsModuleName = 'external.module.js'
 
+export const externalCssPath = path.join(sandboxPath, externalCssName)
 export const externalJsPath = path.join(sandboxPath, externalJsName)
 export const externalJsModulePath = path.join(sandboxPath, externalJsModuleName)
