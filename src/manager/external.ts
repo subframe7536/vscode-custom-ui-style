@@ -101,7 +101,7 @@ async function fetchURLContent(url: string, type: string): Promise<string> {
   if (!isGarbled(txt)) {
     return txt
   }
-  const base = `The content of ${url} may be garbled and crash your VSCode`
+  const base = `The content of ${url} may be garbled`
   log.warn(`${base}\n${txt}`)
 
   const result = await showMessage(
@@ -138,10 +138,13 @@ async function parseResourceMeta<T extends ResourceType>(
   ]
 }
 
-const envRegex = /\$\{([^{}]+)\}/g
+const varRegex = /\$\{([^{}]+)\}/g
 function parseFilePath(url: string): string {
   if (url.startsWith('file://')) {
-    const resolved = url.replace(envRegex, (substr, key) => resolveVariable(key) ?? substr)
+    const resolved = url.replace(
+      varRegex,
+      (substr, key) => resolveVariable(key) ?? substr,
+    )
     return Url.fileURLToPath(resolved)
   } else {
     return url
@@ -156,6 +159,7 @@ function resolveVariable(key: string): string | undefined {
     return process.env[envKey] ?? optionalDefault ?? ''
   }
 }
+
 type CacheInfo = {
   hasFailed: boolean
   urls: string[]
