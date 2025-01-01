@@ -1,10 +1,10 @@
 import fs from 'node:fs'
-import path from 'node:path'
+import path from 'node:path/posix'
 import vscode from 'vscode'
 import { name as bakExt } from './generated/meta'
 
 /**
- * Base dir
+ * Base dir: {VSCodeExecPath}/out
  */
 export const baseDir = (() => {
   const mainFilename = require.main?.filename
@@ -30,7 +30,7 @@ export const webviewHTMLBakPath = getWebviewHTML(`.${bakExt}.html`)
 /**
  * See https://code.visualstudio.com/api/references/vscode-api#env
  */
-function getRendererPath(baseExt: string, backupExt?: string) {
+function getWorkbenchPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   return path.join(
     baseDir,
@@ -45,19 +45,19 @@ function getRendererPath(baseExt: string, backupExt?: string) {
 /**
  * CSS file path
  */
-export const cssPath = getRendererPath('css')
+export const cssPath = getWorkbenchPath('css')
 /**
  * CSS file backup path
  */
-export const cssBakPath = getRendererPath('css', bakExt)
+export const cssBakPath = getWorkbenchPath('css', bakExt)
 /**
  * Main js file path
  */
-export const rendererPath = getRendererPath('js')
+export const rendererPath = getWorkbenchPath('js')
 /**
  * Main js file backup path
  */
-export const rendererBakPath = getRendererPath('js', bakExt)
+export const rendererBakPath = getWorkbenchPath('js', bakExt)
 
 function getMainPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
@@ -74,14 +74,6 @@ function getMainPath(baseExt: string, backupExt?: string) {
 export const mainPath = getMainPath('js')
 export const mainBakPath = getMainPath('js', bakExt)
 
-export function normalizeUrl(url: string) {
-  if (!url.startsWith('file://')) {
-    return url
-  }
-  // file:///Users/foo/bar.png => vscode-file://vscode-app/Users/foo/bar.png
-  return vscode.Uri.parse(url.replace('file://', 'vscode-file://vscode-app')).toString()
-}
-
 function getProductJSONPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   return path.join(path.dirname(baseDir), `product.${ext}`)
@@ -90,3 +82,28 @@ function getProductJSONPath(baseExt: string, backupExt?: string) {
 export const productJSONPath = getProductJSONPath('json')
 
 export const productJSONBakPath = getProductJSONPath('json', `${vscode.version}.${bakExt}`)
+
+const sandboxPath = path.join(
+  baseDir,
+  'vs',
+  'code',
+  'electron-sandbox',
+  'workbench',
+)
+function getSandboxPath(baseExt: string, backupExt?: string) {
+  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
+  return path.join(sandboxPath, `workbench.${ext}`)
+}
+
+export const htmlPath = getSandboxPath('html')
+
+export const htmlBakPath = getSandboxPath('html', bakExt)
+
+export const externalCssName = 'external.css'
+export const externalJsName = 'external.js'
+export const externalJsModuleName = 'external.module.js'
+
+export const externalCssPath = path.join(sandboxPath, externalCssName)
+export const externalJsPath = path.join(sandboxPath, externalJsName)
+export const externalJsModulePath = path.join(sandboxPath, externalJsModuleName)
+export const externalCacheInfoPath = path.join(sandboxPath, 'external.cache.json')

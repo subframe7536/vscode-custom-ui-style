@@ -68,7 +68,7 @@
         "custom-ui-style.watch": {
           "scope": "resource",
           "type": "boolean",
-          "description": "Watch configuration changes and reload window automatically",
+          "description": "Watch configuration changes and reload window automatically (ignore imports)",
           "default": true
         },
         "custom-ui-style.electron": {
@@ -117,6 +117,48 @@
           "type": "string",
           "description": "Background image position",
           "default": "center"
+        },
+        "custom-ui-style.external.loadStrategy": {
+          "scope": "application",
+          "type": "string",
+          "enum": ["refetch", "cache", "disable"],
+          "enumDescriptions": [
+            "Force refetch while reloading",
+            "Skip refetch if nothing changed and all resources are fetched",
+            "Remove all resources"
+          ],
+          "description": "Load strategy for external CSS or JS resources",
+          "default": "refetch"
+        },
+        "custom-ui-style.external.imports": {
+          "scope": "application",
+          "type": "array",
+          "description": "External CSS or JS resources, support protocol: 'https://', 'file://'",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Path to local CSS or JS file, only support 'file://' protocol, support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}]"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "css",
+                      "js",
+                      "js-module"
+                    ]
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "URL to CSS or JS script, only support 'https://' protocol"
+                  }
+                }
+              }
+            ]
+          }
         },
         "custom-ui-style.stylesheet": {
           "scope": "application",

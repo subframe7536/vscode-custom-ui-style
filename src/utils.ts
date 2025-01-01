@@ -10,6 +10,8 @@ import { baseDir } from './path'
 import { restartApp } from './restart'
 
 export const log = useLogger(Meta.displayName)
+export const fileProtocol = 'file://'
+export const httpsProtocol = 'https://'
 
 const lockFile = path.join(baseDir, `__${Meta.name}__.lock`)
 
@@ -85,14 +87,20 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
   }
 }
 
-function logError(message: string, error: unknown) {
+export function logError(message: string, error: unknown) {
   if (error instanceof Error) {
-    log.error(message, error instanceof Error ? `${error.message},` : error)
-    showMessage(`${message}, ${error}`)
+    const msg = `${message}, ${error.message}`
+    log.error(msg)
+    showMessage(msg)
   } else {
     log.error(message, error)
     showMessage(`${message}, Error: ${error}`)
   }
+}
+
+export function promptWarn(message: string) {
+  log.warn(message)
+  showMessage(message)
 }
 
 export async function showMessage<T extends string[]>(

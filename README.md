@@ -36,6 +36,45 @@ To rollback or uninstall the plugin, please open command panel and run `Custom U
 
 See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
 
+#### External Resources
+
+From v0.4.2, the extension supports to load external CSS or JS file, from local file or remote URL. This operation may introduce security issue or runtime crash, use it with caution!
+
+All resources will be fetched, merged and persist according to resource type during reload, so there is no watcher support
+
+```jsonc
+{
+  // skip refetch resources if there is nothing changed
+  // and all resources are successfully fetched
+  "custom-ui-style.external.loadStrategy": "cache",
+  "custom-ui-style.external.imports": [
+    // assume the script is ESM format
+    "file://D:/data/test.js",
+    "file:///Users/yourname/test.js",
+
+    // Variable supports:
+    // Load from user home dir
+    "file://${userHome}/test.css",
+    // Load from environment variable (with optional fallback value)
+    "file://${env:YOUR_ENV_NAME:optional_fallback_value}/other.js",
+
+    // Remote resources will be downloaded
+    {
+      "type": "css", // <link rel="stylesheet" href="./external.css"></link>
+      "url": "https://fonts.googleapis.com/css?family=Sofia",
+    },
+    {
+      "type": "js", // <script src="./external.js"></script>
+      "url": "https://example.com/test.js",
+    },
+    {
+      "type": "js-module", // <script src="./external.module.js" type="module"></script>
+      "url": "https://example.com/test.module.js",
+    }
+  ]
+}
+```
+
 ### FAQ
 
 #### No Effect?
@@ -54,7 +93,7 @@ Due to system permission restrictions, you will receive `RangeError: Maximum cal
 sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
 ```
 
-See #6
+See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
 
 ### Notice
 
@@ -64,23 +103,25 @@ Please make sure the VSCode is totally replaced while upgrading.
 
 <!-- configs -->
 
-| Key                                         | Description                                                                                                                          | Type      | Default    |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---------- |
-| `custom-ui-style.preferRestart`             | Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version &gt;= 1.95.0)                   | `boolean` | `false`    |
-| `custom-ui-style.reloadWithoutPrompting`    | Reload/restart immediately, instead of having to click 'Reload Window' in the notification                                           | `boolean` | `false`    |
-| `custom-ui-style.watch`                     | Watch configuration changes and reload window automatically                                                                          | `boolean` | `true`     |
-| `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                                                       | `object`  | `{}`       |
-| `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family                                 | `string`  | ``         |
-| `custom-ui-style.font.sansSerif`            | Global sans-serif font family that apply in both editor and webview                                                                  | `string`  | ``         |
-| `custom-ui-style.background.url`            | Full-screen background image url (will not sync), support protocol: 'https://', 'file://', 'data:'                                   | `string`  | ``         |
-| `custom-ui-style.background.remoteURL`      | Full-screen background image remote url (will sync), has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:' | `string`  | ``         |
-| `custom-ui-style.background.opacity`        | Background image opacity                                                                                                             | `number`  | `0.9`      |
-| `custom-ui-style.background.size`           | Background image size                                                                                                                | `string`  | `"cover"`  |
-| `custom-ui-style.background.position`       | Background image position                                                                                                            | `string`  | `"center"` |
-| `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                                        | `object`  | `{}`       |
-| `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                                                 | `array`   | ``         |
-| `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                                                | `array`   | ``         |
-| `custom-ui-style.webview.stylesheet`        | Custom css for webview, support nest selectors                                                                                       | `object`  | `{}`       |
+| Key                                         | Description                                                                                                                          | Type      | Default     |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
+| `custom-ui-style.preferRestart`             | Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version &gt;= 1.95.0)                   | `boolean` | `false`     |
+| `custom-ui-style.reloadWithoutPrompting`    | Reload/restart immediately, instead of having to click 'Reload Window' in the notification                                           | `boolean` | `false`     |
+| `custom-ui-style.watch`                     | Watch configuration changes and reload window automatically (ignore imports)                                                         | `boolean` | `true`      |
+| `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                                                       | `object`  | `{}`        |
+| `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family                                 | `string`  | ``          |
+| `custom-ui-style.font.sansSerif`            | Global sans-serif font family that apply in both editor and webview                                                                  | `string`  | ``          |
+| `custom-ui-style.background.url`            | Full-screen background image url (will not sync), support protocol: 'https://', 'file://', 'data:'                                   | `string`  | ``          |
+| `custom-ui-style.background.remoteURL`      | Full-screen background image remote url (will sync), has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:' | `string`  | ``          |
+| `custom-ui-style.background.opacity`        | Background image opacity                                                                                                             | `number`  | `0.9`       |
+| `custom-ui-style.background.size`           | Background image size                                                                                                                | `string`  | `"cover"`   |
+| `custom-ui-style.background.position`       | Background image position                                                                                                            | `string`  | `"center"`  |
+| `custom-ui-style.external.loadStrategy`     | Load strategy for external CSS or JS resources                                                                                       | `string`  | `"refetch"` |
+| `custom-ui-style.external.imports`          | External CSS or JS resources, support protocol: 'https://', 'file://'                                                                | `array`   | ``          |
+| `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                                        | `object`  | `{}`        |
+| `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                                                 | `array`   | ``          |
+| `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                                                | `array`   | ``          |
+| `custom-ui-style.webview.stylesheet`        | Custom css for webview, support nest selectors                                                                                       | `object`  | `{}`        |
 
 <!-- configs -->
 
@@ -171,6 +212,7 @@ Avaiable CSS Variables:
 
 - [APC](https://github.com/drcika/apc-extension)
 - [Background](https://github.com/shalldie/vscode-background)
+- [Custom CSS and JS Loader](https://github.com/be5invis/vscode-custom-css)
 - [vscode-sync-settings](https://github.com/zokugun/vscode-sync-settings)
 - [vscode-fix-checksums](https://github.com/RimuruChan/vscode-fix-checksums)
 

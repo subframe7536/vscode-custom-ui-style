@@ -1,4 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { config } from '../config'
 import { mainBakPath, mainPath } from '../path'
 import { BaseFileManager } from './base'
@@ -10,7 +9,7 @@ export class MainFileManager extends BaseFileManager {
     super(mainPath, mainBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  patch(content: string): string {
     return content.replaceAll(
       entry,
       `${entry},${JSON.stringify(config.electron).slice(1, -1)}`,

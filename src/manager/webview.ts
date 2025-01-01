@@ -1,4 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { createHash } from 'node:crypto'
 import { config, getFamilies } from '../config'
 import { webviewHTMLBakPath, webviewHTMLPath } from '../path'
@@ -42,7 +41,7 @@ export class WebViewFileManager extends BaseFileManager {
     super(webviewHTMLPath, webviewHTMLBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  patch(content: string): string {
     return fixSha256(
       content.replace(
         entry,

@@ -1,4 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
 import { getFamilies } from '../config'
 import { rendererBakPath, rendererPath } from '../path'
 import { escapeQuote } from '../utils'
@@ -22,7 +21,7 @@ export class RendererFileManager extends BaseFileManager {
     super(rendererPath, rendererBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  patch(content: string): string {
     let { monospace, sansSerif } = getFamilies()
     if (monospace) {
       monospace = escapeQuote(monospace)

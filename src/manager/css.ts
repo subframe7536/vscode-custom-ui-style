@@ -1,12 +1,18 @@
-import type { Promisable } from '@subframe7536/type-utils'
+import { Uri } from 'vscode'
 import { config, getFamilies } from '../config'
-import { cssBakPath, cssPath, normalizeUrl } from '../path'
-import { generateStyleFromObject } from '../utils'
+import { cssBakPath, cssPath } from '../path'
+import { fileProtocol, generateStyleFromObject } from '../utils'
 import { BaseFileManager } from './base'
 import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './renderer'
 
-const banner = '/* Custom UI Style Start */'
-const footer = '/* Custom UI Style End */'
+function normalizeUrl(url: string) {
+  url = url.replace(/\\/g, '/')
+  if (!url.startsWith(fileProtocol)) {
+    return url
+  }
+  // file:///Users/foo/bar.png => vscode-file://vscode-app/Users/foo/bar.png
+  return Uri.parse(url.replace(fileProtocol, 'vscode-file://vscode-app')).toString()
+}
 
 function generateBackgroundCSS() {
   const url = config['background.url'] || config['background.remoteURL']
@@ -17,7 +23,7 @@ function generateBackgroundCSS() {
 body:has(div[role=application]) {
   background-size: ${config['background.size']};
   background-repeat: no-repeat;
-  background-attachment: fixed; // for code-server
+  background-attachment: fixed; /* for code-server */
   background-position: ${config['background.position']};
   opacity: ${config['background.opacity']};
   background-image: url('${normalizeUrl(url)}');
@@ -66,13 +72,13 @@ export class CssFileManager extends BaseFileManager {
     super(cssPath, cssBakPath)
   }
 
-  patch(content: string): Promisable<string> {
+  patch(content: string): string {
     return `${content}
-${banner}
+/* Custom UI Style Start */
 ${generateBackgroundCSS()}
 ${generateFontCSS()}
 ${generateStyleFromObject(config.stylesheet)}
-${footer}
+/* Custom UI Style End */
 `
   }
 }

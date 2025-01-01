@@ -3,6 +3,7 @@ import { version } from 'vscode'
 import { config } from '../config'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'
+import { ExternalFileManager } from './external'
 import { JsonFileManager } from './json'
 import { MainFileManager } from './main'
 import { RendererFileManager } from './renderer'
@@ -21,25 +22,28 @@ export function createFileManagers() {
     new CssFileManager(),
     new MainFileManager(),
     new RendererFileManager(),
+    new ExternalFileManager(),
     new WebViewFileManager(),
+    new JsonFileManager(), // MUST be the end of managers
   ]
-  const productJsonManager = new JsonFileManager()
   return {
-    hasBakFile: () => [...managers, productJsonManager].every(m => m.hasBakFile),
+    hasBakFile: () => managers.every(m => m.hasBakFile),
     reload: async (text: string) => {
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
-        () => Promise.all(managers.map(m => m.reload()))
-          // ensure other files are already modified
-          .then(() => productJsonManager.reload()),
+        async () => {
+          for (const manager of managers) {
+            await manager.reload()
+          }
+        },
       )
     },
     rollback: async (text: string) => {
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
-        () => Promise.all([...managers, productJsonManager].map(m => m.rollback())),
+        () => Promise.all(managers.map(m => m.rollback())),
       )
     },
   }
