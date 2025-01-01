@@ -121,14 +121,14 @@
         "custom-ui-style.external.loadStrategy": {
           "scope": "application",
           "type": "string",
-          "enum": ["fetch", "disable", "cache"],
+          "enum": ["refetch", "cache", "disable"],
           "enumDescriptions": [
-            "Fetch and load resources",
-            "Remove cached resources",
-            "Keep existing cached resource, don't refetch"
+            "Force refetch while reloading",
+            "Skip refetch if nothing changed and all resources are fetched",
+            "Remove all resources"
           ],
           "description": "Load strategy for external CSS or JS resources",
-          "default": "fetch"
+          "default": "refetch"
         },
         "custom-ui-style.external.imports": {
           "scope": "application",
