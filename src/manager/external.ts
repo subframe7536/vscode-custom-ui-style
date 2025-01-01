@@ -1,5 +1,6 @@
 // Reference from https://github.com/be5invis/vscode-custom-css/blob/master/src/extension.js
 import type { Promisable } from '@subframe7536/type-utils'
+import fs from 'node:fs'
 import os from 'node:os'
 import Url from 'node:url'
 import { readFileSync, writeFileSync } from 'atomically'
@@ -27,7 +28,7 @@ async function parseImports(): Promise<Record<ResourceType, string>> {
   let js = ''
   let jsModule = ''
   if (!hasPrompted && urls.some(u => typeof u === 'object' && u.type === 'js')) {
-    await showMessage('Loading external JS script, be care of its source code!')
+    showMessage('Loading external JS script, be care of its source code!')
     hasPrompted = true
   }
 
@@ -150,6 +151,15 @@ function resolveVariable(key: string): string | undefined {
   }
 }
 
+function hasCache() {
+  for (const p of [externalCssPath, externalJsPath, externalJsModulePath]) {
+    if (!fs.existsSync(p) || !fs.readFileSync(p, 'utf-8')) {
+      return false
+    }
+  }
+  return true
+}
+
 const entryJS = '<script src="./workbench.js" type="module"></script>'
 const entryCSS = '<link rel="stylesheet" href="../../../workbench/workbench.desktop.main.css">'
 
@@ -165,9 +175,12 @@ export class ExternalFileManager extends BaseFileManager {
         writeFileSync(externalJsPath, '')
         writeFileSync(externalJsModulePath, '')
         return content
-      case 'keep':
-        return content
-      case 'enable':
+      case 'cache':
+        if (hasCache()) {
+          return content
+        }
+        break
+      case 'fetch':
         break
     }
     const { css, js, jsModule } = await parseImports()
@@ -188,7 +201,7 @@ export class ExternalFileManager extends BaseFileManager {
         entryCSS,
         `${entryCSS}
                 <!-- External Style Start -->
-                <script src="./${externalCssName}"></script>
+                <link rel="stylesheet" href="./${externalCssName}"></link>
                 <!-- External Style End -->
 `,
       )
