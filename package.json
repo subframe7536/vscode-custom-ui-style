@@ -89,26 +89,25 @@
         "custom-ui-style.background.url": {
           "scope": "machine",
           "type": "string",
+          "pattern": "^(file://|https://|data:)",
           "description": "Full-screen background image url (will not sync), support protocol: 'https://', 'file://', 'data:'"
         },
         "custom-ui-style.background.remoteURL": {
           "scope": "application",
           "type": "string",
+          "pattern": "^(file://|https://|data:)",
           "description": "Full-screen background image remote url (will sync), has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:'"
         },
         "custom-ui-style.background.opacity": {
           "scope": "application",
           "type": "number",
-          "description": "Background image opacity",
+          "description": "Background image opacity (0 ~ 1)",
           "default": 0.9
         },
         "custom-ui-style.background.size": {
           "scope": "application",
           "type": "string",
-          "enum": [
-            "cover",
-            "contain"
-          ],
+          "enum": ["cover", "contain"],
           "description": "Background image size",
           "default": "cover"
         },
@@ -138,7 +137,8 @@
             "oneOf": [
               {
                 "type": "string",
-                "description": "Path to local CSS or JS file, only support 'file://' protocol, support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}]"
+                "pattern": "^(file://|https://).+\\.(css|js)$",
+                "description": "Path to local CSS or JS file, must end with '.js' or '.css', support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}]"
               },
               {
                 "type": "object",
@@ -153,6 +153,7 @@
                   },
                   "url": {
                     "type": "string",
+                    "pattern": "^https:\\/\\/",
                     "description": "URL to CSS or JS script, only support 'https://' protocol"
                   }
                 }

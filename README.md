@@ -40,7 +40,7 @@ See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#w
 
 From v0.4.2, the extension supports to load external CSS or JS file, from local file or remote URL. This operation may introduce security issue or runtime crash, use it with caution!
 
-All resources will be fetched, merged and persist according to resource type during reload, so there is no watcher support
+All resources will be fetched, merged and persist according to resource type during reload, so there is no watcher support.
 
 ```jsonc
 {
