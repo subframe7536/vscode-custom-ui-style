@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path/posix'
-import vscode from 'vscode'
+import { env, version } from 'vscode'
 import { name as bakExt } from './generated/meta'
 
 /**
@@ -8,7 +8,7 @@ import { name as bakExt } from './generated/meta'
  */
 export const baseDir = (() => {
   const mainFilename = require.main?.filename
-  return mainFilename?.length ? path.dirname(mainFilename) : path.join(vscode.env.appRoot, 'out')
+  return mainFilename?.length ? path.dirname(mainFilename) : path.join(env.appRoot, 'out')
 })()
 // export const baseDir = path.join(vscode.env.appRoot, 'out')
 
@@ -37,7 +37,7 @@ function getWorkbenchPath(baseExt: string, backupExt?: string) {
     'vs',
     'workbench',
     // https://github.com/microsoft/vscode/pull/141263
-    vscode?.env.appHost === 'desktop'
+    env.appHost === 'desktop'
       ? `workbench.desktop.main.${ext}`
       : `workbench.web.main.${ext}`,
   )
@@ -81,7 +81,7 @@ function getProductJSONPath(baseExt: string, backupExt?: string) {
 
 export const productJSONPath = getProductJSONPath('json')
 
-export const productJSONBakPath = getProductJSONPath('json', `${vscode.version}.${bakExt}`)
+export const productJSONBakPath = getProductJSONPath('json', `${version}.${bakExt}`)
 
 const sandboxPath = path.join(
   baseDir,
