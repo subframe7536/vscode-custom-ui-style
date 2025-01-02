@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path/posix'
 import { env, version } from 'vscode'
 import { name as bakExt } from './generated/meta'
+import { log } from './utils'
 
 /**
  * Base dir: {VSCodeExecPath}/out
@@ -90,14 +91,25 @@ const sandboxPath = path.join(
   'electron-sandbox',
   'workbench',
 )
-function getSandboxPath(baseExt: string, backupExt?: string) {
-  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
-  return path.join(sandboxPath, `workbench.${ext}`)
-}
 
-export const htmlPath = getSandboxPath('html')
+export const htmlPath = (() => {
+  const WORKBENCH_NAMES = [
+    'workbench',
+    'workbench-dev',
+    'workbench.esm',
+    'workbench-dev.esm',
+  ]
+  for (const name of WORKBENCH_NAMES) {
+    const result = path.join(sandboxPath, `${name}.html`)
+    if (fs.existsSync(result)) {
+      return result
+    }
+  }
+  log.warn('No html found, use default html path')
+  return path.join(sandboxPath, `${WORKBENCH_NAMES[0]}.html`)
+})()
 
-export const htmlBakPath = getSandboxPath('html', bakExt)
+export const htmlBakPath = htmlPath.replace('.html', `${bakExt}.html`)
 
 export const externalCssName = 'external.css'
 export const externalJsName = 'external.js'
