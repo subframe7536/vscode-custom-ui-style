@@ -291,19 +291,18 @@ export class ExternalFileManager extends BaseFileManager {
       .replace(
         entryJS,
         `${entryJS}
-  <!-- External Script Start -->
-  <script src="./${externalJsName}"></script>
-  <script src="./${externalJsModuleName}" type="module"></script>
-  <!-- External Script End -->
+\t<!-- External Script Start -->
+\t<script src="./${externalJsName}"></script>
+\t<script src="./${externalJsModuleName}" type="module"></script>
+\t<!-- External Script End -->
 `,
       )
       .replace(
         entryCSS,
-        `${entryCSS}
-    <!-- External Style Start -->
-    <link rel="stylesheet" href="./${externalCssName}"></link>
-    <!-- External Style End -->
-`,
+        `<!-- External Style Start -->
+\t\t<link rel="stylesheet" href="./${externalCssName}"></link>
+\t\t<!-- External Style End -->
+\t\t${entryCSS}`,
       )
   }
 }
