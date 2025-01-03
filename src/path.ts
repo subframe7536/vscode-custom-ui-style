@@ -109,7 +109,7 @@ export const htmlPath = (() => {
   return path.join(sandboxPath, `${WORKBENCH_NAMES[0]}.html`)
 })()
 
-export const htmlBakPath = htmlPath.replace('.html', `${bakExt}.html`)
+export const htmlBakPath = htmlPath.replace('.html', `.${bakExt}.html`)
 
 export const externalCssName = 'external.css'
 export const externalJsName = 'external.js'
