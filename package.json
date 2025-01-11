@@ -89,13 +89,11 @@
         "custom-ui-style.background.url": {
           "scope": "machine",
           "type": "string",
-          "pattern": "^(file://|https://|data:)",
           "description": "Full-screen background image url (will not sync), support protocol: 'https://', 'file://', 'data:'"
         },
         "custom-ui-style.background.remoteURL": {
           "scope": "application",
           "type": "string",
-          "pattern": "^(file://|https://|data:)",
           "description": "Full-screen background image remote url (will sync), has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:'"
         },
         "custom-ui-style.background.opacity": {
