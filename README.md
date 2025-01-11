@@ -67,6 +67,9 @@ Avaiable CSS Variables:
   "custom-ui-style.webview.monospaceSelector": [".codeblock", ".prism [class*='language-']"],
   // Custom stylesheet, support native nest selectors
   "custom-ui-style.stylesheet": {
+    "kbd, .statusbar": {
+      "font-family": "var(--cus-monospace-font)",
+    },
     "span:not([class*='dyn-rule'])+span[class*='dyn-rule']": {
       "border-top-left-radius": "3px",
       "border-bottom-left-radius": "3px"
@@ -80,6 +83,9 @@ Avaiable CSS Variables:
     },
     ".quick-input-widget": {
       "top": "25vh !important"
+    },
+    ".monaco-findInput .monaco-inputbox": {
+      "width": "calc(100% + 6px)"
     },
     ".overlayWidgets .editorPlaceholder": {
       "line-height": "unset !important"
