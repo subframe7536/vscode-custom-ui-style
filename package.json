@@ -91,10 +91,10 @@
           "type": "string",
           "description": "Full-screen background image url (will not sync), support protocol: 'https://', 'file://', 'data:'"
         },
-        "custom-ui-style.background.remoteURL": {
+        "custom-ui-style.background.syncURL": {
           "scope": "application",
           "type": "string",
-          "description": "Full-screen background image remote url (will sync), has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:'"
+          "description": "Full-screen background image url (will sync), support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}], has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:'"
         },
         "custom-ui-style.background.opacity": {
           "scope": "application",
@@ -130,7 +130,7 @@
         "custom-ui-style.external.imports": {
           "scope": "application",
           "type": "array",
-          "description": "External CSS or JS resources, support protocol: 'https://', 'file://'",
+          "description": "External CSS or JS resources, support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}], support protocol: 'https://', 'file://'",
           "items": {
             "oneOf": [
               {

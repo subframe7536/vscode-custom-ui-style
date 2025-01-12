@@ -15,7 +15,7 @@ function normalizeUrl(url: string) {
 }
 
 function generateBackgroundCSS() {
-  const url = config['background.url'] || config['background.remoteURL']
+  const url = config['background.url'] || config['background.syncURL']
   if (!url) {
     return ''
   }
