@@ -1,7 +1,7 @@
 import { Uri } from 'vscode'
 import { config, getFamilies } from '../config'
 import { cssBakPath, cssPath } from '../path'
-import { fileProtocol, generateStyleFromObject } from '../utils'
+import { fileProtocol, generateStyleFromObject, resolveVariable } from '../utils'
 import { BaseFileManager } from './base'
 import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './renderer'
 
@@ -15,7 +15,7 @@ function normalizeUrl(url: string) {
 }
 
 function generateBackgroundCSS() {
-  const url = config['background.url'] || config['background.syncURL']
+  const url = config['background.url'] || resolveVariable(config['background.syncURL'] || '')
   if (!url) {
     return ''
   }

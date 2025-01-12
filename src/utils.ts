@@ -1,6 +1,8 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
+import Url from 'node:url'
 import { readFileSync, writeFileSync } from 'atomically'
 import { useLogger } from 'reactive-vscode'
 import { commands, window } from 'vscode'
@@ -162,4 +164,27 @@ export function generateStyleFromObject(obj: Record<string, any>) {
     style += `${selectors}{${css}}`
   }
   return style
+}
+export function parseFilePath(url: string): string {
+  if (url.startsWith('file://')) {
+    return Url.fileURLToPath(resolveVariable(url))
+  } else {
+    return url
+  }
+}
+const varRegex = /\$\{([^{}]+)\}/g
+export function resolveVariable(url: string): string {
+  return url.replace(
+    varRegex,
+    (substr, key) => {
+      if (key === 'userHome') {
+        return os.homedir()
+      } else if (key.startsWith('env:')) {
+        const [_, envKey, optionalDefault] = key.split(':')
+        return process.env[envKey] ?? optionalDefault ?? ''
+      } else {
+        return substr
+      }
+    },
+  )
 }

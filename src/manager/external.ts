@@ -1,8 +1,6 @@
 // Reference from https://github.com/be5invis/vscode-custom-css/blob/master/src/extension.js
 import type { Promisable } from '@subframe7536/type-utils'
 import fs from 'node:fs'
-import os from 'node:os'
-import Url from 'node:url'
 import { readFileSync, writeFileSync } from 'atomically'
 import { config } from '../config'
 import {
@@ -16,7 +14,7 @@ import {
   htmlBakPath,
   htmlPath,
 } from '../path'
-import { fileProtocol, httpsProtocol, log, logError, promptWarn, showMessage } from '../utils'
+import { fileProtocol, httpsProtocol, log, logError, parseFilePath, promptWarn, showMessage } from '../utils'
 import { BaseFileManager } from './base'
 
 type ResourceType = 'css' | 'js' | 'js-module'
@@ -136,28 +134,6 @@ async function parseResourceMeta<T extends ResourceType>(
       }
     },
   ]
-}
-
-const varRegex = /\$\{([^{}]+)\}/g
-function parseFilePath(url: string): string {
-  if (url.startsWith('file://')) {
-    const resolved = url.replace(
-      varRegex,
-      (substr, key) => resolveVariable(key) ?? substr,
-    )
-    return Url.fileURLToPath(resolved)
-  } else {
-    return url
-  }
-}
-
-function resolveVariable(key: string): string | undefined {
-  if (key === 'userHome') {
-    return os.homedir()
-  } else if (key.startsWith('env:')) {
-    const [_, envKey, optionalDefault] = key.split(':')
-    return process.env[envKey] ?? optionalDefault ?? ''
-  }
 }
 
 type CacheInfo = {
