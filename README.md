@@ -15,7 +15,7 @@ VSCode extension that custom ui css style in both editor and webview
 > This extension works by editting the VSCode's css and js files.
 >
 > ~~So, a warning appears while the first time to install or VSCode update. You can click the [never show again] to avoid it.~~
-> From V0.4.0, the warning will no longer prompt. #11
+> From V0.4.0, the warning will no longer prompt after fully restart. #11
 
 ## Features
 
@@ -237,11 +237,11 @@ See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
 
 ## Credit
 
-- [APC](https://github.com/drcika/apc-extension)
-- [Background](https://github.com/shalldie/vscode-background)
-- [Custom CSS and JS Loader](https://github.com/be5invis/vscode-custom-css)
-- [vscode-sync-settings](https://github.com/zokugun/vscode-sync-settings)
-- [vscode-fix-checksums](https://github.com/RimuruChan/vscode-fix-checksums)
+- [APC](https://github.com/drcika/apc-extension) for my previous usage
+- [Background](https://github.com/shalldie/vscode-background) for my previous usage
+- [vscode-sync-settings](https://github.com/zokugun/vscode-sync-settings) for fully restart logic
+- [vscode-fix-checksums](https://github.com/RimuruChan/vscode-fix-checksums) for checksum patch logic
+- [Custom CSS and JS Loader](https://github.com/be5invis/vscode-custom-css) for external resource logic
 
 ## License
 
