@@ -2,16 +2,41 @@ import fs from 'node:fs'
 import path from 'node:path/posix'
 import { env, version } from 'vscode'
 import { name as bakExt } from './generated/meta'
-import { log } from './utils'
+import { log } from './logger'
+import { logError } from './utils'
+
+function getDirectoryName(filePath: string): string {
+  const lastSlashIndex = Math.max(
+    filePath.lastIndexOf('/'),
+    filePath.lastIndexOf('\\'),
+  )
+
+  if (lastSlashIndex === -1) {
+    return ''
+  }
+
+  // 返回目录名
+  return filePath.substring(0, lastSlashIndex)
+}
 
 /**
  * Base dir: {VSCodeExecPath}/out
  */
 export const baseDir = (() => {
-  const mainFilename = require.main?.filename
-  return mainFilename?.length ? path.dirname(mainFilename) : path.join(env.appRoot, 'out')
+  const envAppRoot = env.appRoot
+  if (envAppRoot && fs.existsSync(envAppRoot)) {
+    return path.join(envAppRoot, 'out')
+  }
+  const mainFilename = require.main?.filename.replace(/\\/g, '/')
+  if (!mainFilename) {
+    const msg = 'Cannot determine main file name'
+    logError(msg)
+    throw new Error(msg)
+  }
+
+  // `path.dirname(mainFilename)` will return '.' in extension, so here manually extract it
+  return getDirectoryName(mainFilename)
 })()
-// export const baseDir = path.join(vscode.env.appRoot, 'out')
 
 function getWebviewHTML(ext: string) {
   return path.join(
