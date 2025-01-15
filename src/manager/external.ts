@@ -3,6 +3,7 @@ import type { Promisable } from '@subframe7536/type-utils'
 import fs from 'node:fs'
 import { readFileSync, writeFileSync } from 'atomically'
 import { config } from '../config'
+import { log } from '../logger'
 import {
   externalCacheInfoPath,
   externalCssName,
@@ -14,7 +15,7 @@ import {
   htmlBakPath,
   htmlPath,
 } from '../path'
-import { fileProtocol, httpsProtocol, log, logError, parseFilePath, promptWarn, showMessage } from '../utils'
+import { fileProtocol, httpsProtocol, logError, parseFilePath, promptWarn, showMessage } from '../utils'
 import { BaseFileManager } from './base'
 
 type ResourceType = 'css' | 'js' | 'js-module'

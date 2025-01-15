@@ -4,14 +4,13 @@ import os from 'node:os'
 import path from 'node:path'
 import Url from 'node:url'
 import { readFileSync, writeFileSync } from 'atomically'
-import { useLogger } from 'reactive-vscode'
 import { commands, window } from 'vscode'
 import { config } from './config'
 import * as Meta from './generated/meta'
+import { log } from './logger'
 import { baseDir } from './path'
 import { restartApp } from './restart'
 
-export const log = useLogger(Meta.displayName)
 export const fileProtocol = 'file://'
 export const httpsProtocol = 'https://'
 
@@ -89,14 +88,17 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
   }
 }
 
-export function logError(message: string, error: unknown) {
+export function logError(message: string, error?: unknown) {
   if (error instanceof Error) {
     const msg = `${message}, ${error.message}`
     log.error(msg)
     showMessage(msg)
-  } else {
+  } else if (error) {
     log.error(message, error)
     showMessage(`${message}, Error: ${error}`)
+  } else {
+    log.error(message)
+    showMessage(`Error: ${message}`)
   }
 }
 
