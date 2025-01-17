@@ -15,7 +15,6 @@ function getDirectoryName(filePath: string): string {
     return ''
   }
 
-  // 返回目录名
   return filePath.substring(0, lastSlashIndex)
 }
 

@@ -46,8 +46,7 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
       log.warn('Lock file timeout, remove and continue')
       fs.rmSync(lockFile)
     } else {
-      log.error('File locked:', lockFile)
-      await showMessage('File locked, cancel operation')
+      logError('File locked, please retry later')
       return
     }
   }
@@ -66,8 +65,12 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
       if (config.reloadWithoutPrompting) {
         shouldProceed = true
       } else {
-        const item = await showMessage(message, 'Reload Window', 'Cancel')
-        shouldProceed = item === 'Reload Window'
+        const item = await showMessage(
+          message,
+          fullRestart ? 'Restart APP' : 'Reload Window',
+          'Cancel',
+        )
+        shouldProceed = item === 'Reload Window' || item === 'Restart APP'
       }
       if (shouldProceed) {
         if (fullRestart) {

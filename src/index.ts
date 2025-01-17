@@ -13,11 +13,11 @@ const { activate, deactivate } = defineExtension(() => {
 
   if (!hasBakFile()) {
     showMessage(
-      'Seems like first time use or new version is installed, reload now?',
-      'Reload',
-      'Cancel',
+      'Seems like first time use or new version is installed, initialize and reload config now?',
+      'Yes',
+      'No',
     )
-      .then<any>(item => item === 'Reload' && reload(changedMsg))
+      .then<any>(item => item === 'Yes' && reload(changedMsg))
   }
 
   useCommand(Meta.commands.reload, () => reload(changedMsg))
