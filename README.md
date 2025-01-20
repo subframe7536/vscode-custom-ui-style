@@ -190,10 +190,14 @@ There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/
 
 ### RangeError: Maximum call stack size exceeded
 
-Due to system permission restrictions, you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close (press <kbd>Command + Q</kbd>) VSCode first, then run:
+Due to system permission restrictions, you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close VSCode first (press <kbd>Command + Q</kbd> on MacOS), then run:
 
 ```sh
+# MacOS
 sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
+
+# Linux
+sudo chown -R $(whoami) "/opt/visual-studio-code"
 ```
 
 See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
