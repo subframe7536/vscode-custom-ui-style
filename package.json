@@ -198,7 +198,7 @@
     "publish": "vsce publish --no-dependencies",
     "pack": "vsce package --no-dependencies",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp --all && pnpm run publish",
+    "release": "bumpp --all",
     "vscode:uninstall": "node ./dist/uninstall.js"
   },
   "devDependencies": {
