@@ -9,7 +9,7 @@
 
 VSCode extension that custom ui css style in both editor and webview
 
-- Works with VSCode 1.96!
+- Works with VSCode 1.97!
 
 > [!warning]
 > This extension works by editting the VSCode's css and js files.
@@ -81,9 +81,10 @@ Avaiable CSS Variables:
     ".cdr": {
       "border-radius": "3px"
     },
-    ".quick-input-widget": {
-      "top": "25vh !important"
-    },
+    // No longer needed since v1.97.0 allows to move the command palette position
+    // ".quick-input-widget": {
+    //   "top": "25vh !important"
+    // },
     ".monaco-findInput .monaco-inputbox": {
       "width": "calc(100% + 6px)"
     },
