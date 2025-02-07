@@ -1,20 +1,19 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
 import fs from 'node:fs'
 import os from 'node:os'
-import path from 'node:path'
+import path from 'node:path/posix'
 import Url from 'node:url'
 import { readFileSync, writeFileSync } from 'atomically'
 import { commands, window } from 'vscode'
 import { config } from './config'
 import * as Meta from './generated/meta'
 import { log } from './logger'
-import { baseDir } from './path'
 import { restartApp } from './restart'
 
 export const fileProtocol = 'file://'
 export const httpsProtocol = 'https://'
 
-const lockFile = path.join(baseDir, `__${Meta.name}__.lock`)
+const lockFile = path.join(os.tmpdir(), `__${Meta.name}__.lock`)
 
 let last = hasElectronWindowOptions()
 function hasElectronWindowOptions(): string {

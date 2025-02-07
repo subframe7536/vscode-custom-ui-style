@@ -33,8 +33,7 @@
     "onStartupFinished"
   ],
   "extensionKind": [
-    "ui",
-    "workspace"
+    "ui"
   ],
   "contributes": {
     "commands": [
