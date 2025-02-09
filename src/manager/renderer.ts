@@ -3,6 +3,10 @@ import { rendererBakPath, rendererPath } from '../path'
 import { escapeQuote } from '../utils'
 import { BaseFileManager } from './base'
 
+// Code positions for font settings:
+// https://github.com/microsoft/vscode/blob/main/src/vs/base/browser/ui/contextview/contextview.ts#L391-L430
+// https://github.com/microsoft/vscode/blob/main/src/vs/workbench/browser/media/style.css#L10-L33
+// https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/config/editorOptions.ts#L5403-L5405
 export const VSC_DFAULT_MONO_FONT = {
   win: `Consolas, 'Courier New'`,
   mac: `Menlo, Monaco, 'Courier New'`,
