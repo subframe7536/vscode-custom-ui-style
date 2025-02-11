@@ -4,7 +4,7 @@
   "displayName": "Custom UI Style",
   "version": "0.5.2",
   "private": true,
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@10.2.1",
   "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
   "author": "subframe7536 <1667077010@qq.com>",
   "license": "MIT",
@@ -104,7 +104,10 @@
         "custom-ui-style.background.size": {
           "scope": "application",
           "type": "string",
-          "enum": ["cover", "contain"],
+          "enum": [
+            "cover",
+            "contain"
+          ],
           "description": "Background image size",
           "default": "cover"
         },
@@ -117,7 +120,11 @@
         "custom-ui-style.external.loadStrategy": {
           "scope": "application",
           "type": "string",
-          "enum": ["refetch", "cache", "disable"],
+          "enum": [
+            "refetch",
+            "cache",
+            "disable"
+          ],
           "enumDescriptions": [
             "Force refetch while reloading",
             "Skip refetch if nothing changed and all resources are fetched",
@@ -213,5 +220,12 @@
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
     "vscode-ext-gen": "^0.5.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@vscode/vsce-sign",
+      "esbuild",
+      "keytar"
+    ]
   }
 }
