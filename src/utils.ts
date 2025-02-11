@@ -8,12 +8,13 @@ import { commands, window } from 'vscode'
 import { config } from './config'
 import * as Meta from './generated/meta'
 import { log } from './logger'
+import { baseDir } from './path'
 import { restartApp } from './restart'
 
 export const fileProtocol = 'file://'
 export const httpsProtocol = 'https://'
 
-const lockFile = path.join(os.tmpdir(), `__${Meta.name}__.lock`)
+const lockFile = path.join(baseDir, `__${Meta.name}__.lock`)
 
 let last = hasElectronWindowOptions()
 function hasElectronWindowOptions(): string {
@@ -49,44 +50,56 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
       return
     }
   }
+  let success = true
   try {
     writeFileSync(lockFile, String(Date.now()))
-    let success = true
     try {
       logWindowOptionsChanged(fullRestart)
       await action()
     } catch (error) {
       logError('Fail to execute action', error)
       success = false
+    } finally {
+      fs.rmSync(lockFile)
     }
-    if (success) {
-      let shouldProceed = false
-      if (config.reloadWithoutPrompting) {
-        shouldProceed = true
-      } else {
-        const item = await showMessage(
-          message,
-          fullRestart ? 'Restart APP' : 'Reload Window',
-          'Cancel',
-        )
-        shouldProceed = item === 'Reload Window' || item === 'Restart APP'
+  } catch (err) {
+    if (err instanceof Error) {
+      const base = 'This extension need to modify VSCode\'s source code but'
+      if ('code' in err && err.code === 'EROFS') {
+        logError(`${base} it runs on read-only filesystem. Maybe you need to choose another way to install VSCode`, err)
+        return
+      } else if (err.message.includes('RangeError: Maximum call stack size exceeded')) {
+        logError(`${base} current user is not allowed. Please comfirm that you have the permission to write files in ${baseDir}`, err)
+        return
       }
-      if (shouldProceed) {
-        if (fullRestart) {
-          try {
-            await restartApp()
-          } catch (error) {
-            logError('Fail to restart VSCode', error)
-          }
-        } else {
-          commands.executeCommand('workbench.action.reloadWindow')
+    }
+    logError('Unknown error in npm:atomically', err)
+    return
+  }
+
+  if (success) {
+    let shouldProceed = false
+    if (config.reloadWithoutPrompting) {
+      shouldProceed = true
+    } else {
+      const item = await showMessage(
+        message,
+        fullRestart ? 'Restart APP' : 'Reload Window',
+        'Cancel',
+      )
+      shouldProceed = item === 'Reload Window' || item === 'Restart APP'
+    }
+    if (shouldProceed) {
+      if (fullRestart) {
+        try {
+          await restartApp()
+        } catch (error) {
+          logError('Fail to restart VSCode', error)
         }
+      } else {
+        commands.executeCommand('workbench.action.reloadWindow')
       }
     }
-  } catch (e) {
-    logError(`npm:atomically error, maybe you need to enhance VSCode's permissions?`, e)
-  } finally {
-    fs.rmSync(lockFile)
   }
 }
 
