@@ -53,17 +53,6 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
   let success = true
   try {
     writeFileSync(lockFile, String(Date.now()))
-    try {
-      logWindowOptionsChanged(fullRestart)
-      await action()
-    } catch (error) {
-      logError('Fail to execute action', error)
-      success = false
-    } finally {
-      try {
-        fs.rmSync(lockFile)
-      } catch {}
-    }
   } catch (err) {
     if (err instanceof Error) {
       const base = 'This extension need to modify VSCode\'s source code but'
@@ -77,6 +66,17 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
     }
     logError('Unknown error in npm:atomically', err)
     return
+  }
+  try {
+    logWindowOptionsChanged(fullRestart)
+    await action()
+  } catch (err) {
+    logError('Fail to execute action', err)
+    success = false
+  } finally {
+    try {
+      fs.rmSync(lockFile)
+    } catch {}
   }
 
   if (success) {
