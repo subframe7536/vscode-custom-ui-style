@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto'
 import { config, getFamilies } from '../config'
+import { log } from '../logger'
 import { webviewHTMLBakPath, webviewHTMLPath } from '../path'
 import { escapeQuote, generateStyleFromObject } from '../utils'
-import { log } from '../logger'
 import { BaseFileManager } from './base'
 
 const entry = `'<!DOCTYPE html>\\n' + newDocument.documentElement.outerHTML`
