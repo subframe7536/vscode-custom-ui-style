@@ -181,7 +181,7 @@ To disable all external resources, setup:
 
 ## FAQ
 
-### No Effect?
+### No Effect
 
 If you are using Windows or Linux, make sure you have closed all the VSCode windows and then restart.
 
@@ -189,16 +189,20 @@ If you are using MacOS, press <kbd>Command + Q</kbd> first, then restart VSCode.
 
 There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (MacOS) of the process.
 
+### EROFS
+
+This extension need to modify VSCode's source code but VSCode runs on read-only filesystem (snap, AppImage...). Maybe you need to choose another way to install VSCode.
+
 ### RangeError: Maximum call stack size exceeded
 
-Due to system permission restrictions, you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close VSCode first (press <kbd>Command + Q</kbd> on MacOS), then run:
+Due to system permission restrictions, maybe you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close VSCode first (press <kbd>Command + Q</kbd> on MacOS), then run:
 
 ```sh
 # MacOS
 sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
 
 # Linux
-sudo chown -R $(whoami) "/opt/visual-studio-code"
+sudo chown -R $(whoami) "/usr/local/code"
 ```
 
 See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
