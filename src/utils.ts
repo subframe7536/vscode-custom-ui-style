@@ -60,7 +60,9 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
       logError('Fail to execute action', error)
       success = false
     } finally {
-      fs.rmSync(lockFile)
+      try {
+        fs.rmSync(lockFile)
+      } catch {}
     }
   } catch (err) {
     if (err instanceof Error) {
