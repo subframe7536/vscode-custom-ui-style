@@ -115,6 +115,7 @@ export function logError(message: string, error?: unknown) {
     log.error(message)
     showMessage(`Error: ${message}`)
   }
+  log.show()
 }
 
 export function promptWarn(message: string) {
