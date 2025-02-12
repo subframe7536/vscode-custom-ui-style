@@ -189,7 +189,7 @@ If you are using MacOS, press <kbd>Command + Q</kbd> first, then restart VSCode.
 
 There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (MacOS) of the process.
 
-### EROFS
+### EROFS: read-only file system
 
 This extension need to modify VSCode's source code but VSCode runs on read-only filesystem (snap, AppImage...). Maybe you need to choose another way to install VSCode.
 

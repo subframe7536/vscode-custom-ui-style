@@ -107,7 +107,7 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
 
 export function logError(message: string, error?: unknown) {
   if (error instanceof Error) {
-    const msg = `${message}, ${error.message}`
+    const msg = `${message}, ${error}`
     log.error(msg)
     showMessage(msg)
   } else if (error) {
