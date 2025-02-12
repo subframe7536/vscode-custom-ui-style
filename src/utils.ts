@@ -59,8 +59,8 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
       if ('code' in err && err.code === 'EROFS') {
         logError(`${base} it runs on read-only filesystem. Maybe you need to choose another way to install VSCode`, err)
         return
-      } else if (err.message.includes('RangeError: Maximum call stack size exceeded')) {
-        logError(`${base} current user is not allowed. Please comfirm that you have the permission to write files in ${baseDir}`, err)
+      } else if (err.message.includes('Maximum call stack size exceeded')) {
+        logError(`${base} current user is not allowed. Please run "sudo chown -R $(whoami) '${baseDir}'" to grant permissions`, err)
         return
       }
     }
