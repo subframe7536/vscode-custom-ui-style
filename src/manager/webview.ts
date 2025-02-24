@@ -28,7 +28,7 @@ function getCSS() {
 }
 
 export function fixSha256(html: string) {
-  const [,scriptString] = html.match(/<script async type="module">([\s\S]*?)<\/script>/) || []
+  const [, scriptString] = html.match(/<script async=?"{0,2} type="module">([\s\S]*?)<\/script>/) || []
   if (!scriptString) {
     return html
   }
