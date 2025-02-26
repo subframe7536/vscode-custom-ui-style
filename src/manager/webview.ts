@@ -43,6 +43,9 @@ export class WebViewFileManager extends BaseFileManager {
   }
 
   patch(content: string): string {
+    if (!config['webview.enable']) {
+      return content
+    }
     return fixSha256(
       content.replace(
         entry,

@@ -46,12 +46,12 @@ function getWebviewHTML(ext: string) {
     'webview',
     'browser',
     'pre',
-    `index${ext}`,
+    `index.${ext}`,
   )
 }
 
-export const webviewHTMLPath = getWebviewHTML('.html')
-export const webviewHTMLBakPath = getWebviewHTML(`.${bakExt}.html`)
+export const webviewHTMLPath = getWebviewHTML('html')
+export const webviewHTMLBakPath = getWebviewHTML(`${bakExt}.html`)
 /**
  * See https://code.visualstudio.com/api/references/vscode-api#env
  */

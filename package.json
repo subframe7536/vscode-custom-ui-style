@@ -170,6 +170,12 @@
           "type": "object",
           "description": "Custom css for editor, support nest selectors"
         },
+        "custom-ui-style.webview.enable": {
+          "scope": "application",
+          "type": "boolean",
+          "default": true,
+          "description": "Enable style patch in webview"
+        },
         "custom-ui-style.webview.monospaceSelector": {
           "scope": "application",
           "type": "array",
