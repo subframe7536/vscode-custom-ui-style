@@ -68,19 +68,19 @@ function getWorkbenchPath(baseExt: string, backupExt?: string) {
   )
 }
 /**
- * CSS file path
+ * Workbench CSS file path
  */
 export const cssPath = getWorkbenchPath('css')
 /**
- * CSS file backup path
+ * Workbench CSS file backup path
  */
 export const cssBakPath = getWorkbenchPath('css', bakExt)
 /**
- * Main js file path
+ * Workbench main js file path
  */
 export const rendererPath = getWorkbenchPath('js')
 /**
- * Main js file backup path
+ * Workbench main js file backup path
  */
 export const rendererBakPath = getWorkbenchPath('js', bakExt)
 
@@ -96,7 +96,13 @@ function getMainPath(baseExt: string, backupExt?: string) {
   return fs.existsSync(defaultPath) ? defaultPath : path.join(baseDir, `main.${ext}`)
 }
 
+/**
+ * VSCode main js path
+ */
 export const mainPath = getMainPath('js')
+/**
+ * VSCode main js backup path
+ */
 export const mainBakPath = getMainPath('js', bakExt)
 
 function getProductJSONPath(baseExt: string, backupExt?: string) {

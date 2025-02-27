@@ -181,6 +181,12 @@ To disable all external resources, setup:
 
 ## FAQ
 
+### What is modified
+
+ALL modifications are located in VSCode's installation directory, and modified files are backed up with `custom-ui-style` suffix in same directory. See all file paths in [path.ts](https://github.com/subframe7536/vscode-custom-ui-style/tree/main/src/path.ts)
+
+When reload config, the extension will check backup file first, then read content from backup file and overwrite the original file with patches. Finally try to reload window or restart APP.
+
 ### No Effect
 
 If you are using Windows or Linux, make sure you have closed all the VSCode windows and then restart.
@@ -209,7 +215,13 @@ See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
 
 ### Fail to render panel
 
-According to [#34](https://github.com/subframe7536/vscode-custom-ui-style/issues/34), in Cursor (close source VSCode's fork), the extension detail panel will not show by default due to the violation of iframe's CSP. Currently the way to fix it is just skip patch on webview, so please set `"custom-ui-style.webview.enable": false`
+According to [#34](https://github.com/subframe7536/vscode-custom-ui-style/issues/34), in Cursor (close source VSCode's fork), the extension detail panel will not show by default due to the violation of iframe's CSP. Currently the way to fix it is just skip patch on webview, so please set:
+
+```json
+{
+  "custom-ui-style.webview.enable": false
+}
+```
 
 ## Configurations
 
