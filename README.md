@@ -15,7 +15,7 @@ VSCode extension that custom ui css style in both editor and webview
 > This extension works by editting the VSCode's css and js files.
 >
 > ~~So, a warning appears while the first time to install or VSCode update. You can click the [never show again] to avoid it.~~
-> From V0.4.0, the warning will no longer prompt after fully restart. #11
+> From V0.4.0, the warning will no longer prompt after fully restart. [#11](https://github.com/subframe7536/vscode-custom-ui-style/issues/11)
 
 ## Features
 
@@ -206,6 +206,10 @@ sudo chown -R $(whoami) "/usr/local/code"
 ```
 
 See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
+
+### Fail to render panel
+
+According to [#34](https://github.com/subframe7536/vscode-custom-ui-style/issues/34), in Cursor (close source VSCode's fork), the extension detail panel will not show by default due to the violation of iframe's CSP. Currently the way to fix it is just skip patch on webview, so please set `"custom-ui-style.webview.enable": false`
 
 ## Configurations
 
