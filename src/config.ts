@@ -1,4 +1,5 @@
 import { defineConfigObject } from 'reactive-vscode'
+import { workspace } from 'vscode'
 import * as Meta from './generated/meta'
 
 export const config = defineConfigObject<Meta.ScopedConfigKeyTypeMap>(
@@ -6,13 +7,12 @@ export const config = defineConfigObject<Meta.ScopedConfigKeyTypeMap>(
   Meta.scopedConfigs.defaults,
 )
 
-export const editorConfig = defineConfigObject('editor', {
-  fontFamily: String,
-})
+export const ffKey = 'editor.fontFamily'
 
 export function getFamilies() {
   return {
-    monospace: config['font.monospace'] || editorConfig.fontFamily,
+    monospace: config['font.monospace']
+      || workspace.getConfiguration().inspect<string>(ffKey)!.globalValue,
     sansSerif: config['font.sansSerif'],
   }
 }
