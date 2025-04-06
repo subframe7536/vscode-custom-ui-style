@@ -27,7 +27,10 @@ function getCSS() {
   return result
 }
 
-export function fixSha256(html: string) {
+export function fixCSP(html: string, remove: boolean) {
+  if (remove) {
+    return html.replace('meta http-equiv="Content-Security-Policy"', 'meta http-equiv=""')
+  }
   const [, scriptString] = html.match(/<script async=?"{0,2} type="module">([\s\S]*?)<\/script>/) || []
   if (!scriptString) {
     return html
@@ -46,11 +49,12 @@ export class WebViewFileManager extends BaseFileManager {
     if (!config['webview.enable']) {
       return content
     }
-    return fixSha256(
+    return fixCSP(
       content.replace(
         entry,
         `${getCSS()}\n\n\t\t\t${entry}`,
       ),
+      config['webview.removeCSP'],
     )
   }
 }

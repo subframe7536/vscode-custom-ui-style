@@ -176,6 +176,12 @@
           "default": true,
           "description": "Enable style patch in webview"
         },
+        "custom-ui-style.webview.removeCSP": {
+          "scope": "application",
+          "type": "boolean",
+          "default": true,
+          "description": "Remove Content-Security-Policy restrict in webview"
+        },
         "custom-ui-style.webview.monospaceSelector": {
           "scope": "application",
           "type": "array",
