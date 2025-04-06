@@ -5,7 +5,7 @@ import { webviewHTMLBakPath, webviewHTMLPath } from '../path'
 import { escapeQuote, generateStyleFromObject } from '../utils'
 import { BaseFileManager } from './base'
 
-const entry = `'<!DOCTYPE html>\\n' + newDocument.documentElement.outerHTML`
+const entry = `blockquote {`
 
 const defaultMonospaceSelector: string[] = ['.font-mono', 'code', 'pre', '.mono', '.monospace', 'kbd']
 const defaultSansSerifSelector: string[] = ['.font-sans', '.github-markdown-body']
@@ -49,7 +49,7 @@ export class WebViewFileManager extends BaseFileManager {
     return fixSha256(
       content.replace(
         entry,
-        `${entry}.replace('</body>', '</body><style>${getCSS()}</style>')`,
+        `${getCSS()}\n\n\t\t\t${entry}`,
       ),
     )
   }
