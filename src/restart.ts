@@ -87,7 +87,7 @@ async function restartWindows() {
     '    Start-Sleep -Milliseconds 100',
     '}',
   ].join('')
-  const batchScript = `taskkill /F /IM ${exeName}.exe >nul && powershell -Command "${checkScript}" && "${binary}"`
+  const batchScript = `taskkill /F /IM "${exeName}.exe" >nul && powershell -Command "${checkScript}" && "${binary}"`
 
   return spawn(
     process.env.comspec ?? 'cmd',
