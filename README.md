@@ -9,7 +9,7 @@
 
 VSCode extension that custom ui css style in both editor and webview
 
-- Works with VSCode 1.98! (Tested on Windows and MacOS)
+- Works with VSCode 1.100! (Tested on Windows and MacOS)
 
 > [!warning]
 >

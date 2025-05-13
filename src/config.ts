@@ -1,5 +1,6 @@
 import { defineConfigObject } from 'reactive-vscode'
 import { workspace } from 'vscode'
+
 import * as Meta from './generated/meta'
 
 export const config = defineConfigObject<Meta.ScopedConfigKeyTypeMap>(

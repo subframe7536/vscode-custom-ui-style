@@ -1,6 +1,8 @@
 import { createHash } from 'node:crypto'
 import path from 'node:path'
+
 import { readFileSync } from 'atomically'
+
 import { baseDir, productJSONBakPath, productJSONPath } from '../path'
 import { BaseFileManager } from './base'
 

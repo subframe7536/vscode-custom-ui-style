@@ -1,6 +1,9 @@
 import type { Promisable } from '@subframe7536/type-utils'
+
 import fs from 'node:fs'
+
 import { readFileSync, writeFileSync } from 'atomically'
+
 import { log } from '../logger'
 
 export interface FileManager {

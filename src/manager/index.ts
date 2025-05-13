@@ -1,5 +1,7 @@
 import type { FileManager } from './base'
+
 import { version } from 'vscode'
+
 import { config } from '../config'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'

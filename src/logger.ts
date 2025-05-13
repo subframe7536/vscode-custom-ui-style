@@ -1,5 +1,6 @@
 import { useDisposable } from 'reactive-vscode'
 import { window } from 'vscode'
+
 import * as Meta from './generated/meta'
 
 const outputChannel = useDisposable(window.createOutputChannel(Meta.displayName))

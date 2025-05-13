@@ -2,7 +2,9 @@
 import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
+
 import { readFileSync } from 'atomically'
+
 import { baseDir, productJSONPath } from './path'
 
 export async function restartApp(): Promise<void> {

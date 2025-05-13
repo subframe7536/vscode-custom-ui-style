@@ -1,10 +1,13 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
+
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path/posix'
 import Url from 'node:url'
+
 import { readFileSync, writeFileSync } from 'atomically'
 import { commands, window } from 'vscode'
+
 import { config } from './config'
 import * as Meta from './generated/meta'
 import { log } from './logger'

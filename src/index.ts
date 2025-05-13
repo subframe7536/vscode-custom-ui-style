@@ -1,5 +1,6 @@
 import { defineExtension, useCommand, useDisposable } from 'reactive-vscode'
 import { workspace } from 'vscode'
+
 import { config, ffKey } from './config'
 import * as Meta from './generated/meta'
 import { createFileManagers } from './manager'

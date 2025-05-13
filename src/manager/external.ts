@@ -1,7 +1,10 @@
 // Reference from https://github.com/be5invis/vscode-custom-css/blob/master/src/extension.js
 import type { Promisable } from '@subframe7536/type-utils'
+
 import fs from 'node:fs'
+
 import { readFileSync, writeFileSync } from 'atomically'
+
 import { config } from '../config'
 import { log } from '../logger'
 import {

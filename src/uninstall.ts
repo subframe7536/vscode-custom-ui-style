@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from 'atomically'
+
 import * as paths from './path'
 
 function uninstall(srcPath: string, bakPath: string) {
