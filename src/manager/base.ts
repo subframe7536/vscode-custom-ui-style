@@ -5,11 +5,13 @@ import fs from 'node:fs'
 import { readFileSync, writeFileSync } from 'atomically'
 
 import { log } from '../logger'
+import { promptWarn } from '../utils'
 
 export interface FileManager {
   hasBakFile: boolean
   reload: () => Promise<void>
   rollback: () => Promise<void>
+  skipAll?: () => Promisable<string | false | undefined>
 }
 
 export abstract class BaseFileManager implements FileManager {
@@ -22,24 +24,41 @@ export abstract class BaseFileManager implements FileManager {
     return fs.existsSync(this.bakPath)
   }
 
+  skipAll?: (() => Promisable<string | undefined | false>) | undefined
+
   async reload() {
-    if (!this.hasBakFile) {
-      log.warn(`Backup file [${this.bakPath}] does not exist, backuping...`)
-      fs.cpSync(this.srcPath, this.bakPath)
-      log.info(`Create backup file [${this.bakPath}]`)
-    }
-    const newContent = await this.patch(readFileSync(this.bakPath, 'utf-8'))
-    writeFileSync(this.srcPath, newContent)
-    log.info(`Config reload [${this.srcPath}]`)
+    await this.skipable(async () => {
+      if (!this.hasBakFile) {
+        log.warn(`Backup file [${this.bakPath}] does not exist, backuping...`)
+        fs.cpSync(this.srcPath, this.bakPath)
+        log.info(`Create backup file [${this.bakPath}]`)
+      }
+      const newContent = await this.patch(readFileSync(this.bakPath, 'utf-8'))
+      writeFileSync(this.srcPath, newContent)
+      log.info(`Config reload [${this.srcPath}]`)
+    })
   }
 
   async rollback() {
-    if (!this.hasBakFile) {
-      log.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
-    } else {
-      writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
-      log.info(`Config rollback [${this.srcPath}]`)
+    await this.skipable(() => {
+      if (!this.hasBakFile) {
+        log.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
+      } else {
+        writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
+        log.info(`Config rollback [${this.srcPath}]`)
+      }
+    })
+  }
+
+  async skipable(fn: () => Promisable<void>) {
+    let skipMessage
+    // eslint-disable-next-line no-cond-assign
+    if (skipMessage = await this.skipAll?.()) {
+      promptWarn(skipMessage)
+      return
     }
+
+    await fn()
   }
 
   abstract patch(content: string): Promisable<string>

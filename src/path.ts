@@ -116,13 +116,13 @@ export const productJSONPath = getProductJSONPath('json')
 
 export const productJSONBakPath = getProductJSONPath('json', `${version}.${bakExt}`)
 
-const sandboxPath = path.join(
-  baseDir,
-  'vs',
-  'code',
-  'electron-sandbox',
-  'workbench',
-)
+const workbenchHtmlDir = (() => {
+  const base = path.join(baseDir, 'vs', 'code', 'electron-sandbox')
+  if (fs.existsSync(base)) {
+    return path.join(base, 'workbench')
+  }
+  return path.join(path.dirname(base), 'electron-browser', 'workbench')
+})()
 
 export const htmlPath = (() => {
   const WORKBENCH_NAMES = [
@@ -132,13 +132,12 @@ export const htmlPath = (() => {
     'workbench-dev.esm',
   ]
   for (const name of WORKBENCH_NAMES) {
-    const result = path.join(sandboxPath, `${name}.html`)
+    const result = path.join(workbenchHtmlDir, `${name}.html`)
     if (fs.existsSync(result)) {
       return result
     }
   }
-  log.warn('No html found, use default html path')
-  return path.join(sandboxPath, `${WORKBENCH_NAMES[0]}.html`)
+  return ''
 })()
 
 export const htmlBakPath = htmlPath.replace('.html', `.${bakExt}.html`)
@@ -147,7 +146,7 @@ export const externalCssName = 'external.css'
 export const externalJsName = 'external.js'
 export const externalJsModuleName = 'external.module.js'
 
-export const externalCssPath = path.join(sandboxPath, externalCssName)
-export const externalJsPath = path.join(sandboxPath, externalJsName)
-export const externalJsModulePath = path.join(sandboxPath, externalJsModuleName)
-export const externalCacheInfoPath = path.join(sandboxPath, 'external.cache.json')
+export const externalCssPath = path.join(workbenchHtmlDir, externalCssName)
+export const externalJsPath = path.join(workbenchHtmlDir, externalJsName)
+export const externalJsModulePath = path.join(workbenchHtmlDir, externalJsModuleName)
+export const externalCacheInfoPath = path.join(workbenchHtmlDir, 'external.cache.json')

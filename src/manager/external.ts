@@ -250,6 +250,9 @@ const entryCSS = '<link rel="stylesheet" href="../../../workbench/workbench.desk
 export class ExternalFileManager extends BaseFileManager {
   constructor() {
     super(htmlPath, htmlBakPath)
+    if (!htmlPath) {
+      this.skipAll = () => 'No workbench html found, external resouces are disabled'
+    }
   }
 
   async patch(content: string): Promise<string> {
