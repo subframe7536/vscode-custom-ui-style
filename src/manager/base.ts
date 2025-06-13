@@ -51,14 +51,12 @@ export abstract class BaseFileManager implements FileManager {
   }
 
   async skipable(fn: () => Promisable<void>) {
-    let skipMessage
-    // eslint-disable-next-line no-cond-assign
-    if (skipMessage = await this.skipAll?.()) {
+    let skipMessage = await this.skipAll?.()
+    if (skipMessage) {
       promptWarn(skipMessage)
-      return
+    } else {
+      await fn()
     }
-
-    await fn()
   }
 
   abstract patch(content: string): Promisable<string>
