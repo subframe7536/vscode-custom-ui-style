@@ -4,6 +4,7 @@
 *.log
 *.tgz
 *.vsix
+*.zip
 coverage
 dist
 lib-cov
