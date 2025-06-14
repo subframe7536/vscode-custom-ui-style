@@ -4,7 +4,6 @@ import path from 'node:path/posix'
 import { env, version } from 'vscode'
 
 import { name as bakExt } from './generated/meta'
-import { log } from './logger'
 import { logError } from './utils'
 
 function getDirectoryName(filePath: string): string {

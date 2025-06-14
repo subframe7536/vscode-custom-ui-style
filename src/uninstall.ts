@@ -1,9 +1,12 @@
+import fs from 'node:fs'
 import { readFileSync, writeFileSync } from 'atomically'
 
 import * as paths from './path'
 
 function uninstall(srcPath: string, bakPath: string) {
-  writeFileSync(srcPath, readFileSync(bakPath, 'utf-8'))
+  if (fs.existsSync(srcPath)) {
+    writeFileSync(srcPath, readFileSync(bakPath, 'utf-8'))
+  }
 }
 
 uninstall(
