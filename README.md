@@ -216,6 +216,22 @@ sudo chown -R $(whoami) "/usr/local/code"
 ```
 
 See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
+#### In case of installation under `/usr/share/code`
+> 
+> On some Linux installs (e.g. the official Debian/Ubuntu repos), VS Code’s files live in `/usr/share/code`. When the extension hits a permissions error it logs:
+> 
+>     sudo chown -R $(whoami) '/usr/share/code/resources/app/out'
+> 
+> That only grants ownership of the JS output folder and still leaves required files unwritable, resulting in a half-owned—and easily corrupted—install.
+> 
+> Manually moving the file after that using command like `sudo cp /usr/share/code/resources/app/product.json /usr/share/code/resources/app/product.1.101.2.custom-ui-style.json` completely corrupts vs code and it ends up unusable like [#29](https://github.com/subframe7536/vscode-custom-ui-style/issues/29).
+> 
+> Instead, grant ownership of the entire tree:
+> 
+>     sudo chown -R $(whoami) '/usr/share/code'
+> 
+> Then fully quit VS Code (close all windows on Linux) and reload/restart so the extension can write the required files.
+
 
 ### Fail to render panel
 
