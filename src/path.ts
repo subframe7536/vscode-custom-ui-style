@@ -20,7 +20,9 @@ function getDirectoryName(filePath: string): string {
 }
 
 /**
- * Base dir: {VSCodeExecPath}/out
+ * Base dir for all modified file
+ *
+ * The `product.json` is in its parent dir
  */
 export const baseDir = (() => {
   const envAppRoot = env.appRoot
