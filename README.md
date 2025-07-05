@@ -228,7 +228,7 @@ See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
 > 
 > Instead, grant ownership of the entire tree:
 > 
->     sudo chown -R $(whoami) '/usr/share/code'
+>  `sudo chown -R $(whoami) '/usr/share/code'` or `sudo chown -R $(whoami) '/usr/share/code/resources/app'` 
 > 
 > Then fully quit VS Code (close all windows on Linux) and reload/restart so the extension can write the required files.
 
