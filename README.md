@@ -17,9 +17,7 @@ VSCode extension that custom ui css style in both editor and webview
 
 # ❗CLAIM
 
-Untested on Linux and VSCode forks (Cursor, WindSurf, etc.) and currently I have no energy to adapte them.
-
-So if this extension breaks your editor, you can use [these more mature alternative extension](#credit)
+Untested on Linux and VSCode forks (like Cursor, WindSurf, etc.), and I currently lack the energy to adapt them. If this extension causes issues in your editor, please consider using [these more mature alternative extensions](#credit)
 
 ## Features
 
