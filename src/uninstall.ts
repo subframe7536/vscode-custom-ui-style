@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+
 import { readFileSync, writeFileSync } from 'atomically'
 
 import * as paths from './path'
@@ -29,10 +30,12 @@ uninstall(
   paths.webviewHTMLBakPath,
 )
 
-uninstall(
-  paths.htmlPath,
-  paths.htmlBakPath,
-)
+if (paths.htmlPath) {
+  uninstall(
+    paths.htmlPath,
+    paths.htmlBakPath,
+  )
+}
 
 uninstall(
   paths.productJSONPath,

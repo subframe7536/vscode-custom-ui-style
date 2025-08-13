@@ -15,6 +15,7 @@ import {
   externalJsModulePath,
   externalJsName,
   externalJsPath,
+  generateNoHtmlErrorMessage,
   htmlBakPath,
   htmlPath,
 } from '../path'
@@ -251,7 +252,8 @@ export class ExternalFileManager extends BaseFileManager {
   constructor() {
     super(htmlPath, htmlBakPath)
     if (!htmlPath) {
-      this.skipAll = () => 'No workbench html found, external resouces are disabled'
+      logError(generateNoHtmlErrorMessage())
+      this.skipAll = () => 'No workbench html found, external resources are disabled'
     }
   }
 

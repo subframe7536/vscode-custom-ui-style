@@ -211,3 +211,8 @@ export function resolveVariable(url: string): string {
     },
   )
 }
+
+export function printFileTree(dir: string) {
+  const tree = fs.readdirSync(dir, { recursive: true })
+  return JSON.stringify(tree, null, 2)
+}

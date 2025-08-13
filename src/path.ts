@@ -4,7 +4,7 @@ import path from 'node:path/posix'
 import { env, version } from 'vscode'
 
 import { name as bakExt } from './generated/meta'
-import { logError } from './utils'
+import { logError, printFileTree } from './utils'
 
 function getDirectoryName(filePath: string): string {
   const lastSlashIndex = Math.max(
@@ -40,11 +40,18 @@ export const baseDir = (() => {
   return getDirectoryName(mainFilename)
 })()
 
+/**
+ * <baseDir>/vs/code
+ */
+const codeBaseDir = path.join(baseDir, 'vs', 'code')
+/**
+ * <baseDir>/vs/workbench
+ */
+const workbenchBaseDir = path.join(baseDir, 'vs', 'workbench')
+
 function getWebviewHTML(ext: string) {
   return path.join(
-    baseDir,
-    'vs',
-    'workbench',
+    workbenchBaseDir,
     'contrib',
     'webview',
     'browser',
@@ -61,9 +68,7 @@ export const webviewHTMLBakPath = getWebviewHTML(`${bakExt}.html`)
 function getWorkbenchPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   return path.join(
-    baseDir,
-    'vs',
-    'workbench',
+    workbenchBaseDir,
     // https://github.com/microsoft/vscode/pull/141263
     env.appHost === 'desktop'
       ? `workbench.desktop.main.${ext}`
@@ -90,9 +95,7 @@ export const rendererBakPath = getWorkbenchPath('js', bakExt)
 function getMainPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   const defaultPath = path.join(
-    baseDir,
-    'vs',
-    'code',
+    codeBaseDir,
     'electron-main',
     `main.${ext}`,
   )
@@ -117,23 +120,14 @@ export const productJSONPath = getProductJSONPath('json')
 
 export const productJSONBakPath = getProductJSONPath('json', `${version}.${bakExt}`)
 
-const workbenchHtmlDir = (() => {
-  const base = path.join(baseDir, 'vs', 'code', 'electron-sandbox')
-  if (fs.existsSync(base)) {
-    return path.join(base, 'workbench')
-  }
-  return path.join(path.dirname(base), 'electron-browser', 'workbench')
-})()
+const AVAILIABLE_DIR = [
+  'electron-sandbox/workbench',
+  'electron-browser/workbench',
+]
 
-export const htmlPath = (() => {
-  const WORKBENCH_NAMES = [
-    'workbench',
-    'workbench-dev',
-    'workbench.esm',
-    'workbench-dev.esm',
-  ]
-  for (const name of WORKBENCH_NAMES) {
-    const result = path.join(workbenchHtmlDir, `${name}.html`)
+const htmlDirPath = (() => {
+  for (const dir of AVAILIABLE_DIR) {
+    const result = path.join(codeBaseDir, dir)
     if (fs.existsSync(result)) {
       return result
     }
@@ -141,13 +135,42 @@ export const htmlPath = (() => {
   return ''
 })()
 
+const WORKBENCH_HTML_NAMES = [
+  'workbench.html',
+  'workbench-dev.html',
+  'workbench.esm.html',
+  'workbench-dev.esm.html',
+]
+export const htmlPath = (() => {
+  if (!htmlDirPath) {
+    return ''
+  }
+  for (const name of WORKBENCH_HTML_NAMES) {
+    const result = path.join(htmlDirPath, name)
+    if (fs.existsSync(result)) {
+      return result
+    }
+  }
+  return ''
+})()
+
+export function generateNoHtmlErrorMessage() {
+  if (!htmlDirPath) {
+    return `Cannot find the workbench html dir in ${codeBaseDir}, known dirs are [${AVAILIABLE_DIR}]. File tree: ${printFileTree(codeBaseDir)}`
+  }
+  if (!htmlPath) {
+    return `Cannot find the workbench html file in ${htmlDirPath}, known files are [${WORKBENCH_HTML_NAMES}]. File tree: ${printFileTree(htmlDirPath)}`
+  }
+  return 'Workbench html file found. You should not see this message.'
+}
+
 export const htmlBakPath = htmlPath.replace('.html', `.${bakExt}.html`)
 
 export const externalCssName = 'external.css'
 export const externalJsName = 'external.js'
 export const externalJsModuleName = 'external.module.js'
 
-export const externalCssPath = path.join(workbenchHtmlDir, externalCssName)
-export const externalJsPath = path.join(workbenchHtmlDir, externalJsName)
-export const externalJsModulePath = path.join(workbenchHtmlDir, externalJsModuleName)
-export const externalCacheInfoPath = path.join(workbenchHtmlDir, 'external.cache.json')
+export const externalCssPath = path.join(htmlDirPath, externalCssName)
+export const externalJsPath = path.join(htmlDirPath, externalJsName)
+export const externalJsModulePath = path.join(htmlDirPath, externalJsModuleName)
+export const externalCacheInfoPath = path.join(htmlDirPath, 'external.cache.json')
