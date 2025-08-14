@@ -40,14 +40,12 @@ export abstract class BaseFileManager implements FileManager {
   }
 
   async rollback() {
-    await this.skipable(() => {
-      if (!this.hasBakFile) {
-        log.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
-      } else {
-        writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
-        log.info(`Config rollback [${this.srcPath}]`)
-      }
-    })
+    if (!this.hasBakFile) {
+      log.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
+    } else {
+      writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
+      log.info(`Config rollback [${this.srcPath}]`)
+    }
   }
 
   async skipable(fn: () => Promisable<void>) {
