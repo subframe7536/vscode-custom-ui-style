@@ -55,50 +55,50 @@
         "custom-ui-style.preferRestart": {
           "scope": "resource",
           "type": "boolean",
-          "description": "Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version >= 1.95.0)",
+          "description": "Prefer restarting VSCode after updates (always true for VSCode >= 1.95.0)",
           "default": false
         },
         "custom-ui-style.reloadWithoutPrompting": {
           "scope": "resource",
           "type": "boolean",
-          "description": "Reload/restart immediately, instead of having to click 'Reload Window' in the notification",
+          "description": "Reload/restart immediately without a notification prompt",
           "default": false
         },
         "custom-ui-style.watch": {
           "scope": "resource",
           "type": "boolean",
-          "description": "Watch configuration changes and reload window automatically (ignore imports)",
+          "description": "Automatically reload window on configuration changes (ignores imports)",
           "default": true
         },
         "custom-ui-style.electron": {
           "scope": "application",
           "type": "object",
-          "description": "Electron BrowserWindow options"
+          "description": "Electron BrowserWindow options (see Electron documentation)"
         },
         "custom-ui-style.font.monospace": {
           "scope": "application",
           "type": "string",
-          "description": "Global monospace font family that apply in both editor and webview, fallback to editor's font family"
+          "description": "Global monospace font family for editor and webviews (falls back to editor's font)"
         },
         "custom-ui-style.font.sansSerif": {
           "scope": "application",
           "type": "string",
-          "description": "Global sans-serif font family that apply in both editor and webview"
+          "description": "Global sans-serif font family for editor and webviews"
         },
         "custom-ui-style.background.url": {
           "scope": "machine",
           "type": "string",
-          "description": "Full-screen background image url (will not sync), support protocol: 'https://', 'file://', 'data:'"
+          "description": "Full-screen background image URL (e.g., 'https://', 'file://', 'data:') - not synced"
         },
         "custom-ui-style.background.syncURL": {
           "scope": "application",
           "type": "string",
-          "description": "Full-screen background image url (will sync), support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}], has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:'"
+          "description": "Full-screen background image URL (synced), supports variables like ${userHome} or ${env:VAR:fallback}. Lower priority than 'url'."
         },
         "custom-ui-style.background.opacity": {
           "scope": "application",
           "type": "number",
-          "description": "Background image opacity (0 ~ 1)",
+          "description": "Background image opacity (0 to 1)",
           "default": 0.9
         },
         "custom-ui-style.background.size": {
@@ -108,7 +108,7 @@
             "cover",
             "contain"
           ],
-          "description": "Background image size",
+          "description": "Background image size (e.g., 'cover', 'contain')",
           "default": "cover"
         },
         "custom-ui-style.background.position": {
@@ -130,19 +130,19 @@
             "Skip refetch if nothing changed and all resources are fetched",
             "Remove all resources"
           ],
-          "description": "Load strategy for external CSS or JS resources",
+          "description": "Strategy for loading external CSS or JS resources",
           "default": "refetch"
         },
         "custom-ui-style.external.imports": {
           "scope": "application",
           "type": "array",
-          "description": "External CSS or JS resources, support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}], support protocol: 'https://', 'file://'",
+          "description": "External CSS or JS resources; supports variables (${userHome}, ${env:VAR:fallback}) and protocols ('https://', 'file://')",
           "items": {
             "oneOf": [
               {
                 "type": "string",
                 "pattern": "^(file://|https://).+\\.(css|js)$",
-                "description": "Path to local CSS or JS file, must end with '.js' or '.css', support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}]"
+                "description": "Path to local CSS or JS file (.js or .css); supports variables (${userHome}, ${env:VAR:fallback})"
               },
               {
                 "type": "object",
@@ -158,7 +158,7 @@
                   "url": {
                     "type": "string",
                     "pattern": "^https:\\/\\/",
-                    "description": "URL to CSS or JS script, only support 'https://' protocol"
+                    "description": "URL to CSS or JS script (only 'https://' protocol)"
                   }
                 }
               }
@@ -168,13 +168,13 @@
         "custom-ui-style.stylesheet": {
           "scope": "application",
           "type": "object",
-          "description": "Custom css for editor, support nest selectors"
+          "description": "Custom CSS for the editor; supports nested selectors"
         },
         "custom-ui-style.extensions.enable": {
           "scope": "application",
           "type": "boolean",
           "default": true,
-          "description": "Enable file patch in other extensions"
+          "description": "Enable file patching in other extensions"
         },
         "custom-ui-style.extensions.config": {
           "scope": "application",
@@ -186,15 +186,15 @@
               "properties": {
                 "filePath": {
                   "type": "string",
-                  "description": "Relative path to extension root"
+                  "description": "Relative path within the extension root"
                 },
                 "find": {
                   "type": "string",
-                  "description": "\"find\" in JavaScript code \"str.replace(find, replace)\", support regexp (e.g. /test\\d+/)"
+                  "description": "String or RegExp to find (e.g., /test\\d+/)"
                 },
                 "replace": {
                   "type": "string",
-                  "description": "\"replace\" in JavaScript code \"str.replace(find, replace)\""
+                  "description": "Replacement string"
                 }
               },
               "required": [
@@ -205,19 +205,19 @@
               "additionalProperties": false
             }
           },
-          "description": "Config to patch extension code, key is extension id, value is config"
+          "description": "Configuration for patching extension files (key: extension ID, value: patch config)"
         },
         "custom-ui-style.webview.enable": {
           "scope": "application",
           "type": "boolean",
           "default": true,
-          "description": "Enable style patch in webview"
+          "description": "Enable style patching in webviews"
         },
         "custom-ui-style.webview.removeCSP": {
           "scope": "application",
           "type": "boolean",
           "default": true,
-          "description": "Remove Content-Security-Policy restrict in webview"
+          "description": "Remove Content-Security-Policy restrictions in webviews"
         },
         "custom-ui-style.webview.monospaceSelector": {
           "scope": "application",
@@ -225,7 +225,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Custom monospace selector in webview"
+          "description": "Custom monospace selector for webviews"
         },
         "custom-ui-style.webview.sansSerifSelector": {
           "scope": "application",
@@ -233,12 +233,12 @@
           "items": {
             "type": "string"
           },
-          "description": "Custom sans-serif selector in webview"
+          "description": "Custom sans-serif selector for webviews"
         },
         "custom-ui-style.webview.stylesheet": {
           "scope": "application",
           "type": "object",
-          "description": "Custom css for webview, support nest selectors"
+          "description": "Custom CSS for webviews; supports nested selectors"
         }
       }
     }

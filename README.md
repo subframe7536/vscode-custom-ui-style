@@ -7,7 +7,7 @@
   </p>
 </p>
 
-Custom UI Style is a VSCode extension that modify CSS and JS code in editor and webview, unify global font family, setup background image and Electron BrowserWindow options, add your custom CSS or JS code, or patching file in other VSCode extensions
+Custom UI Style is a VSCode extension that allows you to customize the editor's appearance and behavior by injecting custom CSS and JavaScript. You can unify the global font family, set a background image, modify Electron `BrowserWindow` options, add your own custom styles and scripts, and even patch files in other VSCode extensions.
 
 - Works with VSCode 1.103! (Tested on Windows and MacOS)
 
@@ -21,28 +21,27 @@ Untested on Linux and VSCode forks (like Cursor, WindSurf, etc.), and I currentl
 
 ## Features
 
-- Unified global font family
-- Setup background image
-- Custom nest stylesheet for both editor and webview
-- Custom Electron `BrowserWindow` options
-- [From V0.4.0] Support total restart
-- [From V0.4.0] Suppress corrupt message
-- [From V0.4.2] Load external CSS or JS file
-- [From V0.6.0] Patch files in extension
+- Unify the global font family for the editor and webviews.
+- Set a background image for the editor window.
+- Apply custom stylesheets to both the editor and webviews.
+- Configure Electron `BrowserWindow` options.
+- Support for restarting VSCode to apply changes.
+- Suppress the "Your Code installation is corrupt" message.
+- Load external CSS and JavaScript files.
+- Patch files in other extensions.
 
 ## Usage
 
-When first installed or new VSCode version upgraded, the plugin will prompt to dump backup file.
+1.  **Backup:** When you first install the extension or after a VSCode update, you'll be prompted to create a backup of the original files. This is important for rollback.
+2.  **Configure:** Add your customizations to your `settings.json` file. See the [Example](#example) and [Configurations](#configurations) sections for details.
+3.  **Apply:** Open the Command Palette (<kbd>Ctrl+Shift+P</kbd> or <kbd>Cmd+Shift+P</kbd>) and run `Custom UI Style: Reload` to apply your changes.
+4.  **Rollback:** To revert all changes and restore the original VSCode files, run `Custom UI Style: Rollback` from the Command Palette.
 
-After changing the configuration, please open command panel and run `Custom UI Style: Reload` to apply the configuration.
-
-To rollback or uninstall the plugin, please open command panel and run `Custom UI Style: Rollback` to restore the original VSCode file.
-
-See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns)
+See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns) for more information.
 
 ### Example
 
-Avaiable CSS Variables:
+Available CSS Variables:
 
 - `--cus-monospace-font`: Target monospace font family
 - `--cus-sans-font`: Target sans-serif font family
@@ -122,11 +121,13 @@ Avaiable CSS Variables:
 
 ### External Resources (CSS or JS File)
 
-From v0.4.2, the extension supports loading external CSS or JS file from local file or remote URL. This operation may introduce security issue or runtime crash, use it with caution!
+Starting from v0.4.2, you can load external CSS and JavaScript files from local or remote URLs.
 
-All resources will be applied in editor instead of webview.
+> [!caution]
+> Loading external resources can introduce security risks or cause runtime crashes. Use this feature with caution.
 
-All resources will be fetched, merged and persist according to resource type during reload, so there is no watcher support.
+- All resources are applied to the editor, not webviews.
+- Resources are fetched and merged during reload. Live-watching of files is not supported.
 
 ```jsonc
 {
@@ -164,9 +165,9 @@ All resources will be fetched, merged and persist according to resource type dur
 
 #### Load Strategy
 
-By default, all resources will be refetched during every reload. Failed fetch will be skipped.
+By default, all resources are re-fetched on every reload, and failed fetches are skipped.
 
-To skip refetching resources if there is nothing changed on `custom-ui-style.external.imports` and all resources are successfully fetched before, setup:
+To cache resources and avoid re-fetching when `custom-ui-style.external.imports` is unchanged, set the load strategy to `"cache"`:
 
 ```jsonc
 {
@@ -174,7 +175,7 @@ To skip refetching resources if there is nothing changed on `custom-ui-style.ext
 }
 ```
 
-To disable all external resources, setup:
+To disable all external resources, set the load strategy to `"disable"`:
 
 ```jsonc
 {
@@ -206,41 +207,44 @@ Find and replace target string or `Regexp` in extension's file
 
 ## FAQ
 
-### What is modified
+### What is modified?
 
-ALL modifications are located in VSCode's installation directory, and modified files are backed up with `custom-ui-style` suffix in same directory. See all file paths in [path.ts](https://github.com/subframe7536/vscode-custom-ui-style/tree/main/src/path.ts)
+This extension modifies files in your VSCode installation directory. All modified files are backed up with a `.custom-ui-style` suffix in the same directory. You can see the full list of modified files in [`path.ts`](https://github.com/subframe7536/vscode-custom-ui-style/tree/main/src/path.ts).
 
-When reload config, the extension will check backup file first, then read content from backup file and overwrite the original file with patches. Finally try to reload window or restart APP.
+When you reload the configuration, the extension restores the original files from the backup, applies your custom patches, and then reloads the window or restarts the application.
 
 ### No Effect
 
-If you are using Windows or Linux, make sure you have closed all the VSCode windows and then restart.
+If your changes don't seem to apply, you may need to fully restart VSCode.
 
-If you are using MacOS, press <kbd>Command + Q</kbd> first, then restart VSCode.
+- **Windows/Linux:** Close all VSCode windows and restart the application.
+- **macOS:** Press <kbd>Command + Q</kbd> to quit the application, then restart it.
 
-There are [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (MacOS) of the process.
+There are also a [guide](https://github.com/subframe7536/vscode-custom-ui-style/issues/1#issuecomment-2423660217) and a [video](https://github.com/subframe7536/vscode-custom-ui-style/issues/2#issuecomment-2432225106) (macOS) available for more detailed instructions.
 
 ### EROFS: read-only file system
 
-This extension need to modify VSCode's source code but VSCode runs on read-only filesystem (snap, AppImage...). Maybe you need to choose another way to install VSCode.
+If you see this error, it means VSCode is installed on a read-only filesystem (e.g., via Snap or AppImage). This extension needs to write to the installation directory, so you'll need to install VSCode using a different method.
 
 ### RangeError: Maximum call stack size exceeded
 
-Due to system permission restrictions, maybe you will receive `RangeError: Maximum call stack size exceeded` prompt when you reload the configuration. You need to fully close VSCode first (press <kbd>Command + Q</kbd> on MacOS), then run:
+This error can occur due to system permission restrictions. To fix it, you need to change the ownership of the VSCode installation directory.
+
+First, fully close VSCode (<kbd>Command + Q</_kbd> on macOS). Then, run the following command:
 
 ```sh
-# MacOS
+# macOS
 sudo chown -R $(whoami) "/Applications/Visual Studio Code.app"
 
 # Linux
 sudo chown -R $(whoami) "/usr/local/code"
 ```
 
-See in [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6)
+See [#6](https://github.com/subframe7536/vscode-custom-ui-style/issues/6) for more details.
 
 ### Fail to render panel
 
-According to [#34](https://github.com/subframe7536/vscode-custom-ui-style/issues/34), in Cursor (close source VSCode's fork), the extension detail panel will not show by default due to the violation of iframe's CSP. Currently the way to fix it is just skip patch on webview, so please set:
+In some VSCode forks like Cursor, the extension detail panel may not render due to a Content Security Policy (CSP) violation. To work around this, you can disable the webview patch:
 
 ```json
 {
@@ -252,28 +256,29 @@ According to [#34](https://github.com/subframe7536/vscode-custom-ui-style/issues
 
 <!-- configs -->
 
-| Key                                         | Description                                                                                                                                                                                                  | Type      | Default     |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
-| `custom-ui-style.preferRestart`             | Prefer to restart vscode after update instead of reload window only (ALWAYS true when VSCode version &gt;= 1.95.0)                                                                                           | `boolean` | `false`     |
-| `custom-ui-style.reloadWithoutPrompting`    | Reload/restart immediately, instead of having to click 'Reload Window' in the notification                                                                                                                   | `boolean` | `false`     |
-| `custom-ui-style.watch`                     | Watch configuration changes and reload window automatically (ignore imports)                                                                                                                                 | `boolean` | `true`      |
-| `custom-ui-style.electron`                  | Electron BrowserWindow options                                                                                                                                                                               | `object`  | `{}`        |
-| `custom-ui-style.font.monospace`            | Global monospace font family that apply in both editor and webview, fallback to editor's font family                                                                                                         | `string`  | ``          |
-| `custom-ui-style.font.sansSerif`            | Global sans-serif font family that apply in both editor and webview                                                                                                                                          | `string`  | ``          |
-| `custom-ui-style.background.url`            | Full-screen background image url (will not sync), support protocol: 'https://', 'file://', 'data:'                                                                                                           | `string`  | ``          |
-| `custom-ui-style.background.syncURL`        | Full-screen background image url (will sync), support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}], has lower priority than 'Url', support protocol: 'https://', 'file://', 'data:' | `string`  | ``          |
-| `custom-ui-style.background.opacity`        | Background image opacity (0 ~ 1)                                                                                                                                                                             | `number`  | `0.9`       |
-| `custom-ui-style.background.size`           | Background image size                                                                                                                                                                                        | `string`  | `"cover"`   |
-| `custom-ui-style.background.position`       | Background image position                                                                                                                                                                                    | `string`  | `"center"`  |
-| `custom-ui-style.external.loadStrategy`     | Load strategy for external CSS or JS resources                                                                                                                                                               | `string`  | `"refetch"` |
-| `custom-ui-style.external.imports`          | External CSS or JS resources, support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}], support protocol: 'https://', 'file://'                                                         | `array`   | ``          |
-| `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                                                                                                                | `object`  | `{}`        |
-| `custom-ui-style.extensions`                | Config to patch extension code, key is extension id, value is config                                                                                                                                         | `object`  | `{}`        |
-| `custom-ui-style.webview.enable`            | Enable style patch in webview                                                                                                                                                                                | `boolean` | `true`      |
-| `custom-ui-style.webview.removeCSP`         | Remove Content-Security-Policy restrict in webview                                                                                                                                                           | `boolean` | `true`      |
-| `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                                                                                                                         | `array`   | ``          |
-| `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector in webview                                                                                                                                                                        | `array`   | ``          |
-| `custom-ui-style.webview.stylesheet`        | Custom css for webview, support nest selectors                                                                                                                                                               | `object`  | `{}`        |
+| Key                                         | Description                                                                                                                       | Type      | Default     |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `custom-ui-style.preferRestart`             | Prefer restarting VSCode after updates (always true for VSCode &gt;= 1.95.0)                                                      | `boolean` | `false`     |
+| `custom-ui-style.reloadWithoutPrompting`    | Reload/restart immediately without a notification prompt                                                                          | `boolean` | `false`     |
+| `custom-ui-style.watch`                     | Automatically reload window on configuration changes (ignores imports)                                                            | `boolean` | `true`      |
+| `custom-ui-style.electron`                  | Electron BrowserWindow options (see Electron documentation)                                                                       | `object`  | `{}`        |
+| `custom-ui-style.font.monospace`            | Global monospace font family for editor and webviews (falls back to editor's font)                                                | `string`  | ``          |
+| `custom-ui-style.font.sansSerif`            | Global sans-serif font family for editor and webviews                                                                             | `string`  | ``          |
+| `custom-ui-style.background.url`            | Full-screen background image URL (e.g., 'https://', 'file://', 'data:') - not synced                                              | `string`  | ``          |
+| `custom-ui-style.background.syncURL`        | Full-screen background image URL (synced), supports variables like ${userHome} or ${env:VAR:fallback}. Lower priority than 'url'. | `string`  | ``          |
+| `custom-ui-style.background.opacity`        | Background image opacity (0 to 1)                                                                                                 | `number`  | `0.9`       |
+| `custom-ui-style.background.size`           | Background image size (e.g., 'cover', 'contain')                                                                                  | `string`  | `"cover"`   |
+| `custom-ui-style.background.position`       | Background image position                                                                                                         | `string`  | `"center"`  |
+| `custom-ui-style.external.loadStrategy`     | Strategy for loading external CSS or JS resources                                                                                 | `string`  | `"refetch"` |
+| `custom-ui-style.external.imports`          | External CSS or JS resources; supports variables (${userHome}, ${env:VAR:fallback}) and protocols ('https://', 'file://')         | `array`   | ``          |
+| `custom-ui-style.stylesheet`                | Custom CSS for the editor; supports nested selectors                                                                              | `object`  | `{}`        |
+| `custom-ui-style.extensions.enable`         | Enable file patching in other extensions                                                                                          | `boolean` | `true`      |
+| `custom-ui-style.extensions.config`         | Configuration for patching extension code (key: extension ID, value: patch config)                                                | `object`  | `{}`        |
+| `custom-ui-style.webview.enable`            | Enable style patching in webviews                                                                                                 | `boolean` | `true`      |
+| `custom-ui-style.webview.removeCSP`         | Remove Content-Security-Policy restrictions in webviews                                                                           | `boolean` | `true`      |
+| `custom-ui-style.webview.monospaceSelector` | Custom monospace selector for webviews                                                                                            | `array`   | ``          |
+| `custom-ui-style.webview.sansSerifSelector` | Custom sans-serif selector for webviews                                                                                           | `array`   | ``          |
+| `custom-ui-style.webview.stylesheet`        | Custom CSS for webviews; supports nested selectors                                                                                | `object`  | `{}`        |
 
 <!-- configs -->
 
