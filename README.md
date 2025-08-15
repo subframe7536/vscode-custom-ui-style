@@ -189,11 +189,12 @@ Find and replace target string or `Regexp` in extension's file
 
 ```jsonc
 {
-  "custom-ui-style.extensions": {
+  // "custom-ui-style.extensions.enable": false,
+  "custom-ui-style.extensions.config": {
     // extension id
     "github.copilot-chat": [
       {
-        // target file path
+        // target file path related to extension root
         "filePath": "dist/extension.js",
         // find string (support JavaScript like regexp)
         "find": "https://generativelanguage.googleapis.com/v1beta/openai",
