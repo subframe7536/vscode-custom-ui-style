@@ -125,7 +125,12 @@ export function logError(message: string, error?: unknown) {
 
 export function promptWarn(message: string) {
   log.warn(message)
-  showMessage(message)
+  showMessage(message, 'Show logs')
+    .then((result) => {
+      if (result === 'Show logs') {
+        log.show()
+      }
+    })
 }
 
 export async function showMessage<T extends string[]>(
