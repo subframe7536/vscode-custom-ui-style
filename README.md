@@ -7,9 +7,9 @@
   </p>
 </p>
 
-VSCode extension that custom ui css style in both editor and webview
+Custom UI Style is a VSCode extension that modify CSS and JS code in editor and webview, unify global font family, setup background image and Electron BrowserWindow options, add your custom CSS or JS code, or patching file in other VSCode extensions
 
-- Works with VSCode 1.101! (Tested on Windows and MacOS)
+- Works with VSCode 1.103! (Tested on Windows and MacOS)
 
 > [!warning]
 >
@@ -28,6 +28,7 @@ Untested on Linux and VSCode forks (like Cursor, WindSurf, etc.), and I currentl
 - [From V0.4.0] Support total restart
 - [From V0.4.0] Suppress corrupt message
 - [From V0.4.2] Load external CSS or JS file
+- [From V0.6.0] Patch files in extension
 
 ## Usage
 
@@ -181,6 +182,28 @@ To disable all external resources, setup:
 }
 ```
 
+### Patch Extension
+
+Find and replace target string or `Regexp` in extension's file
+
+```jsonc
+{
+  "custom-ui-style.extensions": {
+    // extension id
+    "github.copilot-chat": [
+      {
+        // target file path
+        "filePath": "dist/extension.js",
+        // find string (support JavaScript like regexp)
+        "find": "https://generativelanguage.googleapis.com/v1beta/openai",
+        // replace string
+        "replace": "<path/to/url>"
+      }
+    ]
+  },
+}
+```
+
 ## FAQ
 
 ### What is modified
@@ -245,6 +268,7 @@ According to [#34](https://github.com/subframe7536/vscode-custom-ui-style/issues
 | `custom-ui-style.external.loadStrategy`     | Load strategy for external CSS or JS resources                                                                                                                                                               | `string`  | `"refetch"` |
 | `custom-ui-style.external.imports`          | External CSS or JS resources, support variable: [${userHome}, ${env:your_env_name:optional_fallback_value}], support protocol: 'https://', 'file://'                                                         | `array`   | ``          |
 | `custom-ui-style.stylesheet`                | Custom css for editor, support nest selectors                                                                                                                                                                | `object`  | `{}`        |
+| `custom-ui-style.extensions`                | Config to patch extension code, key is extension id, value is config                                                                                                                                         | `object`  | `{}`        |
 | `custom-ui-style.webview.enable`            | Enable style patch in webview                                                                                                                                                                                | `boolean` | `true`      |
 | `custom-ui-style.webview.removeCSP`         | Remove Content-Security-Policy restrict in webview                                                                                                                                                           | `boolean` | `true`      |
 | `custom-ui-style.webview.monospaceSelector` | Custom monospace selector in webview                                                                                                                                                                         | `array`   | ``          |
