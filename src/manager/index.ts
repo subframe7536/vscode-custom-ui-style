@@ -28,7 +28,7 @@ export function createFileManagers() {
     new ExternalFileManager(),
     new WebViewFileManager(),
     new JsonFileManager(), // MUST be the end of built-in file managers
-    ...createExtensionFileManagers(config.extensions),
+    ...createExtensionFileManagers(),
   ]
 
   return {

@@ -170,7 +170,13 @@
           "type": "object",
           "description": "Custom css for editor, support nest selectors"
         },
-        "custom-ui-style.extensions": {
+        "custom-ui-style.extensions.enable": {
+          "scope": "application",
+          "type": "boolean",
+          "default": true,
+          "description": "Enable file patch in other extensions"
+        },
+        "custom-ui-style.extensions.config": {
           "scope": "application",
           "type": "object",
           "additionalProperties": {

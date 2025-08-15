@@ -4,6 +4,7 @@ import path from 'node:path'
 
 import { extensions } from 'vscode'
 
+import { config } from '../config'
 import { log } from '../logger'
 import { promptWarn } from '../utils'
 import { BaseFileManager } from './base'
@@ -60,12 +61,12 @@ class ExtensionFileManager extends BaseFileManager {
   }
 }
 
-export function createExtensionFileManagers(extensionConfig?: Record<string, unknown>) {
-  if (!extensionConfig) {
+export function createExtensionFileManagers() {
+  if (!config['extensions.enable'] || !config['extensions.config']) {
     return []
   }
   const managers = []
-  for (const [extensionId, patchConfig] of Object.entries(extensionConfig)) {
+  for (const [extensionId, patchConfig] of Object.entries(config['extensions.config'])) {
     const rootPath = extensions.getExtension(extensionId)?.extensionPath
     if (!rootPath) {
       promptWarn(`No such extension: ${extensionId}, skip patch`)
