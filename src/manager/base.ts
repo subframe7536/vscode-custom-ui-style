@@ -27,16 +27,19 @@ export abstract class BaseFileManager implements FileManager {
   skipAll?: (() => Promisable<string | undefined | false>) | undefined
 
   async reload() {
-    await this.skipable(async () => {
-      if (!this.hasBakFile) {
-        log.warn(`Backup file [${this.bakPath}] does not exist, backuping...`)
-        fs.cpSync(this.srcPath, this.bakPath)
-        log.info(`Create backup file [${this.bakPath}]`)
-      }
-      const newContent = await this.patch(readFileSync(this.bakPath, 'utf-8'))
-      writeFileSync(this.srcPath, newContent)
-      log.info(`Config reload [${this.srcPath}]`)
-    })
+    let skipMessage = await this.skipAll?.()
+    if (skipMessage) {
+      promptWarn(skipMessage)
+      return
+    }
+    if (!this.hasBakFile) {
+      log.warn(`Backup file [${this.bakPath}] does not exist, backuping...`)
+      fs.cpSync(this.srcPath, this.bakPath)
+      log.info(`Create backup file [${this.bakPath}]`)
+    }
+    const newContent = await this.patch(readFileSync(this.bakPath, 'utf-8'))
+    writeFileSync(this.srcPath, newContent)
+    log.info(`Config reload [${this.srcPath}]`)
   }
 
   async rollback() {
@@ -45,15 +48,6 @@ export abstract class BaseFileManager implements FileManager {
     } else {
       writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
       log.info(`Config rollback [${this.srcPath}]`)
-    }
-  }
-
-  async skipable(fn: () => Promisable<void>) {
-    let skipMessage = await this.skipAll?.()
-    if (skipMessage) {
-      promptWarn(skipMessage)
-    } else {
-      await fn()
     }
   }
 

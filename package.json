@@ -2,7 +2,7 @@
   "publisher": "subframe7536",
   "name": "custom-ui-style",
   "displayName": "Custom UI Style",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "private": true,
   "packageManager": "pnpm@10.12.1",
   "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
@@ -169,6 +169,37 @@
           "scope": "application",
           "type": "object",
           "description": "Custom css for editor, support nest selectors"
+        },
+        "custom-ui-style.extensions": {
+          "scope": "application",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "filePath": {
+                  "type": "string",
+                  "description": "Relative path to extension root"
+                },
+                "find": {
+                  "type": "string",
+                  "description": "\"find\" in JavaScript code \"str.replace(find, replace)\", support regexp (e.g. /test\\d+/)"
+                },
+                "replace": {
+                  "type": "string",
+                  "description": "\"replace\" in JavaScript code \"str.replace(find, replace)\""
+                }
+              },
+              "required": [
+                "filePath",
+                "find",
+                "replace"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "description": "Config to patch extension code, key is extension id, value is config"
         },
         "custom-ui-style.webview.enable": {
           "scope": "application",
