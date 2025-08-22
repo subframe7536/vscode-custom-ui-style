@@ -1,12 +1,11 @@
 import fs from 'node:fs'
 
-import { readFileSync, writeFileSync } from 'atomically'
-
+import { createExtensionFileManagers } from './manager/extension'
 import * as paths from './path'
 
 function uninstall(srcPath: string, bakPath: string) {
   if (fs.existsSync(srcPath)) {
-    writeFileSync(srcPath, readFileSync(bakPath, 'utf-8'))
+    fs.renameSync(bakPath, srcPath)
   }
 }
 
@@ -41,3 +40,7 @@ uninstall(
   paths.productJSONPath,
   paths.productJSONBakPath,
 )
+
+for (const manager of createExtensionFileManagers(true)) {
+  uninstall(manager.srcPath, manager.bakPath)
+}

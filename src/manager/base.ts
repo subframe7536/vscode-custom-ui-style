@@ -16,8 +16,8 @@ export interface FileManager {
 
 export abstract class BaseFileManager implements FileManager {
   constructor(
-    private srcPath: string,
-    private bakPath: string,
+    public srcPath: string,
+    public bakPath: string,
   ) { }
 
   get hasBakFile() {
