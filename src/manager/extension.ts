@@ -61,7 +61,7 @@ class ExtensionFileManager extends BaseFileManager {
   }
 }
 
-export function createExtensionFileManagers() {
+export function createExtensionFileManagers(skipWarnIfExtensionNotExist = false) {
   if (!config['extensions.enable'] || !config['extensions.config']) {
     return []
   }
@@ -69,7 +69,12 @@ export function createExtensionFileManagers() {
   for (const [extensionId, patchConfig] of Object.entries(config['extensions.config'])) {
     const rootPath = extensions.getExtension(extensionId)?.extensionPath
     if (!rootPath) {
-      promptWarn(`No such extension: ${extensionId}, skip patch`)
+      const msg = `No such extension: ${extensionId}, skip`
+      if (skipWarnIfExtensionNotExist) {
+        log.warn(msg)
+      } else {
+        promptWarn(msg)
+      }
       continue
     }
     if (!Array.isArray(patchConfig)) {
@@ -88,7 +93,9 @@ export function createExtensionFileManagers() {
       }
     }
     if (warningArray.length > 0) {
-      promptWarn(`Configs of ${extensionId} are invalid: ${JSON.stringify(warningArray, null, 2)}`)
+      promptWarn(
+        `Configs of ${extensionId} are invalid: ${JSON.stringify(warningArray, null, 2)}`,
+      )
     }
   }
   return managers

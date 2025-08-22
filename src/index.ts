@@ -9,27 +9,23 @@ import { debounce, showMessage } from './utils'
 const changedMsg = 'UI Style changed.'
 const rollbackMsg = 'UI Style rollback.'
 
+const configChangedMsg = 'Configuration changed, apply now?'
+const newVersionMsg = 'Seems like first time use or new version is installed, initialize and reload config now?'
+const extensionUpdatedMsg = 'Seems like extensions are updated, reload config now?'
 const { activate, deactivate } = defineExtension(() => {
-  const { hasBakFile, reload, rollback } = createFileManagers()
+  const { hasBakFile, hasBakExtFiles, reload, rollback } = createFileManagers()
+
+  const requestReload = (msg: string) => showMessage(msg, 'Yes', 'No')
+    .then<any>(item => item === 'Yes' && reload(changedMsg))
 
   if (!hasBakFile()) {
-    showMessage(
-      'Seems like first time use or new version is installed, initialize and reload config now?',
-      'Yes',
-      'No',
-    )
-      .then<any>(item => item === 'Yes' && reload(changedMsg))
+    requestReload(newVersionMsg)
+  } else if (!hasBakExtFiles()) {
+    requestReload(extensionUpdatedMsg)
   }
 
   useCommand(Meta.commands.reload, () => reload(changedMsg))
   useCommand(Meta.commands.rollback, () => rollback(rollbackMsg))
-
-  const notifyChanged = () => showMessage(
-    'Configuration changed, apply now?',
-    'Yes',
-    'No',
-  )
-    .then<any>(item => item === 'Yes' && reload(changedMsg))
 
   useDisposable(
     workspace.onDidChangeConfiguration(
@@ -39,14 +35,14 @@ const { activate, deactivate } = defineExtension(() => {
             return
           }
           if (e.affectsConfiguration(Meta.name)) {
-            notifyChanged()
+            requestReload(configChangedMsg)
           } else if (e.affectsConfiguration(ffKey) && !config['font.monospace']) {
             const {
               globalValue,
               workspaceValue,
             } = workspace.getConfiguration().inspect<string>(ffKey)!
             if (globalValue === workspaceValue) {
-              notifyChanged()
+              requestReload(configChangedMsg)
             }
           }
         },

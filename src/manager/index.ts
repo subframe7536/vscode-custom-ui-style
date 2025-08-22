@@ -32,6 +32,7 @@ export function createFileManagers() {
 
   return {
     hasBakFile: () => builtinManagers.every(m => m.hasBakFile),
+    hasBakExtFiles: () => createExtensionFileManagers(true).every(m => m.hasBakFile),
     reload: async (text: string) => {
       await runAndRestart(
         text,
