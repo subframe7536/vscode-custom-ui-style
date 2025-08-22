@@ -76,26 +76,19 @@ Available CSS Variables:
       "border-top-left-radius": "3px",
       "border-bottom-left-radius": "3px"
     },
-    "span[class*='dyn-rule']:has(+span:not([class*='dyn-rule']))": {
+    "span[class*='dyn-rule']:has(+span[class*='dyn-rule']+span:not([class*='dyn-rule']))": {
       "border-top-right-radius": "3px",
       "border-bottom-right-radius": "3px"
     },
     ".cdr": {
       "border-radius": "3px"
     },
-    // No longer needed since v1.97.0 allows to move the command palette position
-    // ".quick-input-widget": {
-    //   "top": "25vh !important"
-    // },
     ".monaco-findInput .monaco-inputbox": {
       "width": "calc(100% + 6px)"
     },
-    ".overlayWidgets .editorPlaceholder": {
-      "line-height": "unset !important"
-    },
     ".monaco-workbench .activitybar .monaco-action-bar": {
       "& .action-label": {
-        "font-size": "20px !important",
+        "font-size": "21px !important",
         "&::before": {
           "position": "absolute",
           "z-index": 2
@@ -105,16 +98,53 @@ Available CSS Variables:
           "width": "75%",
           "height": "75%",
           "position": "absolute",
-          "border-radius": "6px"
-        }
+          "border-radius": "6px",
+        },
       },
       "& .action-item:hover .action-label": {
         "color": "var(--vscode-menu-selectionForeground) !important",
         "&::after": {
-          "background-color": "var(--vscode-menu-selectionBackground)"
+          "background-color": "var(--vscode-menu-selectionBackground)",
         }
+      },
+      "& .active-item-indicator:before": {
+        "border": "none !important",
+        "width": "3px !important",
+        "height": "calc(100% - 12px) !important",
+        "top": "6px !important",
+        "border-radius": "4px"
+      },
+      "& .action-item.checked .active-item-indicator:before": {
+        "background": "var(--vscode-activityBar-activeBorder)",
       }
-    }
+    },
+    ".basepanel .composite-bar-container .actions-container > .action-item": {
+      "height": "24px",
+      "padding": "0 8px !important",
+      "border-radius": "4px",
+      "align-items": "center",
+      "justify-content": "center",
+      "&.checked": {
+        "background": "color-mix(in srgb, var(--vscode-foreground) 12%, transparent)",
+      },
+      "& .active-item-indicator:before": {
+        "content": "none !important"
+      }
+    },
+    ".monaco-text-button": {
+      "border-radius": "4px !important",
+    },
+    ".monaco-button-dropdown": {
+      "& > .monaco-button.monaco-text-button": {
+        "border-radius": "4px 0 0 4px !important",
+      },
+      "& > .monaco-button.monaco-dropdown-button": {
+        "border-radius": "0 4px 4px 0 !important",
+      },
+    },
+    ".monaco-workbench>.notifications-center": {
+      "border-radius": "8px !important"
+    },
   }
 }
 ```
