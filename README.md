@@ -274,7 +274,7 @@ In some VSCode forks like Cursor, the extension detail panel may not render due 
 | `custom-ui-style.external.imports`          | External CSS or JS resources; supports variables (${userHome}, ${env:VAR:fallback}) and protocols ('https://', 'file://')         | `array`   | ``          |
 | `custom-ui-style.stylesheet`                | Custom CSS for the editor; supports nested selectors                                                                              | `object`  | `{}`        |
 | `custom-ui-style.extensions.enable`         | Enable file patching in other extensions                                                                                          | `boolean` | `true`      |
-| `custom-ui-style.extensions.config`         | Configuration for patching extension code (key: extension ID, value: patch config)                                                | `object`  | `{}`        |
+| `custom-ui-style.extensions.config`         | Configuration for patching extension files (key: extension ID, value: patch config)                                               | `object`  | `{}`        |
 | `custom-ui-style.webview.enable`            | Enable style patching in webviews                                                                                                 | `boolean` | `true`      |
 | `custom-ui-style.webview.removeCSP`         | Remove Content-Security-Policy restrictions in webviews                                                                           | `boolean` | `true`      |
 | `custom-ui-style.webview.monospaceSelector` | Custom monospace selector for webviews                                                                                            | `array`   | ``          |

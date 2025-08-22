@@ -21,24 +21,24 @@ const isVSCodeUsingESM = (() => {
 })()
 
 export function createFileManagers() {
-  const managers: FileManager[] = [
+  const builtinManagers: FileManager[] = [
     new CssFileManager(),
     new MainFileManager(),
     new RendererFileManager(),
     new ExternalFileManager(),
     new WebViewFileManager(),
     new JsonFileManager(), // MUST be the end of built-in file managers
-    ...createExtensionFileManagers(),
   ]
 
   return {
-    hasBakFile: () => managers.every(m => m.hasBakFile),
+    hasBakFile: () => builtinManagers.every(m => m.hasBakFile),
     reload: async (text: string) => {
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
         async () => {
-          for (const manager of managers) {
+          const total = [...builtinManagers, ...createExtensionFileManagers()]
+          for (const manager of total) {
             await manager.reload()
           }
         },
@@ -48,7 +48,7 @@ export function createFileManagers() {
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
-        () => Promise.all(managers.map(m => m.rollback())),
+        () => Promise.all([...builtinManagers, ...createExtensionFileManagers()].map(m => m.rollback())),
       )
     },
   }
