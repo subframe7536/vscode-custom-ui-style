@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   entry: [
@@ -6,7 +6,6 @@ export default defineConfig({
     'src/uninstall.ts',
   ],
   format: ['cjs'],
-  shims: false,
   dts: false,
   external: [
     'vscode',
