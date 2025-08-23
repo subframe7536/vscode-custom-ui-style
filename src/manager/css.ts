@@ -71,6 +71,10 @@ body {
 export class CssFileManager extends BaseFileManager {
   constructor() {
     super(cssPath, cssBakPath)
+    this.cleanup = content => content.replace(
+      /\/\* Custom UI Style Start \*\/[\s\S]*?\/\* Custom UI Style End \*\//,
+      '',
+    ).trim()
   }
 
   patch(content: string): string {

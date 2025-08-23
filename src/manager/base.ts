@@ -8,10 +8,11 @@ import { log } from '../logger'
 import { promptWarn } from '../utils'
 
 export interface FileManager {
+  srcPath: string
+  bakPath: string
   hasBakFile: boolean
   reload: () => Promise<void>
   rollback: () => Promise<void>
-  skipAll?: () => Promisable<string | false | undefined>
 }
 
 export abstract class BaseFileManager implements FileManager {
@@ -24,7 +25,14 @@ export abstract class BaseFileManager implements FileManager {
     return fs.existsSync(this.bakPath)
   }
 
-  skipAll?: (() => Promisable<string | undefined | false>) | undefined
+  /**
+   * Skip all operations with message (optional)
+   */
+  protected skipAll?: () => Promisable<string | undefined | false>
+  /**
+   * Cleanup content when rollback (optional)
+   */
+  protected cleanup?: (content: string) => string
 
   async reload() {
     let skipMessage = await this.skipAll?.()
@@ -46,7 +54,11 @@ export abstract class BaseFileManager implements FileManager {
     if (!this.hasBakFile) {
       log.warn(`Backup file [${this.bakPath}] does not exist, skip rollback`)
     } else {
-      writeFileSync(this.srcPath, readFileSync(this.bakPath, 'utf-8'))
+      let content = readFileSync(this.bakPath, 'utf-8')
+      if (this.cleanup) {
+        content = this.cleanup(content)
+      }
+      writeFileSync(this.srcPath, content)
       log.info(`Config rollback [${this.srcPath}]`)
     }
   }

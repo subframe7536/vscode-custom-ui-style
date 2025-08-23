@@ -255,6 +255,16 @@ export class ExternalFileManager extends BaseFileManager {
       logError(generateNoHtmlErrorMessage())
       this.skipAll = () => 'No workbench html found, external resources are disabled'
     }
+    this.cleanup = content => content
+      .replace(
+        /<!-- External Script Start -->[\s\S]*?<!-- External Script End -->/,
+        '',
+      )
+      .replace(
+        /<!-- External Style Start -->[\s\S]*?<!-- External Style End -->/,
+        '',
+      )
+      .trim()
   }
 
   async patch(content: string): Promise<string> {
