@@ -2,6 +2,7 @@ import type { FileManager } from './base'
 
 import { version } from 'vscode'
 
+import { flushCache } from '../cache'
 import { config } from '../config'
 import { runAndRestart } from '../utils'
 import { CssFileManager } from './css'
@@ -29,6 +30,7 @@ export function createFileManagers() {
     new WebViewFileManager(),
     new JsonFileManager(), // MUST be the end of built-in file managers
   ]
+  flushCache()
 
   return {
     hasBakFile: () => builtinManagers.every(m => m.hasBakFile),

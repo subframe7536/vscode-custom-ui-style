@@ -4,6 +4,7 @@ import path from 'node:path'
 
 import { extensions } from 'vscode'
 
+import { flushCache } from '../cache'
 import { config } from '../config'
 import { log } from '../logger'
 import { promptWarn } from '../utils'
@@ -53,7 +54,7 @@ function tryParseRegex(str: string): RegExp | string {
 
 class ExtensionFileManager extends BaseFileManager {
   constructor(private config: ExtensionPatchConfig) {
-    super(config.filePath, getBackupPath(config.filePath))
+    super(config.filePath, getBackupPath(config.filePath), true)
   }
 
   patch(content: string): Promisable<string> {
@@ -98,5 +99,6 @@ export function createExtensionFileManagers(skipWarnIfExtensionNotExist = false)
       )
     }
   }
+  flushCache()
   return managers
 }

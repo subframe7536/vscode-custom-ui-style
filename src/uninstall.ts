@@ -1,7 +1,8 @@
+import type { ConfigCache } from './cache'
+
 import fs from 'node:fs'
 
-import { createExtensionFileManagers } from './manager/extension'
-import * as paths from './path'
+import { cacheFilePath } from './cache'
 
 function uninstall(srcPath: string, bakPath: string) {
   if (fs.existsSync(srcPath)) {
@@ -9,38 +10,10 @@ function uninstall(srcPath: string, bakPath: string) {
   }
 }
 
-uninstall(
-  paths.cssPath,
-  paths.cssBakPath,
-)
-
-uninstall(
-  paths.mainPath,
-  paths.mainBakPath,
-)
-
-uninstall(
-  paths.rendererPath,
-  paths.rendererBakPath,
-)
-
-uninstall(
-  paths.webviewHTMLPath,
-  paths.webviewHTMLBakPath,
-)
-
-if (paths.htmlPath) {
-  uninstall(
-    paths.htmlPath,
-    paths.htmlBakPath,
+try {
+  const cache: ConfigCache = JSON.parse(fs.readFileSync(cacheFilePath, 'utf-8'))
+  Promise.all(
+    [...cache.builtin, ...cache.extension]
+      .map(async ([src, bak]) => uninstall(src, bak)),
   )
-}
-
-uninstall(
-  paths.productJSONPath,
-  paths.productJSONBakPath,
-)
-
-for (const manager of createExtensionFileManagers(true)) {
-  uninstall(manager.srcPath, manager.bakPath)
-}
+} catch { }

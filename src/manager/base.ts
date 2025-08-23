@@ -4,6 +4,7 @@ import fs from 'node:fs'
 
 import { readFileSync, writeFileSync } from 'atomically'
 
+import { addBuiltinConfigCache, addExtensionConfigCache } from '../cache'
 import { log } from '../logger'
 import { promptWarn } from '../utils'
 
@@ -19,7 +20,14 @@ export abstract class BaseFileManager implements FileManager {
   constructor(
     public srcPath: string,
     public bakPath: string,
-  ) { }
+    isExtension?: boolean,
+  ) {
+    if (isExtension) {
+      addExtensionConfigCache(srcPath, bakPath)
+    } else {
+      addBuiltinConfigCache(srcPath, bakPath)
+    }
+  }
 
   get hasBakFile() {
     return fs.existsSync(this.bakPath)
