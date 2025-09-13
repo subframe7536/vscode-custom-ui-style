@@ -1,10 +1,11 @@
 // Reference from https://github.com/zokugun/vscode-sync-settings/blob/master/src/utils/restart-app.ts
-import { spawn } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
 import { readFileSync } from 'atomically'
 
+import { log } from './logger'
 import { baseDir, productJSONPath } from './path'
 
 export async function restartApp(): Promise<void> {
@@ -39,6 +40,18 @@ function getAppBinary(...binDirectories: string[]): string {
       }
     } else if (files.length > 0) {
       return path.join(dir, files[0])
+    }
+  }
+
+  // Fallback to using `which` to locate `vscode` or `vscode-insiders`
+  const fallbackPaths = ['code-insiders', 'code']
+  for (const p of fallbackPaths) {
+    try {
+      const target = spawnSync('which', [p], { encoding: 'utf-8' }).stdout.trim()
+      if (target) {
+        return target
+      }
+    } catch {
     }
   }
 
