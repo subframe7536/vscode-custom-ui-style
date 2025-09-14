@@ -5,7 +5,6 @@ import path from 'node:path'
 
 import { readFileSync } from 'atomically'
 
-import { log } from './logger'
 import { baseDir, productJSONPath } from './path'
 
 export async function restartApp(): Promise<void> {
