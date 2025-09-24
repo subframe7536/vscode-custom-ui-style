@@ -22,12 +22,12 @@ function generateBackgroundCSS() {
   }
   return `
 body:has(div[role=application]) {
-  background-size: ${config['background.size']};
-  background-repeat: no-repeat;
-  background-attachment: fixed; /* for code-server */
-  background-position: ${config['background.position']};
-  opacity: ${config['background.opacity']};
-  background-image: url('${normalizeUrl(url)}');
+  background-size: ${config['background.size']} !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important; /* for code-server */
+  background-position: ${config['background.position']} !important;
+  opacity: ${config['background.opacity']} !important;
+  background-image: url('${normalizeUrl(url)}') !important;
 }`
 }
 
