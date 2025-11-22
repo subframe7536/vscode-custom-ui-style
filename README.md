@@ -37,8 +37,6 @@ Untested on Linux and VSCode forks (like Cursor, WindSurf, etc.), and I currentl
 3.  **Apply:** Open the Command Palette (<kbd>Ctrl+Shift+P</kbd> or <kbd>Cmd+Shift+P</kbd>) and run `Custom UI Style: Reload` to apply your changes.
 4.  **Rollback:** To revert all changes and restore the original VSCode files, run `Custom UI Style: Rollback` from the Command Palette.
 
-See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns) for more information.
-
 ### Example
 
 Available CSS Variables:
