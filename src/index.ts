@@ -15,11 +15,11 @@ const extensionUpdatedMsg = 'Seems like extensions are updated, reload config no
 const { activate, deactivate } = defineExtension(() => {
   const { hasBakFile, hasBakExtFiles, reload, rollback } = createFileManagers()
 
-  const requestReload = (msg: string) => showMessage(msg, 'Yes', 'No')
-    .then<any>(item => item === 'Yes' && reload(changedMsg))
+  const requestReload = (msg: string, override = false) => showMessage(msg, 'Yes', 'No')
+    .then<any>(item => item === 'Yes' && reload(changedMsg, override))
 
   if (!hasBakFile()) {
-    requestReload(newVersionMsg)
+    requestReload(newVersionMsg, true)
   } else if (!hasBakExtFiles()) {
     requestReload(extensionUpdatedMsg)
   }

@@ -12,7 +12,7 @@ export interface FileManager {
   srcPath: string
   bakPath: string
   hasBakFile: boolean
-  reload: () => Promise<void>
+  reload: (overrideBak: boolean) => Promise<void>
   rollback: () => Promise<void>
 }
 
@@ -42,14 +42,14 @@ export abstract class BaseFileManager implements FileManager {
    */
   protected cleanup?: (content: string) => string
 
-  async reload() {
+  async reload(overrideBak = false) {
     let skipMessage = await this.skipAll?.()
     if (skipMessage) {
       promptWarn(skipMessage)
       return
     }
-    if (!this.hasBakFile) {
-      log.warn(`Backup file [${this.bakPath}] does not exist, backuping...`)
+    if (overrideBak || !this.hasBakFile) {
+      log.warn(`Backup file [${this.bakPath}] ${overrideBak ? 'ignored' : 'does not exist'}, backuping...`)
       fs.cpSync(this.srcPath, this.bakPath)
       log.info(`Create backup file [${this.bakPath}]`)
     }

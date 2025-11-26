@@ -35,14 +35,14 @@ export function createFileManagers() {
   return {
     hasBakFile: () => builtinManagers[builtinManagers.length - 1].hasBakFile,
     hasBakExtFiles: () => createExtensionFileManagers(true).every(m => m.hasBakFile),
-    reload: async (text: string) => {
+    reload: async (text: string, override = false) => {
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
         async () => {
           const total = [...builtinManagers, ...createExtensionFileManagers()]
           for (const manager of total) {
-            await manager.reload()
+            await manager.reload(override)
           }
         },
       )
