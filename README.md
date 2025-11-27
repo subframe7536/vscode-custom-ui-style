@@ -9,7 +9,7 @@
 
 Custom UI Style is a VSCode extension that allows you to customize the editor's appearance and behavior by injecting custom CSS and JavaScript. You can unify the global font family, set a background image, modify Electron `BrowserWindow` options, add your own custom styles and scripts, and even patch files in other VSCode extensions.
 
-- Works with VSCode 1.103! (Tested on Windows and MacOS)
+- Works with VSCode 1.106! (Tested on Windows and MacOS)
 
 > [!warning]
 >
@@ -36,8 +36,6 @@ Untested on Linux and VSCode forks (like Cursor, WindSurf, etc.), and I currentl
 2.  **Configure:** Add your customizations to your `settings.json` file. See the [Example](#example) and [Configurations](#configurations) sections for details.
 3.  **Apply:** Open the Command Palette (<kbd>Ctrl+Shift+P</kbd> or <kbd>Cmd+Shift+P</kbd>) and run `Custom UI Style: Reload` to apply your changes.
 4.  **Rollback:** To revert all changes and restore the original VSCode files, run `Custom UI Style: Rollback` from the Command Palette.
-
-See [details](https://github.com/shalldie/vscode-background?tab=readme-ov-file#warns) for more information.
 
 ### Example
 
@@ -227,9 +225,9 @@ Find and replace target string or `Regexp` in extension's file
         // target file path related to extension root
         "filePath": "dist/extension.js",
         // find string (support JavaScript like regexp)
-        "find": "https://generativelanguage.googleapis.com/v1beta/openai",
+        "find": "/(this._genAIClient=new (\\w+)({apiKey:(\\w+)}));/",
         // replace string
-        "replace": "<path/to/url>"
+        "replace": "(this._genAIClient=new $1({apiKey:$2,httpOptions:{baseUrl:'<path/to/url>'}}));"
       }
     ]
   },
