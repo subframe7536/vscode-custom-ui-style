@@ -12,7 +12,7 @@ import { config } from './config'
 import * as Meta from './generated/meta'
 import { log } from './logger'
 import { baseDir } from './path'
-import { restartApp } from './restart'
+import { ManualRestartRequiredError, restartApp } from './restart'
 
 export const fileProtocol = 'file://'
 export const httpsProtocol = 'https://'
@@ -34,6 +34,11 @@ function logWindowOptionsChanged(useFullRestart: boolean) {
     showMessage(`Note: Please TOTALLY restart VSCode (${method}) to take effect, "custom-ui-style.electron" is changed`)
   }
   last = current
+}
+
+async function notifyManualRestartRequired(error: ManualRestartRequiredError) {
+  log.warn(error.message)
+  await showMessage(error.message)
 }
 
 export async function runAndRestart(message: string, fullRestart: boolean, action: () => Promise<any>, instantRestart = false) {
@@ -84,7 +89,15 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
 
   if (success) {
     if (instantRestart) {
-      await restartApp()
+      try {
+        await restartApp()
+      } catch (error) {
+        if (error instanceof ManualRestartRequiredError) {
+          await notifyManualRestartRequired(error)
+        } else {
+          throw error
+        }
+      }
       return
     }
     let shouldProceed = false
@@ -103,7 +116,11 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
         try {
           await restartApp()
         } catch (error) {
-          logError('Fail to restart VSCode', error)
+          if (error instanceof ManualRestartRequiredError) {
+            await notifyManualRestartRequired(error)
+          } else {
+            logError('Fail to restart VSCode', error)
+          }
         }
       } else {
         commands.executeCommand('workbench.action.reloadWindow')

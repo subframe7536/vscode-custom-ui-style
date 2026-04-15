@@ -7,6 +7,13 @@ import { readFileSync } from 'atomically'
 
 import { baseDir, productJSONPath } from './path'
 
+export class ManualRestartRequiredError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'ManualRestartRequiredError'
+  }
+}
+
 export async function restartApp(): Promise<void> {
   let sp
   switch (process.platform) {
@@ -117,16 +124,20 @@ async function restartWindows() {
 async function restartLinux() {
   const appHomeDir = path.dirname(process.execPath)
   const binary = getAppBinary(`${appHomeDir}/bin/`)
-  const processName = path.basename(process.execPath)
+  const vscodePID = Number(process.env.VSCODE_PID)
+
+  if (!Number.isInteger(vscodePID) || vscodePID <= 0) {
+    throw new ManualRestartRequiredError('Cannot determine the VS Code main process on Linux. Please fully quit and reopen VS Code to apply changes.')
+  }
 
   return spawn(
     '/bin/sh',
     [
       '-c',
       `
-      pkill -f "${processName}"
+      kill "${vscodePID}" 2>/dev/null || exit 1
       counter=0
-      while pgrep -f "${processName}" > /dev/null && [ $counter -lt 100 ]; do
+      while kill -0 "${vscodePID}" 2>/dev/null && [ $counter -lt 100 ]; do
         sleep 0.1
         counter=$((counter + 1))
       done
