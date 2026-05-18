@@ -26,7 +26,7 @@
   "type": "commonjs",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "bun run typecheck && tsdown --minify --treeshake",
+    "build": "bun run typecheck && tsdown --minify --treeshake --config-loader native",
     "dev": "tsdown --watch",
     "prepare": "bun run update",
     "update": "vscode-ext-gen --output src/generated/meta.ts",

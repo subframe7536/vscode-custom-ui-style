@@ -1,11 +1,24 @@
 import { defineConfig } from 'tsdown'
 
-export default defineConfig({
-  entry: ['src/index.ts', 'src/uninstall.ts'],
+const opts = {
   format: ['cjs'],
   dts: false,
   deps: {
     neverBundle: ['vscode'],
   },
   outExtensions: () => ({ js: '.js' }),
-})
+  outputOptions: {
+    codeSplitting: false,
+  },
+}
+
+export default defineConfig([
+  {
+    entry: 'src/index.ts',
+    ...opts,
+  },
+  {
+    entry: 'src/uninstall.ts',
+    ...opts,
+  },
+])
