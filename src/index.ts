@@ -10,13 +10,16 @@ const changedMsg = 'UI Style changed.'
 const rollbackMsg = 'UI Style rollback.'
 
 const configChangedMsg = 'Configuration changed, apply now?'
-const newVersionMsg = 'Seems like first time use or new version is installed, initialize and reload config now?'
+const newVersionMsg =
+  'Seems like first time use or new version is installed, initialize and reload config now?'
 const extensionUpdatedMsg = 'Seems like extensions are updated, reload config now?'
 const { activate, deactivate } = defineExtension(() => {
   const { hasBakFile, hasBakExtFiles, reload, rollback } = createFileManagers()
 
-  const requestReload = (msg: string, override = false) => showMessage(msg, 'Yes', 'No')
-    .then<any>(item => item === 'Yes' && reload(changedMsg, override))
+  const requestReload = (msg: string, override = false) =>
+    showMessage(msg, 'Yes', 'No').then<any>(
+      (item) => item === 'Yes' && reload(changedMsg, override),
+    )
 
   if (!hasBakFile()) {
     requestReload(newVersionMsg, true)
@@ -30,25 +33,21 @@ const { activate, deactivate } = defineExtension(() => {
 
   useDisposable(
     workspace.onDidChangeConfiguration(
-      debounce(
-        (e) => {
-          if (!config.watch) {
-            return
-          }
-          if (e.affectsConfiguration(Meta.name)) {
+      debounce((e) => {
+        if (!config.watch) {
+          return
+        }
+        if (e.affectsConfiguration(Meta.name)) {
+          requestReload(configChangedMsg)
+        } else if (e.affectsConfiguration(ffKey) && !config['font.monospace']) {
+          const { globalValue, workspaceValue } = workspace
+            .getConfiguration()
+            .inspect<string>(ffKey)!
+          if (globalValue === workspaceValue) {
             requestReload(configChangedMsg)
-          } else if (e.affectsConfiguration(ffKey) && !config['font.monospace']) {
-            const {
-              globalValue,
-              workspaceValue,
-            } = workspace.getConfiguration().inspect<string>(ffKey)!
-            if (globalValue === workspaceValue) {
-              requestReload(configChangedMsg)
-            }
           }
-        },
-        1000,
-      ),
+        }
+      }, 1000),
     ),
   )
 })

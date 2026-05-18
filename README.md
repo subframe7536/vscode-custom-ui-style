@@ -77,24 +77,24 @@ Deprecated variables:
     },
     "span:not([class*='dyn-rule'])+span[class*='dyn-rule']": {
       "border-top-left-radius": "3px",
-      "border-bottom-left-radius": "3px"
+      "border-bottom-left-radius": "3px",
     },
     "span[class*='dyn-rule']:has(+span[class*='dyn-rule']+span:not([class*='dyn-rule']))": {
       "border-top-right-radius": "3px",
-      "border-bottom-right-radius": "3px"
+      "border-bottom-right-radius": "3px",
     },
     ".cdr": {
-      "border-radius": "3px"
+      "border-radius": "3px",
     },
     ".monaco-findInput .monaco-inputbox": {
-      "width": "calc(100% + 6px)"
+      "width": "calc(100% + 6px)",
     },
     ".monaco-workbench .activitybar .monaco-action-bar": {
       "& .action-label": {
         "font-size": "21px !important",
         "&::before": {
           "position": "absolute",
-          "z-index": 2
+          "z-index": 2,
         },
         "&::after": {
           "content": "''",
@@ -108,18 +108,18 @@ Deprecated variables:
         "color": "var(--vscode-menu-selectionForeground) !important",
         "&::after": {
           "background-color": "var(--vscode-menu-selectionBackground)",
-        }
+        },
       },
       "& .active-item-indicator:before": {
         "border": "none !important",
         "width": "3px !important",
         "height": "calc(100% - 12px) !important",
         "top": "6px !important",
-        "border-radius": "4px"
+        "border-radius": "4px",
       },
       "& .action-item.checked .active-item-indicator:before": {
         "background": "var(--vscode-activityBar-activeBorder)",
-      }
+      },
     },
     ".basepanel .composite-bar-container .actions-container > .action-item": {
       "height": "24px",
@@ -131,8 +131,8 @@ Deprecated variables:
         "background": "color-mix(in srgb, var(--vscode-foreground) 12%, transparent)",
       },
       "& .active-item-indicator:before": {
-        "content": "none !important"
-      }
+        "content": "none !important",
+      },
     },
     ".monaco-text-button": {
       "border-radius": "4px !important",
@@ -146,9 +146,9 @@ Deprecated variables:
       },
     },
     ".monaco-workbench>.notifications-center": {
-      "border-radius": "8px !important"
+      "border-radius": "8px !important",
     },
-  }
+  },
 }
 ```
 
@@ -191,8 +191,8 @@ Starting from v0.4.2, you can load external CSS and JavaScript files from local 
       // <script src="./external.module.js" type="module"></script>
       "type": "js-module",
       "url": "https://example.com/test.module.js",
-    }
-  ]
+    },
+  ],
 }
 ```
 
@@ -204,7 +204,7 @@ To cache resources and avoid re-fetching when `custom-ui-style.external.imports`
 
 ```jsonc
 {
-  "custom-ui-style.external.loadStrategy": "cache"
+  "custom-ui-style.external.loadStrategy": "cache",
 }
 ```
 
@@ -212,7 +212,7 @@ To disable all external resources, set the load strategy to `"disable"`:
 
 ```jsonc
 {
-  "custom-ui-style.external.loadStrategy": "disable"
+  "custom-ui-style.external.loadStrategy": "disable",
 }
 ```
 
@@ -232,9 +232,9 @@ Find and replace target string or `Regexp` in extension's file
         // find string (support JavaScript like regexp)
         "find": "/(this._genAIClient=new (\\w+)({apiKey:(\\w+)}));/",
         // replace string
-        "replace": "(this._genAIClient=new $1({apiKey:$2,httpOptions:{baseUrl:'<path/to/url>'}}));"
-      }
-    ]
+        "replace": "(this._genAIClient=new $1({apiKey:$2,httpOptions:{baseUrl:'<path/to/url>'}}));",
+      },
+    ],
   },
 }
 ```
@@ -278,7 +278,7 @@ If you see this error, it means VSCode is installed on a read-only filesystem (e
 
 This error can occur due to system permission restrictions. To fix it, you need to change the ownership of the VSCode installation directory.
 
-First, fully close VSCode (<kbd>Command + Q</_kbd> on macOS). Then, run the following command:
+First, fully close VSCode (<kbd>Command + Q</\_kbd> on macOS). Then, run the following command:
 
 ```sh
 # macOS

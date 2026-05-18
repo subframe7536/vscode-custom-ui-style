@@ -1,5 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
-
 import fs from 'node:fs'
 
 import { readFileSync, writeFileSync } from 'atomically'
@@ -7,6 +5,7 @@ import { readFileSync, writeFileSync } from 'atomically'
 import { addBuiltinConfigCache, addExtensionConfigCache } from '../cache'
 import { log } from '../logger'
 import { promptWarn } from '../utils'
+import type { Promisable } from '../utils'
 
 export interface FileManager {
   srcPath: string
@@ -49,7 +48,9 @@ export abstract class BaseFileManager implements FileManager {
       return
     }
     if (overrideBak || !this.hasBakFile) {
-      log.warn(`Backup file [${this.bakPath}] ${overrideBak ? 'ignored' : 'does not exist'}, backuping...`)
+      log.warn(
+        `Backup file [${this.bakPath}] ${overrideBak ? 'ignored' : 'does not exist'}, backuping...`,
+      )
       fs.cpSync(this.srcPath, this.bakPath)
       log.info(`Create backup file [${this.bakPath}]`)
     }

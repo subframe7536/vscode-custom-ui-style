@@ -1,5 +1,3 @@
-import type { AnyFunction } from '@subframe7536/type-utils'
-
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path/posix'
@@ -13,6 +11,8 @@ import * as Meta from './generated/meta'
 import { log } from './logger'
 import { baseDir } from './path'
 import { ManualRestartRequiredError, restartApp } from './restart'
+
+export type Promisable<T> = T | Promise<T>
 
 export const fileProtocol = 'file://'
 export const httpsProtocol = 'https://'
@@ -31,7 +31,9 @@ function logWindowOptionsChanged(useFullRestart: boolean) {
       return
     }
     const method = process.platform === 'darwin' ? 'Press "Command + Q"' : 'Close all windows'
-    showMessage(`Note: Please TOTALLY restart VSCode (${method}) to take effect, "custom-ui-style.electron" is changed`)
+    showMessage(
+      `Note: Please TOTALLY restart VSCode (${method}) to take effect, "custom-ui-style.electron" is changed`,
+    )
   }
   last = current
 }
@@ -41,12 +43,17 @@ async function notifyManualRestartRequired(error: ManualRestartRequiredError) {
   await showMessage(error.message)
 }
 
-export async function runAndRestart(message: string, fullRestart: boolean, action: () => Promise<any>, instantRestart = false) {
+export async function runAndRestart(
+  message: string,
+  fullRestart: boolean,
+  action: () => Promise<any>,
+  instantRestart = false,
+) {
   let count = 5
   const check = () => fs.existsSync(lockFile)
   while (check() && count--) {
     log.warn('Lock file detected, waiting...')
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000))
   }
   if (!count) {
     // If exists and expire time exceed 10 minutes, just remove it
@@ -63,12 +70,18 @@ export async function runAndRestart(message: string, fullRestart: boolean, actio
     writeFileSync(lockFile, String(Date.now()))
   } catch (err) {
     if (err instanceof Error) {
-      const base = 'This extension need to modify VSCode\'s source code but'
+      const base = "This extension need to modify VSCode's source code but"
       if ('code' in err && err.code === 'EROFS') {
-        logError(`${base} it runs on read-only filesystem. Maybe you need to choose another way to install VSCode`, err)
+        logError(
+          `${base} it runs on read-only filesystem. Maybe you need to choose another way to install VSCode`,
+          err,
+        )
         return
       } else if (err.message.includes('Maximum call stack size exceeded')) {
-        logError(`${base} current user is not allowed. Please run "sudo chown -R $(whoami) '${path.dirname(baseDir)}'" to grant permissions`, err)
+        logError(
+          `${base} current user is not allowed. Please run "sudo chown -R $(whoami) '${path.dirname(baseDir)}'" to grant permissions`,
+          err,
+        )
         return
       }
     }
@@ -146,12 +159,11 @@ export function logError(message: string, error?: unknown) {
 
 export function promptWarn(message: string) {
   log.warn(message)
-  showMessage(message, 'Show logs')
-    .then((result) => {
-      if (result === 'Show logs') {
-        log.show()
-      }
-    })
+  showMessage(message, 'Show logs').then((result) => {
+    if (result === 'Show logs') {
+      log.show()
+    }
+  })
 }
 
 export async function showMessage<T extends string[]>(
@@ -166,12 +178,10 @@ export async function showMessage<T extends string[]>(
 }
 
 export function escapeQuote(str: string) {
-  return str
-    .replaceAll(`'`, `\\'`)
-    .replaceAll(`"`, `\\"`)
+  return str.replaceAll(`'`, `\\'`).replaceAll(`"`, `\\"`)
 }
 
-export function debounce<T extends AnyFunction<void>>(fn: T, delay: number): T {
+export function debounce<T extends (...args: any[]) => void>(fn: T, delay: number): T {
   let timer: NodeJS.Timeout
   return ((...args: any[]) => {
     clearTimeout(timer)
@@ -223,19 +233,16 @@ export function parseFilePath(url: string): string {
 }
 const varRegex = /\$\{([^{}]+)\}/g
 export function resolveVariable(url: string): string {
-  return url.replace(
-    varRegex,
-    (substr, key) => {
-      if (key === 'userHome') {
-        return os.homedir()
-      } else if (key.startsWith('env:')) {
-        const [_, envKey, optionalDefault] = key.split(':')
-        return process.env[envKey] ?? optionalDefault ?? ''
-      } else {
-        return substr
-      }
-    },
-  )
+  return url.replace(varRegex, (substr, key) => {
+    if (key === 'userHome') {
+      return os.homedir()
+    } else if (key.startsWith('env:')) {
+      const [_, envKey, optionalDefault] = key.split(':')
+      return process.env[envKey] ?? optionalDefault ?? ''
+    } else {
+      return substr
+    }
+  })
 }
 
 export function printFileTree(dir: string) {

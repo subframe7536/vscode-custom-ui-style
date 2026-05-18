@@ -35,17 +35,17 @@ function getAppBinary(...binDirectories: string[]): string {
       continue
     }
     // remove tunnel
-    let files = fs.readdirSync(dir).filter(file => !file.includes('-tunnel'))
+    let files = fs.readdirSync(dir).filter((file) => !file.includes('-tunnel'))
 
     if (process.platform === 'win32') {
       // select *.cmd
-      files = files.filter(file => file.endsWith('.cmd'))
+      files = files.filter((file) => file.endsWith('.cmd'))
 
       if (files.length > 0) {
-        return path.join(dir, files[0])
+        return path.join(dir, files[0]!)
       }
     } else if (files.length > 0) {
-      return path.join(dir, files[0])
+      return path.join(dir, files[0]!)
     }
   }
 
@@ -57,8 +57,7 @@ function getAppBinary(...binDirectories: string[]): string {
       if (target) {
         return target
       }
-    } catch {
-    }
+    } catch {}
   }
 
   throw new Error(`Cannot find binary path in [${binDirectories}]`)
@@ -110,15 +109,11 @@ async function restartWindows() {
   ].join('')
   const batchScript = `taskkill /F /IM "${exeName}.exe" >nul && powershell -Command "${checkScript}" && "${binary}"`
 
-  return spawn(
-    process.env.comspec ?? 'cmd',
-    [`/C ${batchScript}`],
-    {
-      detached: true,
-      stdio: 'ignore',
-      windowsVerbatimArguments: true,
-    },
-  )
+  return spawn(process.env.comspec ?? 'cmd', [`/C ${batchScript}`], {
+    detached: true,
+    stdio: 'ignore',
+    windowsVerbatimArguments: true,
+  })
 }
 
 async function restartLinux() {
@@ -127,7 +122,9 @@ async function restartLinux() {
   const vscodePID = Number(process.env.VSCODE_PID)
 
   if (!Number.isInteger(vscodePID) || vscodePID <= 0) {
-    throw new ManualRestartRequiredError('Cannot determine the VS Code main process on Linux. Please fully quit and reopen VS Code to apply changes.')
+    throw new ManualRestartRequiredError(
+      'Cannot determine the VS Code main process on Linux. Please fully quit and reopen VS Code to apply changes.',
+    )
   }
 
   return spawn(

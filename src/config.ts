@@ -12,8 +12,8 @@ export const ffKey = 'editor.fontFamily'
 
 export function getFamilies() {
   return {
-    monospace: config['font.monospace']
-      || workspace.getConfiguration().inspect<string>(ffKey)!.globalValue,
+    monospace:
+      config['font.monospace'] || workspace.getConfiguration().inspect<string>(ffKey)!.globalValue,
     sansSerif: config['font.sansSerif'],
   }
 }

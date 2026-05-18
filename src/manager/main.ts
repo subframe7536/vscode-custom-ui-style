@@ -1,5 +1,6 @@
 import { config } from '../config'
 import { mainBakPath, mainPath } from '../path'
+
 import { BaseFileManager } from './base'
 
 const entry = 'experimentalDarkMode:!0'
@@ -13,10 +14,7 @@ export class MainFileManager extends BaseFileManager {
   patch(content: string): string {
     const result = JSON.stringify(config.electron).slice(1, -1)
     if (result) {
-      content = content.replaceAll(
-        entry,
-        `${entry},${result}`,
-      )
+      content = content.replaceAll(entry, `${entry},${result}`)
       if ('backgroundColor' in config.electron) {
         content = content.replace(
           setBgColorRegex,

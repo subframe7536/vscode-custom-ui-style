@@ -1,5 +1,4 @@
 // Reference from https://github.com/be5invis/vscode-custom-css/blob/master/src/extension.js
-import type { Promisable } from '@subframe7536/type-utils'
 
 import fs from 'node:fs'
 
@@ -19,12 +18,21 @@ import {
   htmlBakPath,
   htmlPath,
 } from '../path'
-import { fileProtocol, httpsProtocol, logError, parseFilePath, promptWarn, showMessage } from '../utils'
+import {
+  fileProtocol,
+  httpsProtocol,
+  logError,
+  parseFilePath,
+  promptWarn,
+  showMessage,
+} from '../utils'
+import type { Promisable } from '../utils'
+
 import { BaseFileManager } from './base'
 
 type ResourceType = 'css' | 'js' | 'js-module'
 type ResourceMeta = [type: ResourceType, url: string, content: () => Promisable<string | undefined>]
-type ResourceConfig = string | { type: ResourceType, url: string }
+type ResourceConfig = string | { type: ResourceType; url: string }
 
 const EMPTY_CSS = '/* EMPTY EXTERNAL CSS */'
 const EMPTY_JS = '// EMPTY EXTERNAL JS'
@@ -33,10 +41,11 @@ const EMPTY_JS_MODULE = '// EMPTY EXTERNAL JS MODULE'
 let hasPrompted = false
 async function parseImports(urls: ResourceConfig[]): Promise<ResourceMeta[]> {
   if (
-    !hasPrompted
-    && urls.some(u =>
-      (typeof u === 'object' && u.type.startsWith('.js'))
-      || (typeof u === 'string' && u.startsWith('http') && u.endsWith('.js')),
+    !hasPrompted &&
+    urls.some(
+      (u) =>
+        (typeof u === 'object' && u.type.startsWith('.js')) ||
+        (typeof u === 'string' && u.startsWith('http') && u.endsWith('.js')),
     )
   ) {
     showMessage('Loading remote JS script, be care of its source code!')
@@ -59,7 +68,8 @@ function isGarbled(text: string): boolean {
   return (text.match(garbledPattern) || []).length / text.length > 0.5
 }
 
-const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+const ua =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
 
 async function getResourceMeta(config: ResourceConfig): Promise<ResourceMeta | undefined> {
   let type: ResourceType
@@ -80,21 +90,15 @@ async function getResourceMeta(config: ResourceConfig): Promise<ResourceMeta | u
       promptWarn(`[${config}] must startsWith '${fileProtocol}'`)
       return undefined
     }
-    return await parseResourceMeta(
-      type,
-      parseFilePath(config),
-      path => readFileSync(path, 'utf-8'),
+    return await parseResourceMeta(type, parseFilePath(config), (path) =>
+      readFileSync(path, 'utf-8'),
     )
   } else {
     if (!config.url.startsWith(httpsProtocol)) {
       promptWarn(`[${config.url}] must startsWith '${httpsProtocol}'`)
       return undefined
     }
-    return await parseResourceMeta(
-      config.type,
-      new URL(config.url).toString(),
-      fetchURLContent,
-    )
+    return await parseResourceMeta(config.type, new URL(config.url).toString(), fetchURLContent)
   }
 }
 
@@ -146,10 +150,7 @@ type CacheInfo = {
   urls: string[]
 }
 
-async function mergeAndWriteContent(
-  resources: ResourceMeta[],
-  useCached: boolean,
-): Promise<void> {
+async function mergeAndWriteContent(resources: ResourceMeta[], useCached: boolean): Promise<void> {
   // Check if resources changed compared to cache
   if (useCached) {
     let cachedInfo: CacheInfo = {
@@ -167,21 +168,18 @@ async function mergeAndWriteContent(
 
     const resourceUrls = new Set(resources.map(([type, url]) => `${type}:${url}`))
     if (
-      !cachedInfo.hasFailed
-      && resourceUrls.size === cachedInfo.urls.length
-      && [...resourceUrls].every(url => cachedInfo.urls.includes(url))
+      !cachedInfo.hasFailed &&
+      resourceUrls.size === cachedInfo.urls.length &&
+      [...resourceUrls].every((url) => cachedInfo.urls.includes(url))
     ) {
       log.info('No changes detected and no failed fetches, using cached content')
       return
     }
   }
 
-  const resourcesByType: Record<
-    ResourceType,
-    { url: string, content: string }[]
-  > = {
-    'css': [],
-    'js': [],
+  const resourcesByType: Record<ResourceType, { url: string; content: string }[]> = {
+    css: [],
+    js: [],
     'js-module': [],
   }
 
@@ -220,7 +218,7 @@ async function mergeAndWriteContent(
     writeFileSync(
       externalCssPath,
       resourcesByType.css.length > 0
-        ? resourcesByType.css.map(r => `/* ${r.url} */\n${r.content}`).join(sep)
+        ? resourcesByType.css.map((r) => `/* ${r.url} */\n${r.content}`).join(sep)
         : EMPTY_CSS,
       'utf-8',
     )
@@ -228,7 +226,7 @@ async function mergeAndWriteContent(
     writeFileSync(
       externalJsPath,
       resourcesByType.js.length > 0
-        ? resourcesByType.js.map(r => `// ${r.url}\n${r.content}`).join(sep)
+        ? resourcesByType.js.map((r) => `// ${r.url}\n${r.content}`).join(sep)
         : EMPTY_JS,
       'utf-8',
     )
@@ -236,7 +234,7 @@ async function mergeAndWriteContent(
     writeFileSync(
       externalJsModulePath,
       resourcesByType['js-module'].length > 0
-        ? resourcesByType['js-module'].map(r => `// ${r.url}\n${r.content}`).join(sep)
+        ? resourcesByType['js-module'].map((r) => `// ${r.url}\n${r.content}`).join(sep)
         : EMPTY_JS_MODULE,
       'utf-8',
     )
@@ -255,16 +253,11 @@ export class ExternalFileManager extends BaseFileManager {
       logError(generateNoHtmlErrorMessage())
       this.skipAll = () => 'No workbench html found, external resources are disabled'
     }
-    this.cleanup = content => content
-      .replace(
-        /<!-- External Script Start -->[\s\S]*?<!-- External Script End -->/,
-        '',
-      )
-      .replace(
-        /<!-- External Style Start -->[\s\S]*?<!-- External Style End -->/,
-        '',
-      )
-      .trim()
+    this.cleanup = (content) =>
+      content
+        .replace(/<!-- External Script Start -->[\s\S]*?<!-- External Script End -->/, '')
+        .replace(/<!-- External Style Start -->[\s\S]*?<!-- External Style End -->/, '')
+        .trim()
   }
 
   async patch(content: string): Promise<string> {
@@ -277,9 +270,7 @@ export class ExternalFileManager extends BaseFileManager {
     }
 
     await mergeAndWriteContent(
-      await parseImports(
-        (config['external.imports'] || []) as ResourceConfig[],
-      ),
+      await parseImports((config['external.imports'] || []) as ResourceConfig[]),
       strategy === 'cache',
     )
     return content

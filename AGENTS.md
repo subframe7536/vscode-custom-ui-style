@@ -1,108 +1,54 @@
-# AGENTS.md
+# AGENTS
 
-This file provides instructions for agentic coding assistants working in this repository.
+## Purpose
+This repository builds a VS Code extension that patches VS Code runtime assets (CSS/JS/HTML/JSON) to apply custom UI styles.
 
-## Development Commands
+Read first:
+- [README.md](README.md)
+- [src/path.ts](src/path.ts)
+- [src/manager/index.ts](src/manager/index.ts)
+- [src/manager/base.ts](src/manager/base.ts)
 
-### Build & Typecheck
-- `pnpm run build` - Typecheck and compile (minified, treeshaken)
-- `pnpm run typecheck` - Run TypeScript type checking without emitting files
-- `pnpm run dev` - Watch mode for development
+## Stack
+- Runtime: Node.js + VS Code Extension API
+- Language: TypeScript (CommonJS output)
+- Build tool: `tsdown`
+- Quality tools: `tsc`, `oxlint`, `oxfmt`
+- Package manager/scripts: `bun`
 
-### Linting & Formatting
-- `pnpm run format` - Run ESLint with auto-fix (this is the lint command)
-- Note: No separate lint command - use `pnpm run format` to check and fix issues
+## Commands
+- Install deps: `bun install`
+- Dev watch: `bun run dev`
+- Typecheck: `bun run typecheck`
+- Lint + format: `bun run oxc`
+- Build: `bun run build`
+- Regenerate extension metadata: `bun run update`
 
-### Testing
-- No test framework is configured in this project
-- Manual testing is done by building and loading the VSCode extension
+Before finishing code changes, run at least:
+1. `bun run typecheck`
+2. `bun run oxc`
+3. `bun run build`
 
-### Publishing
-- `pnpm run publish` - Publish to VSCode marketplace
-- `pnpm run pack` - Package extension locally
-- `pnpm run release` - Format, build, and bump version
+## Architecture Map
+- `src/index.ts`: activation, commands, config-watch flow.
+- `src/manager/base.ts`: shared backup/reload/rollback lifecycle.
+- `src/manager/index.ts`: manager composition and restart strategy.
+- `src/manager/*.ts`: concrete patching logic by target file type.
+- `src/path.ts`: resolves VS Code installation paths and backup paths.
+- `src/generated/meta.ts`: generated metadata; do not hand-edit.
 
-### Other Commands
-- `pnpm run update` - Generate TypeScript meta types from package.json config
-- `pnpm run prepare` - Runs update (automatically on install)
+## Repo-Specific Rules
+- Keep `JsonFileManager` as the last built-in manager in `src/manager/index.ts` because checksum patching depends on prior modifications.
+- Preserve backup semantics in `BaseFileManager`: patch from backup content, not from already-modified source.
+- Backup extension suffix comes from generated meta name (currently `.custom-ui-style` behavior); do not hardcode a new suffix in random files.
+- VS Code >= 1.95 uses ESM-related paths/behavior; avoid assuming only reload is enough. Respect restart flow in manager orchestration.
+- If command/config metadata changes in `package.json`, regenerate `src/generated/meta.ts` with `bun run update`.
 
-## Code Style Guidelines
+## Editing Guidance
+- Prefer minimal, local changes in the relevant manager file instead of adding cross-cutting abstractions.
+- Reuse existing helpers (`src/utils.ts`, cache/config modules) before introducing new utilities.
+- Maintain current style conventions (simple naming, low complexity, straightforward control flow).
 
-### Imports
-- Use ES6 import/export syntax
-- Import types with `import type { ... }` for type-only imports
-- Use namespace imports with `* as` for groups of related exports
-- Group imports: external libraries (reactive-vscode, vscode), then local modules
-- Use default imports for single functions when appropriate
-
-```typescript
-import type { FileManager } from './base'
-
-import { defineExtension, useCommand } from 'reactive-vscode'
-import { workspace } from 'vscode'
-
-import * as Meta from './generated/meta'
-```
-
-### Formatting
-- Indentation: 2 spaces
-- Double quotes for strings
-- Semicolons required
-- No trailing whitespace
-- Single quotes used for escaping within double-quoted strings
-- Consistent spacing around operators and after commas
-
-### Types
-- TypeScript strict mode enabled
-- Define interfaces for custom types
-- Use generic types from `@subframe7536/type-utils` (e.g., `Promisable`, `AnyFunction`)
-- Type function parameters explicitly when not inferred
-- Use generic types for flexible function signatures
-- Return types inferred unless complex or public API
-
-### Naming Conventions
-- camelCase for variables, functions, methods, and object properties
-- PascalCase for classes and interfaces
-- UPPER_SNAKE_CASE for constants (e.g., `fileProtocol`, `httpsProtocol`)
-- Descriptive names: `hasBakFile`, `runAndRestart`, `generateStyleFromObject`
-- Prefix boolean predicates with `is`, `has`, `can`, or similar (e.g., `isVSCodeUsingESM`)
-
-### Error Handling
-- Use try/catch blocks for error-prone operations
-- Check `error instanceof Error` before accessing error properties
-- Use the centralized `logError()` utility function from `utils.ts`
-- Log errors using the custom logger: `log.error()`, `log.warn()`, `log.info()`
-- Show user-facing messages with `showMessage()` for errors affecting users
-- Never silently swallow errors - always log them
-
-### Async/Await
-- Use async/await for asynchronous operations
-- Prefer explicit async functions over callbacks
-- Use `Promise.all()` for parallel operations when order doesn't matter
-- Handle lock files when modifying VSCode installation files
-
-### File Structure
-- Source files in `src/` directory
-- Managers in `src/manager/` for file patching logic
-- Generated meta in `src/generated/meta.ts` (auto-generated, do not edit manually)
-- Use base classes for shared logic (see `BaseFileManager`)
-- Keep utility functions in `src/utils.ts`
-- Configuration handling in `src/config.ts`
-
-### Comments
-- Use JSDoc comments for public APIs and complex functions
-- Keep comments concise and meaningful
-- No unnecessary comments for self-explanatory code
-
-### Project Specifics
-- This is a VSCode extension that modifies VSCode's source files
-- All modifications create backups with `.custom-ui-style` suffix
-- Uses `reactive-vscode` framework for extension lifecycle
-- Files are modified atomically using `atomically` package
-- Always run typecheck before committing changes
-
-### Important Notes
-- Extension requires write access to VSCode installation directory
-- Changes may require full VSCode restart (not just window reload)
-- Be careful with file operations - they directly affect VSCode installation
-- Test thoroughly before publishing as changes affect user's VSCode environment
+## Validation Notes
+- There is no dedicated test suite in this repo; verification is command-based (`typecheck`, `oxc`, `build`).
+- Runtime behavior depends on local VS Code installation files and may require elevated permissions.

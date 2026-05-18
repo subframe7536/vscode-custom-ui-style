@@ -1,10 +1,10 @@
-import type { FileManager } from './base'
-
 import { version } from 'vscode'
 
 import { flushCache } from '../cache'
 import { config } from '../config'
 import { runAndRestart } from '../utils'
+
+import type { FileManager } from './base'
 import { CssFileManager } from './css'
 import { createExtensionFileManagers } from './extension'
 import { ExternalFileManager } from './external'
@@ -18,7 +18,7 @@ import { WebViewFileManager } from './webview'
  */
 const isVSCodeUsingESM = (() => {
   const versionArray = version.split('.').map(Number)
-  return versionArray[0] === 1 && versionArray[1] >= 95
+  return versionArray[0] === 1 && versionArray[1]! >= 95
 })()
 
 export function createFileManagers() {
@@ -33,25 +33,24 @@ export function createFileManagers() {
   flushCache()
 
   return {
-    hasBakFile: () => builtinManagers[builtinManagers.length - 1].hasBakFile,
-    hasBakExtFiles: () => createExtensionFileManagers(true).every(m => m.hasBakFile),
+    hasBakFile: () => builtinManagers[builtinManagers.length - 1]?.hasBakFile,
+    hasBakExtFiles: () => createExtensionFileManagers(true).every((m) => m.hasBakFile),
     reload: async (text: string, override = false) => {
-      await runAndRestart(
-        text,
-        isVSCodeUsingESM || config.preferRestart,
-        async () => {
-          const total = [...builtinManagers, ...createExtensionFileManagers()]
-          for (const manager of total) {
-            await manager.reload(override)
-          }
-        },
-      )
+      await runAndRestart(text, isVSCodeUsingESM || config.preferRestart, async () => {
+        const total = [...builtinManagers, ...createExtensionFileManagers()]
+        for (const manager of total) {
+          await manager.reload(override)
+        }
+      })
     },
     rollback: async (text: string, cleanup = false) => {
       await runAndRestart(
         text,
         isVSCodeUsingESM || config.preferRestart,
-        () => Promise.all([...builtinManagers, ...createExtensionFileManagers()].map(m => m.rollback(cleanup))),
+        () =>
+          Promise.all(
+            [...builtinManagers, ...createExtensionFileManagers()].map((m) => m.rollback(cleanup)),
+          ),
         cleanup,
       )
     },

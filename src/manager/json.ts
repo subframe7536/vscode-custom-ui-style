@@ -4,14 +4,12 @@ import path from 'node:path'
 import { readFileSync } from 'atomically'
 
 import { baseDir, productJSONBakPath, productJSONPath } from '../path'
+
 import { BaseFileManager } from './base'
 
 // https://github.com/RimuruChan/vscode-fix-checksums/blob/master/src/extension.js#L75-L81
 function computeChecksum(file: string) {
-  return createHash('sha256')
-    .update(readFileSync(file))
-    .digest('base64')
-    .replace(/=+$/, '')
+  return createHash('sha256').update(readFileSync(file)).digest('base64').replace(/=+$/, '')
 }
 
 export class JsonFileManager extends BaseFileManager {

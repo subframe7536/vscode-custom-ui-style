@@ -7,10 +7,7 @@ import { name as bakExt } from './generated/meta'
 import { logError, printFileTree } from './utils'
 
 function getDirectoryName(filePath: string): string {
-  const lastSlashIndex = Math.max(
-    filePath.lastIndexOf('/'),
-    filePath.lastIndexOf('\\'),
-  )
+  const lastSlashIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'))
 
   if (lastSlashIndex === -1) {
     return ''
@@ -50,14 +47,7 @@ const codeBaseDir = path.join(baseDir, 'vs', 'code')
 const workbenchBaseDir = path.join(baseDir, 'vs', 'workbench')
 
 function getWebviewHTML(ext: string) {
-  return path.join(
-    workbenchBaseDir,
-    'contrib',
-    'webview',
-    'browser',
-    'pre',
-    `index.${ext}`,
-  )
+  return path.join(workbenchBaseDir, 'contrib', 'webview', 'browser', 'pre', `index.${ext}`)
 }
 
 export const webviewHTMLPath = getWebviewHTML('html')
@@ -70,9 +60,7 @@ function getWorkbenchPath(baseExt: string, backupExt?: string) {
   return path.join(
     workbenchBaseDir,
     // https://github.com/microsoft/vscode/pull/141263
-    env.appHost === 'desktop'
-      ? `workbench.desktop.main.${ext}`
-      : `workbench.web.main.${ext}`,
+    env.appHost === 'desktop' ? `workbench.desktop.main.${ext}` : `workbench.web.main.${ext}`,
   )
 }
 /**
@@ -94,11 +82,7 @@ export const rendererBakPath = getWorkbenchPath('js', bakExt)
 
 function getMainPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
-  const defaultPath = path.join(
-    codeBaseDir,
-    'electron-main',
-    `main.${ext}`,
-  )
+  const defaultPath = path.join(codeBaseDir, 'electron-main', `main.${ext}`)
   return fs.existsSync(defaultPath) ? defaultPath : path.join(baseDir, `main.${ext}`)
 }
 
@@ -120,10 +104,7 @@ export const productJSONPath = getProductJSONPath('json')
 
 export const productJSONBakPath = getProductJSONPath('json', `${version}.${bakExt}`)
 
-const AVAILIABLE_DIR = [
-  'electron-sandbox/workbench',
-  'electron-browser/workbench',
-]
+const AVAILIABLE_DIR = ['electron-sandbox/workbench', 'electron-browser/workbench']
 
 const htmlDirPath = (() => {
   for (const dir of AVAILIABLE_DIR) {

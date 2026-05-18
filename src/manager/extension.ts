@@ -1,5 +1,3 @@
-import type { Promisable } from '@subframe7536/type-utils'
-
 import path from 'node:path'
 
 import { extensions } from 'vscode'
@@ -8,6 +6,8 @@ import { flushCache } from '../cache'
 import { config } from '../config'
 import { log } from '../logger'
 import { promptWarn } from '../utils'
+import type { Promisable } from '../utils'
+
 import { BaseFileManager } from './base'
 
 interface ExtensionPatchConfig {
@@ -85,18 +85,18 @@ export function createExtensionFileManagers(skipWarnIfExtensionNotExist = false)
     const warningArray = []
     for (const conf of patchConfig) {
       if (conf.filePath && conf.find && conf.replace) {
-        managers.push(new ExtensionFileManager({
-          ...conf,
-          filePath: path.join(rootPath, conf.filePath),
-        }))
+        managers.push(
+          new ExtensionFileManager({
+            ...conf,
+            filePath: path.join(rootPath, conf.filePath),
+          }),
+        )
       } else {
         warningArray.push(conf)
       }
     }
     if (warningArray.length > 0) {
-      promptWarn(
-        `Configs of ${extensionId} are invalid: ${JSON.stringify(warningArray, null, 2)}`,
-      )
+      promptWarn(`Configs of ${extensionId} are invalid: ${JSON.stringify(warningArray, null, 2)}`)
     }
   }
   flushCache()

@@ -3,6 +3,7 @@ import { Uri } from 'vscode'
 import { config, getFamilies } from '../config'
 import { cssBakPath, cssPath } from '../path'
 import { fileProtocol, generateStyleFromObject, resolveVariable } from '../utils'
+
 import { BaseFileManager } from './base'
 import { VSC_DFAULT_SANS_FONT, VSC_NOTEBOOK_MONO_FONT } from './renderer'
 
@@ -74,10 +75,10 @@ body {
 export class CssFileManager extends BaseFileManager {
   constructor() {
     super(cssPath, cssBakPath)
-    this.cleanup = content => content.replace(
-      /\/\* Custom UI Style Start \*\/[\s\S]*?\/\* Custom UI Style End \*\//,
-      '',
-    ).trim()
+    this.cleanup = (content) =>
+      content
+        .replace(/\/\* Custom UI Style Start \*\/[\s\S]*?\/\* Custom UI Style End \*\//, '')
+        .trim()
   }
 
   patch(content: string): string {
