@@ -4,6 +4,9 @@ on:
       - '*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 name: Release Extension
 jobs:
   release:
