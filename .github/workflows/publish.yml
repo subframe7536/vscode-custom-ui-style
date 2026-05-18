@@ -4,11 +4,14 @@ on:
       - '*'
   workflow_dispatch:
 
-name: Deploy Extension
+name: Release Extension
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
       - name: Publish to Open VSX Registry
@@ -20,3 +23,6 @@ jobs:
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
+      - run: bunx changelogithub
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
