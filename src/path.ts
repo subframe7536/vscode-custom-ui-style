@@ -95,6 +95,16 @@ export const mainPath = getMainPath('js')
  */
 export const mainBakPath = getMainPath('js', bakExt)
 
+function getSessionsPath(baseExt: string, backupExt?: string) {
+  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
+  return path.join(baseDir, 'vs', 'sessions', `sessions.desktop.main.${ext}`)
+}
+
+export const sessionsMainJsPath = getSessionsPath('js')
+export const sessionsMainJsBakPath = getSessionsPath('js', bakExt)
+export const sessionsMainCssPath = getSessionsPath('css')
+export const sessionsMainCssBakPath = getSessionsPath('css', bakExt)
+
 function getProductJSONPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
   return path.join(path.dirname(baseDir), `product.${ext}`)

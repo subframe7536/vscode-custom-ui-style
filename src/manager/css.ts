@@ -72,6 +72,16 @@ body {
   return result
 }
 
+export function patchWorkbenchStyle(content: string, stylesheet: Record<string, unknown>): string {
+  return `${content}
+/* Custom UI Style Start */
+${generateBackgroundCSS()}
+${generateFontCSS()}
+${generateStyleFromObject(stylesheet)}
+/* Custom UI Style End */
+`
+}
+
 export class CssFileManager extends BaseFileManager {
   constructor() {
     super(cssPath, cssBakPath)
@@ -82,12 +92,6 @@ export class CssFileManager extends BaseFileManager {
   }
 
   patch(content: string): string {
-    return `${content}
-/* Custom UI Style Start */
-${generateBackgroundCSS()}
-${generateFontCSS()}
-${generateStyleFromObject(config.stylesheet)}
-/* Custom UI Style End */
-`
+    return patchWorkbenchStyle(content, config.stylesheet)
   }
 }

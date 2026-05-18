@@ -9,7 +9,8 @@
 
 Custom UI Style is a VSCode extension that allows you to customize the editor's appearance and behavior by injecting custom CSS and JavaScript. You can unify the global font family, set a background image, modify Electron `BrowserWindow` options, add your own custom styles and scripts, and even patch files in other VSCode extensions.
 
-- Works with VSCode 1.106! (Tested on Windows and MacOS)
+- Works with VSCode 1.120! (Tested on Windows and MacOS)
+- Support Agents window
 
 > [!warning]
 >
@@ -73,7 +74,10 @@ Deprecated variables:
   // Custom stylesheet, support native nest selectors
   "custom-ui-style.stylesheet": {
     "kbd, .statusbar": {
-      "font-family": "var(--cus-monospace-font)",
+      "font-family": "var(--cus-mono)",
+    },
+    ".chat-question-carousel-container code": {
+      "font-family": "var(--cus-mono) !important",
     },
     "span:not([class*='dyn-rule'])+span[class*='dyn-rule']": {
       "border-top-left-radius": "3px",
@@ -320,6 +324,7 @@ In some VSCode forks like Cursor, the extension detail panel may not render due 
 | `custom-ui-style.external.loadStrategy`     | Strategy for loading external CSS or JS resources                                                                                 | `string`  | `"refetch"` |
 | `custom-ui-style.external.imports`          | External CSS or JS resources; supports variables (${userHome}, ${env:VAR:fallback}) and protocols ('https://', 'file://')         | `array`   | ``          |
 | `custom-ui-style.stylesheet`                | Custom CSS for the editor; supports nested selectors                                                                              | `object`  | `{}`        |
+| `custom-ui-style.agents.stylesheet`         | Custom CSS for Agents window; supports nested selectors                                                                           | `object`  | `{}`        |
 | `custom-ui-style.extensions.enable`         | Enable file patching in other extensions                                                                                          | `boolean` | `true`      |
 | `custom-ui-style.extensions.config`         | Configuration for patching extension files (key: extension ID, value: patch config)                                               | `object`  | `{}`        |
 | `custom-ui-style.webview.enable`            | Enable style patching in webviews                                                                                                 | `boolean` | `true`      |

@@ -11,6 +11,8 @@ import { ExternalFileManager } from './external'
 import { JsonFileManager } from './json'
 import { MainFileManager } from './main'
 import { RendererFileManager } from './renderer'
+import { SessionsCssFileManager } from './sessions-css'
+import { SessionsMainFileManager } from './sessions-main'
 import { WebViewFileManager } from './webview'
 
 /**
@@ -25,6 +27,8 @@ export function createFileManagers() {
   const builtinManagers: FileManager[] = [
     new CssFileManager(),
     new MainFileManager(),
+    new SessionsCssFileManager(),
+    new SessionsMainFileManager(),
     new RendererFileManager(),
     new ExternalFileManager(),
     new WebViewFileManager(),

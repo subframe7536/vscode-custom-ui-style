@@ -192,6 +192,11 @@
           "type": "object",
           "description": "Custom CSS for the editor; supports nested selectors"
         },
+        "custom-ui-style.agents.stylesheet": {
+          "scope": "application",
+          "type": "object",
+          "description": "Custom CSS for Agents window; supports nested selectors"
+        },
         "custom-ui-style.extensions.enable": {
           "scope": "application",
           "type": "boolean",

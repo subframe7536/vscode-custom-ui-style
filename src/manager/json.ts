@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto'
+import fs from 'node:fs'
 import path from 'node:path'
 
 import { readFileSync } from 'atomically'
@@ -21,7 +22,11 @@ export class JsonFileManager extends BaseFileManager {
     // https://github.com/RimuruChan/vscode-fix-checksums/blob/master/src/extension.js#L30-L58
     const product: { checksums: Record<string, string> } = JSON.parse(content)
     for (const [filePath, curChecksum] of Object.entries(product.checksums)) {
-      const checksum = computeChecksum(path.join(baseDir, filePath))
+      const absPath = path.join(baseDir, filePath)
+      if (!fs.existsSync(absPath)) {
+        continue
+      }
+      const checksum = computeChecksum(absPath)
       if (checksum !== curChecksum) {
         product.checksums[filePath] = checksum
       }
