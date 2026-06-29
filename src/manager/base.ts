@@ -4,7 +4,6 @@ import { readFileSync, writeFileSync } from 'atomically'
 
 import { addBuiltinConfigCache, addExtensionConfigCache } from '../cache'
 import { log } from '../logger'
-import { promptWarn } from '../utils'
 import type { Promisable } from '../utils'
 
 export interface FileManager {
@@ -44,7 +43,7 @@ export abstract class BaseFileManager implements FileManager {
   async reload(overrideBak = false) {
     let skipMessage = await this.skipAll?.()
     if (skipMessage) {
-      promptWarn(skipMessage)
+      log.warn(skipMessage)
       return
     }
     if (overrideBak || !this.hasBakFile) {
