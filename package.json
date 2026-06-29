@@ -1,7 +1,7 @@
 {
   "name": "custom-ui-style",
   "displayName": "Custom UI Style",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "private": true,
   "description": "Custom ui css style in both editor and webview, unify global font family, setup background image",
   "categories": [
