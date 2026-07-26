@@ -77,7 +77,10 @@ export async function runAndRestart(
           err,
         )
         return
-      } else if (err.message.includes('Maximum call stack size exceeded')) {
+      } else if (
+        err.message.includes('Maximum call stack size exceeded') ||
+        ('code' in err && err.code === 'EACCES')
+      ) {
         logError(
           `${base} current user is not allowed. Please run "sudo chown -R $(whoami) '${path.dirname(baseDir)}'" to grant permissions`,
           err,
