@@ -80,20 +80,24 @@ export const rendererPath = getWorkbenchPath('js')
  */
 export const rendererBakPath = getWorkbenchPath('js', bakExt)
 
-function getMainPath(baseExt: string, backupExt?: string) {
-  const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
-  const defaultPath = path.join(codeBaseDir, 'electron-main', `main.${ext}`)
-  return fs.existsSync(defaultPath) ? defaultPath : path.join(baseDir, `main.${ext}`)
-}
+const mainPath = (() => {
+  const defaultPath = path.join(codeBaseDir, 'electron-main', 'main.js')
+  if (fs.existsSync(defaultPath)) {
+    return defaultPath
+  }
+
+  const mainImplPath = path.join(baseDir, 'mainImpl.js')
+  return fs.existsSync(mainImplPath) ? mainImplPath : path.join(baseDir, 'main.js')
+})()
 
 /**
  * VSCode main js path
  */
-export const mainPath = getMainPath('js')
+export { mainPath }
 /**
  * VSCode main js backup path
  */
-export const mainBakPath = getMainPath('js', bakExt)
+export const mainBakPath = mainPath.replace('.js', `.${bakExt}.js`)
 
 function getSessionsPath(baseExt: string, backupExt?: string) {
   const ext = backupExt ? `${backupExt}.${baseExt}` : baseExt
