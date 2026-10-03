@@ -11,5 +11,7 @@ function uninstall(srcPath: string, bakPath: string) {
 
 try {
   const cache: ConfigCache = JSON.parse(fs.readFileSync(cacheFilePath, 'utf-8'))
-  Promise.all([...cache.builtin, ...cache.extension].map(async ([src, bak]) => uninstall(src, bak)))
+  void Promise.all(
+    [...cache.builtin, ...cache.extension].map(async ([src, bak]) => uninstall(src, bak)),
+  )
 } catch {}

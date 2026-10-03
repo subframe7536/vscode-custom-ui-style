@@ -60,7 +60,7 @@ function getAppBinary(...binDirectories: string[]): string {
     } catch {}
   }
 
-  throw new Error(`Cannot find binary path in [${binDirectories}]`)
+  throw new Error(`Cannot find binary path in [${binDirectories.join(',')}]`)
 }
 
 async function restartMacOS() {

@@ -27,14 +27,14 @@ function getCSS() {
       ...defaultMonospaceSelector,
       ...(config['webview.monospaceSelector'] || []),
     ]
-    result += `${monoSelectors}{font-family:${escapeQuote(monospace)}!important}`
+    result += `${monoSelectors.join(',')}{font-family:${escapeQuote(monospace)}!important}`
   }
   if (sansSerif) {
     const sansSelectors = [
       ...defaultSansSerifSelector,
       ...(config['webview.sansSerifSelector'] || []),
     ]
-    result += `${sansSelectors}{font-family:${escapeQuote(sansSerif)}!important}`
+    result += `${sansSelectors.join(',')}{font-family:${escapeQuote(sansSerif)}!important}`
   }
   if (config['webview.stylesheet']) {
     result += generateStyleFromObject(config['webview.stylesheet'])

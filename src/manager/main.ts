@@ -14,7 +14,10 @@ export function patchMainScript(content: string, options: Record<string, unknown
 
   content = content.replaceAll(entry, `${entry},${result}`)
   if ('backgroundColor' in options) {
-    content = content.replace(setBgColorRegex, `setBackgroundColor("${options.backgroundColor}");`)
+    content = content.replace(
+      setBgColorRegex,
+      `setBackgroundColor("${String(options.backgroundColor)}");`,
+    )
   }
   return content
 }

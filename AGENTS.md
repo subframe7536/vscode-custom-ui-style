@@ -17,22 +17,22 @@ Read first:
 - Language: TypeScript (CommonJS output)
 - Build tool: `tsdown`
 - Quality tools: `tsc`, `oxlint`, `oxfmt`
-- Package manager/scripts: `bun`
+- Package manager/scripts: `pnpm@12.6.0`
 
 ## Commands
 
-- Install deps: `bun install`
-- Dev watch: `bun run dev`
-- Typecheck: `bun run typecheck`
-- Lint + format: `bun run oxc`
-- Build: `bun run build`
-- Regenerate extension metadata: `bun run update`
+- Install deps: `pnpm install`
+- Dev watch: `pnpm run dev`
+- Typecheck: `pnpm run typecheck`
+- Lint + format: `pnpm run oxc`
+- Build: `pnpm run build`
+- Regenerate extension metadata: `pnpm run update`
 
 Before finishing code changes, run at least:
 
-1. `bun run typecheck`
-2. `bun run oxc`
-3. `bun run build`
+1. `pnpm run typecheck`
+2. `pnpm run oxc`
+3. `pnpm run build`
 
 ## Architecture Map
 
@@ -49,7 +49,7 @@ Before finishing code changes, run at least:
 - Preserve backup semantics in `BaseFileManager`: patch from backup content, not from already-modified source.
 - Backup extension suffix comes from generated meta name (currently `.custom-ui-style` behavior); do not hardcode a new suffix in random files.
 - VS Code >= 1.95 uses ESM-related paths/behavior; avoid assuming only reload is enough. Respect restart flow in manager orchestration.
-- If command/config metadata changes in `package.json`, regenerate `src/generated/meta.ts` with `bun run update`.
+- If command/config metadata changes in `package.json`, regenerate `src/generated/meta.ts` with `pnpm run update`.
 
 ## Editing Guidance
 

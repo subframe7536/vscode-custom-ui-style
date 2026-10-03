@@ -1,6 +1,23 @@
 {
-  "extends": "@subf/config/tsconfig-lib",
   "compilerOptions": {
+    "target": "ES2023",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "lib": ["ESNext"],
+    "noUncheckedIndexedAccess": true,
     "types": ["node"]
-  }
+  },
+  "include": ["src", "*.config.mts", "oxlint.config.ts", "oxfmt.config.ts"],
+  "exclude": ["dist", "node_modules"]
 }
