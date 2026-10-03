@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@subf/config": "^0.5.0",
-    "@types/node": "^26.6.4",
+    "@types/node": "^24",
     "@types/vscode": "1.89.0",
     "@vscode/vsce": "^4.0.0",
     "atomically": "^2.1.1",
