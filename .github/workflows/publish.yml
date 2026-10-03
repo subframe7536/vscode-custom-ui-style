@@ -28,13 +28,11 @@ jobs:
         uses: HaaLeo/publish-vscode-extension@v1
         with:
           extensionFile: custom-ui-style.vsix
-          dependencies: false
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
       - name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
           extensionFile: custom-ui-style.vsix
-          dependencies: false
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
       - run: pnpm dlx changelogithub
