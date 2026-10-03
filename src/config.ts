@@ -1,12 +1,19 @@
-import { defineConfigObject } from 'reactive-vscode'
 import { workspace } from 'vscode'
 
 import * as Meta from './generated/meta'
 
-export const config = defineConfigObject<Meta.ScopedConfigKeyTypeMap>(
-  Meta.scopedConfigs.scope,
-  Meta.scopedConfigs.defaults,
-)
+export const config = Object.defineProperties(
+  {},
+  Object.fromEntries(
+    Object.entries(Meta.scopedConfigs.defaults).map(([key, defaultValue]) => [
+      key,
+      {
+        enumerable: true,
+        get: () => workspace.getConfiguration(Meta.scopedConfigs.scope).get(key, defaultValue),
+      },
+    ]),
+  ),
+) as Readonly<Meta.ScopedConfigKeyTypeMap>
 
 export const ffKey = 'editor.fontFamily'
 

@@ -48,7 +48,7 @@ async function parseImports(urls: ResourceConfig[]): Promise<ResourceMeta[]> {
         (typeof u === 'string' && u.startsWith('http') && u.endsWith('.js')),
     )
   ) {
-    showMessage('Loading remote JS script, be care of its source code!')
+    void showMessage('Loading remote JS script, be care of its source code!')
     hasPrompted = true
   }
 

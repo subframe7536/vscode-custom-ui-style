@@ -5,6 +5,7 @@ const opts = {
   dts: false,
   deps: {
     neverBundle: ['vscode'],
+    onlyBundle: false,
   },
   outExtensions: () => ({ js: '.js' }),
   outputOptions: {

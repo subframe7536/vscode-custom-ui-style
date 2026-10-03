@@ -4,7 +4,7 @@ import path from 'node:path/posix'
 import { env, version } from 'vscode'
 
 import { name as bakExt } from './generated/meta'
-import { logError, printFileTree } from './utils'
+import { logError } from './logger'
 
 function getDirectoryName(filePath: string): string {
   const lastSlashIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'))
@@ -150,10 +150,10 @@ export const htmlPath = (() => {
 
 export function generateNoHtmlErrorMessage() {
   if (!htmlDirPath) {
-    return `Cannot find the workbench html dir in ${codeBaseDir}, known dirs are [${AVAILIABLE_DIR}]. File tree: ${printFileTree(codeBaseDir)}`
+    return `Cannot find the workbench html dir in ${codeBaseDir}, known dirs are [${AVAILIABLE_DIR.join(',')}]. File tree: ${printFileTree(codeBaseDir)}`
   }
   if (!htmlPath) {
-    return `Cannot find the workbench html file in ${htmlDirPath}, known files are [${WORKBENCH_HTML_NAMES}]. File tree: ${printFileTree(htmlDirPath)}`
+    return `Cannot find the workbench html file in ${htmlDirPath}, known files are [${WORKBENCH_HTML_NAMES.join(',')}]. File tree: ${printFileTree(htmlDirPath)}`
   }
   return 'Workbench html file found. You should not see this message.'
 }
@@ -168,3 +168,8 @@ export const externalCssPath = path.join(htmlDirPath, externalCssName)
 export const externalJsPath = path.join(htmlDirPath, externalJsName)
 export const externalJsModulePath = path.join(htmlDirPath, externalJsModuleName)
 export const externalCacheInfoPath = path.join(htmlDirPath, 'external.cache.json')
+
+export function printFileTree(dir: string) {
+  const tree = fs.readdirSync(dir, { recursive: true })
+  return JSON.stringify(tree, null, 2)
+}

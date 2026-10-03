@@ -26,30 +26,32 @@
   "type": "commonjs",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "bun run typecheck && tsdown --minify --treeshake --config-loader native",
+    "build": "pnpm run typecheck && tsdown --minify --treeshake --config-loader native",
     "dev": "tsdown --watch",
-    "prepare": "bun run update",
+    "prepare": "pnpm run update",
     "update": "vscode-ext-gen --output src/generated/meta.ts",
-    "oxc": "oxlint --fix -c oxlint.config.mjs && oxfmt -c oxfmt.config.mjs",
-    "vscode:prepublish": "bun run build",
+    "oxc": "pnpm run lint && pnpm run format",
+    "vscode:prepublish": "pnpm run build",
     "publish": "vsce publish --no-dependencies",
     "pack": "vsce package --no-dependencies",
     "typecheck": "tsc --noEmit",
-    "release": "bun run typecheck && bun run oxc && bun run build && bumpp --all",
-    "vscode:uninstall": "node ./dist/uninstall.js"
+    "release": "pnpm run typecheck && pnpm run oxc && pnpm run build && bumpp --all",
+    "vscode:uninstall": "node ./dist/uninstall.js",
+    "lint": "oxlint --fix --max-warnings 0 --report-unused-disable-directives",
+    "format": "oxfmt"
   },
   "devDependencies": {
-    "@subf/config": "^0.2.1",
-    "@types/node": "^24",
+    "@subf/config": "^0.4.0",
+    "@types/node": "^26.6.4",
     "@types/vscode": "1.89.0",
-    "@vscode/vsce": "^3.9.1",
+    "@vscode/vsce": "^4.0.0",
     "atomically": "^2.1.1",
-    "bumpp": "^11.1.0",
-    "oxfmt": "^0.50.0",
-    "oxlint": "^1.65.0",
-    "reactive-vscode": "0.2.6",
-    "tsdown": "^0.22.0",
-    "typescript": "^6.0.3",
+    "bumpp": "^12.3.0",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
+    "oxlint-tsgolint": "^7.0.2003",
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2",
     "vscode-ext-gen": "^1.6.0"
   },
   "contributes": {
@@ -279,5 +281,6 @@
   "icon": "res/icon.png",
   "engines": {
     "vscode": "^1.89.0"
-  }
+  },
+  "packageManager": "pnpm@12.6.0"
 }

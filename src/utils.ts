@@ -4,13 +4,15 @@ import path from 'node:path/posix'
 import Url from 'node:url'
 
 import { readFileSync, writeFileSync } from 'atomically'
-import { commands, window } from 'vscode'
+import { commands } from 'vscode'
 
 import { config } from './config'
 import * as Meta from './generated/meta'
-import { log } from './logger'
+import { log, logError, showMessage } from './logger'
 import { baseDir } from './path'
 import { ManualRestartRequiredError, restartApp } from './restart'
+
+export { logError, promptWarn, showMessage } from './logger'
 
 export type Promisable<T> = T | Promise<T>
 
@@ -31,7 +33,7 @@ function logWindowOptionsChanged(useFullRestart: boolean) {
       return
     }
     const method = process.platform === 'darwin' ? 'Press "Command + Q"' : 'Close all windows'
-    showMessage(
+    void showMessage(
       `Note: Please TOTALLY restart VSCode (${method}) to take effect, "custom-ui-style.electron" is changed`,
     )
   }
@@ -116,7 +118,7 @@ export async function runAndRestart(
       }
       return
     }
-    let shouldProceed = false
+    let shouldProceed: boolean
     if (config.reloadWithoutPrompting) {
       shouldProceed = true
     } else {
@@ -139,44 +141,9 @@ export async function runAndRestart(
           }
         }
       } else {
-        commands.executeCommand('workbench.action.reloadWindow')
+        await commands.executeCommand('workbench.action.reloadWindow')
       }
     }
-  }
-}
-
-export function logError(message: string, error?: unknown) {
-  if (error instanceof Error) {
-    const msg = `${message}, ${error}`
-    log.error(msg)
-    showMessage(msg)
-  } else if (error) {
-    log.error(message, error)
-    showMessage(`${message}, Error: ${error}`)
-  } else {
-    log.error(message)
-    showMessage(`Error: ${message}`)
-  }
-  log.show()
-}
-
-export function promptWarn(message: string) {
-  log.warn(message)
-  showMessage(message, 'Show logs').then((result) => {
-    if (result === 'Show logs') {
-      log.show()
-    }
-  })
-}
-
-export async function showMessage<T extends string[]>(
-  content: string,
-  ...buttons: T
-): Promise<T[number] | undefined> {
-  try {
-    return await window.showInformationMessage(content, ...buttons)
-  } catch (error) {
-    logError('VSCode error', error)
   }
 }
 
@@ -184,27 +151,24 @@ export function escapeQuote(str: string) {
   return str.replaceAll(`'`, `\\'`).replaceAll(`"`, `\\"`)
 }
 
-export function debounce<T extends (...args: any[]) => void>(fn: T, delay: number): T {
-  let timer: NodeJS.Timeout
-  return ((...args: any[]) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => fn(...args), delay)
-  }) as T
+export function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
+  let timer: NodeJS.Timeout | undefined
+  return Object.assign(
+    (...args: Parameters<T>) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => fn(...args), delay)
+    },
+    { dispose: () => clearTimeout(timer) },
+  )
 }
 
 export function generateStyleFromObject(obj: Record<string, any>) {
   function gen(obj: Record<string, any>, styles = '') {
     for (const [prop, value] of Object.entries(obj)) {
-      switch (typeof value) {
-        case 'string':
-        case 'number':
-          styles += `${prop}:${value};`
-          break
-        case 'object':
-          if (value) {
-            styles += `${prop}{${gen(value)}}`
-          }
-          break
+      if (typeof value === 'string' || typeof value === 'number') {
+        styles += `${prop}:${value};`
+      } else if (typeof value === 'object' && value) {
+        styles += `${prop}{${gen(value)}}`
       }
     }
     return styles
@@ -212,16 +176,13 @@ export function generateStyleFromObject(obj: Record<string, any>) {
 
   let style = ''
   for (const [selectors, val] of Object.entries(obj)) {
-    let css = ''
-    switch (typeof val) {
-      case 'string':
-        css = val
-        break
-      case 'object':
-        css = gen(val)
-        break
-      default:
-        continue
+    let css: string
+    if (typeof val === 'string') {
+      css = val
+    } else if (typeof val === 'object') {
+      css = gen(val)
+    } else {
+      continue
     }
     style += `${selectors}{${css}}`
   }
@@ -246,9 +207,4 @@ export function resolveVariable(url: string): string {
       return substr
     }
   })
-}
-
-export function printFileTree(dir: string) {
-  const tree = fs.readdirSync(dir, { recursive: true })
-  return JSON.stringify(tree, null, 2)
 }
