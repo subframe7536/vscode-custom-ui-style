@@ -165,10 +165,18 @@ export function debounce<T extends (...args: any[]) => void>(fn: T, delay: numbe
 export function generateStyleFromObject(obj: Record<string, any>) {
   function gen(obj: Record<string, any>, styles = '') {
     for (const [prop, value] of Object.entries(obj)) {
-      if (typeof value === 'string' || typeof value === 'number') {
-        styles += `${prop}:${value};`
-      } else if (typeof value === 'object' && value) {
-        styles += `${prop}{${gen(value)}}`
+      switch (typeof value) {
+        case 'string':
+        case 'number':
+          styles += `${prop}:${value};`
+          break
+        case 'object':
+          if (value) {
+            styles += `${prop}{${gen(value)}}`
+          }
+          break
+        default:
+          break
       }
     }
     return styles
@@ -177,12 +185,15 @@ export function generateStyleFromObject(obj: Record<string, any>) {
   let style = ''
   for (const [selectors, val] of Object.entries(obj)) {
     let css: string
-    if (typeof val === 'string') {
-      css = val
-    } else if (typeof val === 'object') {
-      css = gen(val)
-    } else {
-      continue
+    switch (typeof val) {
+      case 'string':
+        css = val
+        break
+      case 'object':
+        css = gen(val)
+        break
+      default:
+        continue
     }
     style += `${selectors}{${css}}`
   }

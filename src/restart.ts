@@ -16,12 +16,15 @@ export class ManualRestartRequiredError extends Error {
 
 export async function restartApp(): Promise<void> {
   let sp
-  if (process.platform === 'darwin') {
-    sp = await restartMacOS()
-  } else if (process.platform === 'win32') {
-    sp = await restartWindows()
-  } else {
-    sp = await restartLinux()
+  switch (process.platform) {
+    case 'darwin':
+      sp = await restartMacOS()
+      break
+    case 'win32':
+      sp = await restartWindows()
+      break
+    default:
+      sp = await restartLinux()
   }
   sp.unref()
 }
