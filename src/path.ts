@@ -80,7 +80,10 @@ export const rendererPath = getWorkbenchPath('js')
  */
 export const rendererBakPath = getWorkbenchPath('js', bakExt)
 
-const mainPath = (() => {
+/**
+ * VSCode main js path
+ */
+export const mainPath = (() => {
   const defaultPath = path.join(codeBaseDir, 'electron-main', 'main.js')
   if (fs.existsSync(defaultPath)) {
     return defaultPath
@@ -90,10 +93,6 @@ const mainPath = (() => {
   return fs.existsSync(mainImplPath) ? mainImplPath : path.join(baseDir, 'main.js')
 })()
 
-/**
- * VSCode main js path
- */
-export { mainPath }
 /**
  * VSCode main js backup path
  */
