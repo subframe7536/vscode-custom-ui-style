@@ -3,3 +3,6 @@ publicHoistPattern:
 
 allowBuilds:
   '@vscode/vsce-sign': true
+
+minimumReleaseAgeExclude:
+  - '@subf/config@0.5.0'

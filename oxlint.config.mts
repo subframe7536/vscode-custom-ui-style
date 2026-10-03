@@ -1,6 +1,6 @@
 import { subfLint } from '@subf/config/oxlint'
 
-const config = subfLint({
+export default subfLint({
   options: {
     typeAware: true,
   },
@@ -8,15 +8,3 @@ const config = subfLint({
     'class-methods-use-this': 'off',
   },
 })
-
-config.overrides?.push({
-  files: ['src/**/*.ts'],
-  rules: {
-    'typescript/switch-exhaustiveness-check': [
-      'error',
-      { considerDefaultExhaustiveForUnions: true },
-    ],
-  },
-})
-
-export default config

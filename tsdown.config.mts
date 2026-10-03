@@ -1,6 +1,7 @@
 import { defineConfig } from 'tsdown'
+import type { UserConfig } from 'tsdown'
 
-const opts = {
+const opts: UserConfig = {
   format: ['cjs'],
   dts: false,
   deps: {

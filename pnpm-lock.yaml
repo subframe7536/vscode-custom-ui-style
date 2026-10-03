@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       '@subf/config':
-        specifier: ^0.4.0
-        version: 0.4.0(defu@6.1.7)(oxfmt@0.71.0)(oxlint@1.86.0(oxlint-tsgolint@7.0.2003))
+        specifier: ^0.5.0
+        version: 0.5.0(defu@6.1.7)(oxfmt@0.71.0)(oxlint@1.86.0(oxlint-tsgolint@7.0.2003))
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -736,11 +736,11 @@ packages:
     resolution: {integrity: sha512-Nqc90v4lWCXyakD6xNyNACBJNJ0tNCwj2WNk/7ivyacYHxiITVgmLUFXTBOeCdy79iz6HtN9Y31uw/jbLrdOAg==}
     engines: {node: '>=20.0.0'}
 
-  '@subf/config@0.4.0':
-    resolution: {integrity: sha512-Ql91bi7ydXvrC6WaEJR9v+c0WKEEhBSrKPZ6U4OAQsyDSp+WA5K2ZKo0GLARih7QK/NNdCOIpeLf8xPkRLI//A==}
+  '@subf/config@0.5.0':
+    resolution: {integrity: sha512-GBk01mfu7BmakMgTlAm2zAX4ilOFX3Br0QdYO6wAxDVjaY1uGhcVpHXxRcHhKh+gry89yPASqqrBB7zGdAtk7Q==}
     hasBin: true
     peerDependencies:
-      defu: 6.1.7
+      defu: ^6.1.7
       oxfmt: ^0
       oxlint: ^1
 
@@ -1995,7 +1995,7 @@ snapshots:
 
   '@secretlint/types@10.2.2': {}
 
-  '@subf/config@0.4.0(defu@6.1.7)(oxfmt@0.71.0)(oxlint@1.86.0(oxlint-tsgolint@7.0.2003))':
+  '@subf/config@0.5.0(defu@6.1.7)(oxfmt@0.71.0)(oxlint@1.86.0(oxlint-tsgolint@7.0.2003))':
     dependencies:
       '@subf/oxlint-plugin': 0.3.0
       defu: 6.1.7

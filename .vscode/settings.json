@@ -1,5 +1,5 @@
 {
   "npm.packageManager": "pnpm",
-  "oxc.configPath": "./oxlint.config.mts",
-  "oxc.fmt.configPath": "./oxfmt.config.mts"
+  "oxc.configPath": "oxlint.config.mts",
+  "oxc.fmt.configPath": "oxfmt.config.mts"
 }

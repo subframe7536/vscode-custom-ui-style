@@ -18,6 +18,6 @@
     "noUncheckedIndexedAccess": true,
     "types": ["node"]
   },
-  "include": ["src", "*.config.mts"],
+  "include": ["src", "*.config.mts", "oxlint.config.ts", "oxfmt.config.ts"],
   "exclude": ["dist", "node_modules"]
 }
