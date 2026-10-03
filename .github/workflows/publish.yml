@@ -20,14 +20,20 @@ jobs:
           runtime: node@24
           cache: true
           require-lockfile: true
+      - name: Build extension
+        run: pnpm run build
+      - name: Package extension
+        run: pnpm exec vsce package --no-dependencies --out custom-ui-style.vsix
       - name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@v1
         with:
+          extensionFile: custom-ui-style.vsix
           dependencies: false
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
       - name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
+          extensionFile: custom-ui-style.vsix
           dependencies: false
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
